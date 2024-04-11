@@ -1,19 +1,20 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View ,ScrollView} from 'react-native'
 import Profile from './Profile'
 import DailyChallanges from './DailyChallanges'
 import DailyLearning from './DailyLearning'
 import Header from './Header'
+// import { ScrollView } from 'react-native'
 
 
 const Home = () => {
   return (
-    <View>
+    <ScrollView>
       <Header />
       <Profile isHome={true} />
       <DailyChallanges />
       <DailyLearning />
-    </View>
+    </ScrollView>
   )
 }
 

@@ -25,6 +25,7 @@ import LoginForm from './src/screens/Login';
 import SignupForm from './src/screens/SignUp';
 import Header from './src/screens/Header';
 import Profile from './src/screens/Profile';
+import LearnSection from './src/screens/Learn.Section';
 
 
 type SectionProps = PropsWithChildren<{
@@ -45,10 +46,11 @@ function App(): React.JSX.Element {
 
   const TabNavigator = () => {
     return (
-      <Tab.Navigator screenOptions={{ headerShown: false }}>
+      <Tab.Navigator >
         <Tab.Screen
           name='Home'
           options={{
+            headerShown: false,
             tabBarIcon: ({ color, size }) => (
               <Image
                 source={require('./assets/images/home.png')}
@@ -70,14 +72,26 @@ function App(): React.JSX.Element {
           }}
           component={Profile}
         />
+        <Tab.Screen
+          name='Learn'
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <Image
+                source={require('./assets/images/learn.png')}
+                style={{ width: size, height: size, tintColor: color }}
+              />
+            ),
+          }}
+          component={LearnSection}
+        />
       </Tab.Navigator>
     )
   }
 
   const HomeStack = () => {
     return (
-      <Stack.Navigator initialRouteName="HomeScreen" screenOptions={{ headerShown: false }} >
-        <Stack.Screen name="HomeScreen" component={Home} />
+      <Stack.Navigator initialRouteName="HomeScreen"  >
+        <Stack.Screen options={{ headerShown: false }} name="HomeScreen" component={Home} />
         <Stack.Screen
           name="Login"
           component={LoginForm}

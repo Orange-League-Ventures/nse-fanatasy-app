@@ -45,7 +45,7 @@ function App(): React.JSX.Element {
 
   const TabNavigator = () => {
     return (
-      <Tab.Navigator>
+      <Tab.Navigator screenOptions={{ headerShown: false }}>
         <Tab.Screen
           name='Home'
           options={{
@@ -76,7 +76,7 @@ function App(): React.JSX.Element {
 
   const HomeStack = () => {
     return (
-      <Stack.Navigator initialRouteName="HomeScreen">
+      <Stack.Navigator initialRouteName="HomeScreen" screenOptions={{ headerShown: false }} >
         <Stack.Screen name="HomeScreen" component={Home} />
         <Stack.Screen
           name="Login"

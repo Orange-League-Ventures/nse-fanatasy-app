@@ -1,6 +1,7 @@
 import React from 'react';
 import type { PropsWithChildren } from 'react';
 import {
+  Image,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -16,11 +17,14 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
 import { REACT_APP_BASE_LOCAL_URL } from "@env"
 import Home from './src/screens/Home';
 import LoginForm from './src/screens/Login';
 import SignupForm from './src/screens/SignUp';
 import Header from './src/screens/Header';
+import Profile from './src/screens/Profile';
 
 
 type SectionProps = PropsWithChildren<{
@@ -37,18 +41,43 @@ function App(): React.JSX.Element {
   };
 
   const Stack = createNativeStackNavigator();
+  const Tab = createBottomTabNavigator();
 
-
-  return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="Home" component={Home}
+  const TabNavigator = () => {
+    return (
+      <Tab.Navigator>
+        <Tab.Screen
+          name='Home'
           options={{
-            header: props => <Header />,
-            title: '', // Hide the default header title
+            tabBarIcon: ({ color, size }) => (
+              <Image
+                source={require('./assets/images/home.png')}
+                style={{ width: size, height: size, tintColor: color }}
+              />
+            ),
           }}
-
+          component={HomeStack}
         />
+        <Tab.Screen
+          name='Profile'
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <Image
+                source={require('./assets/images/home.png')}
+                style={{ width: size, height: size, tintColor: color }}
+              />
+            ),
+          }}
+          component={Profile}
+        />
+      </Tab.Navigator>
+    )
+  }
+
+  const HomeStack = () => {
+    return (
+      <Stack.Navigator initialRouteName="HomeScreen">
+        <Stack.Screen name="HomeScreen" component={Home} />
         <Stack.Screen
           name="Login"
           component={LoginForm}
@@ -56,6 +85,13 @@ function App(): React.JSX.Element {
         />
         <Stack.Screen name="Signup" component={SignupForm} />
       </Stack.Navigator>
+    )
+  }
+
+
+  return (
+    <NavigationContainer>
+      <TabNavigator />
     </NavigationContainer>
   );
 }

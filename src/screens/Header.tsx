@@ -28,8 +28,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#f5f5f5',
-    paddingHorizontal: 20,
-    paddingTop: 20,
+    paddingHorizontal: 10,
+    paddingTop: 10,
   },
   leftImages: {
     flexDirection: 'row',

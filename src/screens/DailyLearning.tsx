@@ -21,6 +21,7 @@ const styles = StyleSheet.create({
         maxWidth: 328,
         flexDirection: "column",
         fontSize: 14,
+        marginLeft:20
         // color: "#03050A",
     },
     view2: {
@@ -35,6 +36,8 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         marginTop: 8,
         width: "100%",
+        paddingBottom:30,
+        paddingTop:30
     },
     text1: {
         color: "black",

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 
-const Profile = () => {
+const Profile = (props: any) => {
     return (
         <View style={styles.container}>
             <View style={styles.left}>
@@ -16,6 +16,16 @@ const Profile = () => {
                 <Text style={styles.text1}>Good morning!!</Text>
                 <Text style={styles.text2}>Jitendra Singh</Text>
             </View>
+            <View>
+                {
+                    !props?.isHome ? (
+                        <View>
+                            <Text style={styles.text2}>Pure Profile</Text>
+                        </View>
+                    ) : null
+                }
+            </View>
+
         </View>
     );
 };

@@ -8,7 +8,7 @@ import DailyLearning from './DailyLearning'
 const Home = () => {
   return (
     <View>
-      <Profile/>
+      <Profile isHome={true} />
       <DailyChallanges/>
       <DailyLearning/>
     </View>

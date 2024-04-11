@@ -4,13 +4,13 @@ import { Image, StyleSheet, Text, View } from 'react-native';
 const DailyChallanges = () => {
     return (
         <View style={styles.view1}>
-            <View style={styles.view2}>
-                <Text>Daily Challenges</Text>
+            <View >
+                <Text style={styles.text2}>Daily Challenges</Text>
             </View>
             <View style={styles.view3}>
                 <View style={styles.view5}>
                     <Image
-                        source={require('../../assets/images/dailyChallenge.png')}
+                        source={require('../../assets/images/dailyChallenges.png')}
                         style={styles.image1}
                     />
                 </View>
@@ -18,8 +18,8 @@ const DailyChallanges = () => {
             <View style={styles.view7}>
                 <Text>START THE QUIZ</Text>
             </View>
-            <View style={styles.view8}>
-                <Text>Terms & Conditions Apply</Text>
+            <View >
+                <Text style={styles.text8}>Terms & Conditions Apply</Text>
             </View>
         </View>
     )
@@ -32,15 +32,17 @@ const styles = StyleSheet.create({
         maxWidth: 328,
         flexDirection: "column",
     },
-    view2: {
+    text2: {
+        marginLeft: 20,
         color: "#03050A",
         width: "100%",
+        fontSize: 14
     },
     view3: {
         alignItems: "stretch",
         borderRadius: 8,
         display: "flex",
-        marginTop: 8,
+        // marginTop: 8,
         width: "100%",
         flexDirection: "column",
     },
@@ -64,7 +66,10 @@ const styles = StyleSheet.create({
         padding: 16,
     },
     view6: { fontFamily: "Roboto, sans-serif" },
-    image1: {},
+    image1: {
+        // width:100,
+        // height:200
+    },
     view7: {
         justifyContent: "center",
         alignItems: "center",
@@ -73,7 +78,7 @@ const styles = StyleSheet.create({
         borderStyle: "solid",
         borderWidth: 1,
         backgroundColor: "#25D366",
-        marginTop: 8,
+        // marginTop: 8,
         marginLeft: 15,
         width: "100%",
         color: "#FFF",
@@ -81,11 +86,12 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         paddingBottom: 16,
     },
-    view8: {
+    text8: {
         color: "#C35516",
         textAlign: "center",
         alignSelf: "center",
-        marginTop: 12,
+        marginTop: 4,
+        fontSize: 10
     },
 });
 

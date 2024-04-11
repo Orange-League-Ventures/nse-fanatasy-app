@@ -1,32 +1,45 @@
 import React from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
+import Header from './Header';
 
 const Profile = (props: any) => {
     return (
-        <View style={styles.container}>
-            <View style={styles.left}>
-                <Image
-                    source={{
-                        uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/0afdad6062808b75f0c28108ce49a468ccef7d64aa18f95e1d0f05400491f9e5?apiKey=7f48bd1f1f1e45f5914640147dc815d6&",
-                    }}
-                    style={styles.image}
-                />
-            </View>
-            <View style={styles.right}>
-                <Text style={styles.text1}>Good morning!!</Text>
-                <Text style={styles.text2}>Jitendra Singh</Text>
-            </View>
+        <View>
             <View>
                 {
                     !props?.isHome ? (
-                        <View>
-                            <Text style={styles.text2}>Pure Profile</Text>
-                        </View>
+                        <Header title={"Profile"} isTab={true} />
+
                     ) : null
                 }
             </View>
+            <View style={styles.container}>
 
+                <View style={styles.left}>
+                    <Image
+                        source={{
+                            uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/0afdad6062808b75f0c28108ce49a468ccef7d64aa18f95e1d0f05400491f9e5?apiKey=7f48bd1f1f1e45f5914640147dc815d6&",
+                        }}
+                        style={styles.image}
+                    />
+                </View>
+                <View style={styles.right}>
+                    <Text style={styles.text1}>Good morning!!</Text>
+                    <Text style={styles.text2}>Jitendra Singh</Text>
+                </View>
+                <View>
+                    {
+                        !props?.isHome ? (
+                            <View>
+                                <Text style={styles.text2}>Pure Profile</Text>
+                            </View>
+                        ) : null
+                    }
+                </View>
+
+            </View>
         </View>
+
     );
 };
 

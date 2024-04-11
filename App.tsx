@@ -26,6 +26,7 @@ import SignupForm from './src/screens/SignUp';
 import Header from './src/screens/Header';
 import Profile from './src/screens/Profile';
 import LearnSection from './src/screens/Learn.Section';
+import ChartList from './src/screens/ChartList';
 
 
 type SectionProps = PropsWithChildren<{
@@ -33,7 +34,6 @@ type SectionProps = PropsWithChildren<{
 }>;
 
 function App(): React.JSX.Element {
-  // console.log({ base: REACT_APP_BASE_LOCAL_URL });
 
   const isDarkMode = useColorScheme() === 'dark';
 
@@ -61,20 +61,9 @@ function App(): React.JSX.Element {
           component={HomeStack}
         />
         <Tab.Screen
-          name='Profile'
-          options={{
-            tabBarIcon: ({ color, size }) => (
-              <Image
-                source={require('./assets/images/home.png')}
-                style={{ width: size, height: size, tintColor: color }}
-              />
-            ),
-          }}
-          component={Profile}
-        />
-        <Tab.Screen
           name='Learn'
           options={{
+            headerShown: false,
             tabBarIcon: ({ color, size }) => (
               <Image
                 source={require('./assets/images/learn.png')}
@@ -83,6 +72,19 @@ function App(): React.JSX.Element {
             ),
           }}
           component={LearnSection}
+        />
+        <Tab.Screen
+          name='Profile'
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ color, size }) => (
+              <Image
+                source={require('./assets/images/profile.png')}
+                style={{ width: size, height: size, tintColor: color }}
+              />
+            ),
+          }}
+          component={Profile}
         />
       </Tab.Navigator>
     )
@@ -98,6 +100,7 @@ function App(): React.JSX.Element {
           options={{ title: 'Login' }}
         />
         <Stack.Screen name="Signup" component={SignupForm} />
+        <Stack.Screen name="ChartList" component={ChartList} />
       </Stack.Navigator>
     )
   }

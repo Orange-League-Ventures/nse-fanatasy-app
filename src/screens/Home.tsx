@@ -10,7 +10,7 @@ import Header from './Header'
 const Home = () => {
   return (
     <ScrollView>
-      <Header />
+      <Header isHome={true} isTab={true} />
       <Profile isHome={true} />
       <DailyChallanges />
       <DailyLearning />

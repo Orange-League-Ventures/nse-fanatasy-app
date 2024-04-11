@@ -1,18 +1,25 @@
 import React from 'react';
-import { Image, View, StyleSheet, Text } from 'react-native';
+import { Image, View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
-const ChartSection = () => {
+const ChartSection = (props: any) => {
+    const handleImageClick = (chartType: string) => {
+        // chartType will be passed as state
+        props.navigation.navigate('ChartList');
+    }
+
     return (
         <View >
             <View style={styles.textContainer}>
-                <Text style={styles.headingText} >Understaing Chart</Text>
+                <Text style={styles.headingText} >Understanding Charts</Text>
             </View>
             <View style={styles.container}>
-                <View style={styles.imageContainer}>
-                    <Image
-                        source={require('../../assets/images/lineChart.png')}
-                    />
-                </View>
+                <TouchableOpacity onPress={() => { props.navigation.navigate('ChartList'); }}>
+                    <View style={styles.imageContainer}>
+                        <Image
+                            source={require('../../assets/images/lineChart.png')}
+                        />
+                    </View>
+                </TouchableOpacity>
                 <View style={styles.imageContainer}>
                     <Image
                         source={require('../../assets/images/candelStick.png')}
@@ -30,17 +37,17 @@ const ChartSection = () => {
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 20,
+        marginTop: 10,
         flexDirection: 'row',
     },
     imageContainer: {
-        marginRight: 10,
+        marginRight: 5,
     },
     chartPatternContainer: {
-        marginTop: 10
+        marginTop: 5
     },
     textContainer: {
-        marginTop: 20
+        marginTop: 3
     },
     headingText: {
         marginTop: 10,

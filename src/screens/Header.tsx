@@ -1,24 +1,36 @@
 import React from 'react';
-import { Image, StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 
-const Header = () => {
+const Header = (props: any) => {
   return (
     <View style={styles.header}>
       <View style={styles.leftImages}>
-        {/* <Image
-          source={require('../../assets/images/image1.png')}
-          style={styles.image}
-        /> */}
-        <Image
-          source={require('../../assets/images/menu.png')}
-          style={styles.image}
-        />
-        {/* Add more images here if needed */}
+        {
+          props?.isTab ? (
+            <Image
+              source={require('../../assets/images/menu.png')}
+              style={styles.image}
+            />
+          ) : (
+            <Image
+              source={require('../../assets/images/backIcon.png')}
+              style={styles.image}
+            />
+          )
+        }
+
       </View>
-      <Image
-        source={require('../../assets/images/logo.png')}
-        style={styles.logo}
-      />
+      {
+        props?.isHome ? (
+          <Image
+            source={require('../../assets/images/logo.png')}
+            style={styles.logo}
+          />
+        ) : (
+          <Text >{props.title}</Text>
+        )
+      }
+
     </View>
   );
 };
@@ -42,6 +54,9 @@ const styles = StyleSheet.create({
     resizeMode: 'contain', // Ensure logo scales properly
     alignSelf: 'center', // Center the logo vertically within the header
   },
+  headerText: {
+    marginLeft: 20
+  }
 });
 
 export default Header;

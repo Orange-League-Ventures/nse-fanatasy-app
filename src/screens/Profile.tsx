@@ -33,7 +33,7 @@ const Profile = (props: any) => {
             <View style={styles.imagecontainer}>
               <Image
                 style={styles.profileimage}
-                source={require('../../assets/images/image.png')}
+                source={require('../../assets/images/UserImage.png')}
               />
             </View>
             <View style={styles.Referaldetails}>

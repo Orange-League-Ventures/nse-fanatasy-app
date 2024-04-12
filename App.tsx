@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import type { PropsWithChildren } from 'react';
 import {
   Image,
@@ -27,6 +27,8 @@ import Header from './src/screens/Header';
 import Profile from './src/screens/Profile';
 import LearnSection from './src/screens/Learn.Section';
 import ChartList from './src/screens/ChartList';
+import Play from './src/screens/Play';
+import Quiz from './src/screens/Quiz';
 
 
 type SectionProps = PropsWithChildren<{
@@ -34,7 +36,7 @@ type SectionProps = PropsWithChildren<{
 }>;
 
 function App(): React.JSX.Element {
-
+  const[openQuiz,setOpenQuiz]=useState(false);
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
@@ -86,6 +88,33 @@ function App(): React.JSX.Element {
           }}
           component={Profile}
         />
+        {/* <Tab.Screen
+          name='Play'
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ color, size }) => (
+              <Image
+                source={require('./assets/images/profile.png')}
+                style={{ width: size, height: size, tintColor: color }}
+              />
+            ),
+          }}
+          component={Play}
+          initialParams={{ openQuiz, setOpenQuiz }}
+        /> */}
+        <Tab.Screen
+          name='Play'
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <Image
+                source={require('./assets/images/home.png')}
+                style={{ width: size, height: size, tintColor: color }}
+              />
+            ),
+          }}
+          component={Play}
+          initialParams={{ openQuiz, setOpenQuiz }}
+        />
       </Tab.Navigator>
     )
   }
@@ -100,6 +129,7 @@ function App(): React.JSX.Element {
           options={{ title: 'Login' }}
         />
         <Stack.Screen name="Signup" component={SignupForm} />
+        {/* <Stack.Screen name="NewScreen" component={Quiz} /> */}
         <Stack.Screen name="ChartList" component={ChartList} />
       </Stack.Navigator>
     )
@@ -108,7 +138,8 @@ function App(): React.JSX.Element {
 
   return (
     <NavigationContainer>
-      <TabNavigator />
+      {/* <TabNavigator /> */}
+      {openQuiz ? <Quiz openQuiz={openQuiz} setOpenQuiz={setOpenQuiz}/> : <TabNavigator />}
     </NavigationContainer>
   );
 }

@@ -4,9 +4,9 @@ import Header from './Header';
 
 const Profile = (props: any) => {
   return (
-    <View >
+    <View>
       <View>
-        {!props?.isHome ? <Header title={'Profile'} isTab={true} /> : null}
+        {!props?.isHome ? <Header title={'PROFILE'} isTab={true} /> : null}
       </View>
       {props?.isHome ? (
         <View style={styles.container}>
@@ -25,10 +25,6 @@ const Profile = (props: any) => {
         </View>
       ) : (
         <View style={styles.subcontainer}>
-          <View style={styles.section}>
-            {/* <Image style={styles.humberger} source={require('../../assets/images/humberger.png')} /> */}
-            <Text style={styles.heading}>PROFILE</Text>
-          </View>
           <View style={styles.profileContainer}>
             <View style={styles.imagecontainer}>
               <Image
@@ -138,15 +134,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     justifyContent: 'center',
   },
-  heading: {
-    fontFamily: 'Montserrat',
-    fontWeight: '600',
-    fontSize: 14,
-    lineHeight: 21,
-    alignItems: 'center',
-    justifyContent: 'center',
-    color: '#03050A',
-  },
   profileContainer: {
     height: 'auto',
     paddingTop: 8,
@@ -216,6 +203,5 @@ const styles = StyleSheet.create({
     height: 15,
   },
 });
-
 
 export default Profile;

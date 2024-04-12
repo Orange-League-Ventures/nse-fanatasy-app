@@ -3,7 +3,6 @@ import {Image, StyleSheet, Text, View} from 'react-native';
 import Header from './Header';
 
 const Profile = (props: any) => {
-  console.log('props-----', props.isHome);
   return (
     <View >
       <View>

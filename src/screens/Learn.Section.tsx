@@ -8,7 +8,7 @@ import Header from './Header'
 const LearnSection = (props: any) => {
   return (
     <View>
-      <Header title={"Learn"} isTab={true} />
+      <Header title={"LEARN"} isTab={true} />
       <ScrollView style={styles.mainContainer}>
         <ChartSection navigation={props.navigation} />
         <Disctionary />

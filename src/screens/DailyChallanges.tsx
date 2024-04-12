@@ -1,6 +1,5 @@
 import React from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
-import Button from '../common/Button';
 
 const DailyChallanges = () => {
   return (
@@ -16,15 +15,9 @@ const DailyChallanges = () => {
           />
         </View>
       </View>
-      {/* <View style={styles.view7}>
-                <Text>START THE QUIZ</Text>
-            </View> */}
-      <Button
-        title="Submit"
-        onPress={() => console.log('Button pressed')}
-        style={styles.view7}
-        textStyle={styles.customButtonText}
-      />
+      <View style={styles.view7}>
+        <Text>START THE QUIZ</Text>
+      </View>
       <View>
         <Text style={styles.text8}>Terms & Conditions Apply</Text>
       </View>

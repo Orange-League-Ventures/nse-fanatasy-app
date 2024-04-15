@@ -1,11 +1,11 @@
 import React from 'react';
 import { TextInput, StyleSheet } from 'react-native';
 
-const InputBox = ({ value, placeholder }) => (
+const InputBox = ({ value, placeholder ,style,onChangeText}) => (
   <TextInput
-    style={styles.input}
+  style={[styles.input, style]}
     value={value}
-    // onChangeText={onChangeText}
+    onChangeText={onChangeText}
     placeholder={placeholder}
   />
 );

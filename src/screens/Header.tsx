@@ -20,6 +20,7 @@ const Header = (props: any) => {
         }
 
       </View>
+      <View style={styles.container}>
       {
         props?.isHome ? (
           <Image
@@ -27,10 +28,10 @@ const Header = (props: any) => {
             style={styles.logo}
           />
         ) : (
-          <Text >{props.title}</Text>
+          <Text style={styles.titlename}>{props.title} </Text>
         )
       }
-
+</View>
     </View>
   );
 };
@@ -39,7 +40,6 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#f5f5f5',
     paddingHorizontal: 10,
     paddingTop: 10,
   },
@@ -49,14 +49,24 @@ const styles = StyleSheet.create({
   image: {
     marginRight: 8, // Adjust spacing between images as needed
   },
+  container: {
+    flex: 1, // Make the container take up the full width
+    justifyContent: 'center',
+    alignItems: 'center', // Optional for vertical centering if needed
+  },
   logo: {
     flex: 1, // Allow logo to grow and center itself within the available space
     resizeMode: 'contain', // Ensure logo scales properly
     alignSelf: 'center', // Center the logo vertically within the header
   },
-  headerText: {
-    marginLeft: 20
-  }
+  titlename: {
+    fontFamily: 'Montserrat',
+    fontWeight: '600',
+    fontSize: 14,
+    lineHeight: 21,
+    color: '#03050A',
+   
+  },
 });
 
 export default Header;

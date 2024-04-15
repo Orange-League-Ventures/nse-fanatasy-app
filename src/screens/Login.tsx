@@ -1,4 +1,4 @@
-import React, {useState,useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useForm, Controller} from 'react-hook-form';
 import {
   View,
@@ -12,23 +12,24 @@ import {
 } from 'react-native';
 import {useDispatch} from 'react-redux';
 import CheckBox from '@react-native-community/checkbox';
-
-// import { login } from '../Redux/actions';
+import {login} from '../services/authService';
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
-
 const LoginForm = (props: any) => {
+  const [enableFingerprint, setEnableFingerprint] = useState(false);
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [enableFingerprint, setEnableFingerprint] = useState(false);
-  const handleForgotPassword = () => {
-    console.log('Forgot Password clicked');
-  };
 
-  const handleLogin = () => {
-    // Handle login logic here
-    console.log('Logging in with:', email, password);
+  const handleLogin = async () => {
+    try {
+      console.log("i am in api",email,password);
+      const response = await login({email, password});
+      console.log('Login Successful:----', response);
+    } catch (error) {
+      console.error('Login Failed:', error.message);
+    }
   };
 
   // const {
@@ -129,6 +130,11 @@ const styles = StyleSheet.create({
     alignItems: 'center', // Center text horizontally
   },
   buttonText: {
+    fontFamily: 'Roboto',
+    fontWeight: '500',
+    fontSize: 14,
+    lineHeight: 16.41,
+    textAlign: 'center',
     color: '#ffffff',
   },
 });

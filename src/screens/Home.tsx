@@ -15,7 +15,10 @@ const Home = () => {
     // Navigate to the Login screen
     navigation.navigate('Login');
   };
-
+  const handlePress_signup = () => {
+    // Navigate to the Login screen
+    navigation.navigate('Signup');
+  };
   return (
     <ScrollView>
       <Header isHome={true} isTab={true} />
@@ -23,6 +26,7 @@ const Home = () => {
       <DailyChallanges />
       <DailyLearning />
       <Button title="Login" onPress={handlePress} />
+      <Button title="Signup" onPress={handlePress_signup} />
     </ScrollView>
   )
 }

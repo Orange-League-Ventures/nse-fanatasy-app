@@ -10,38 +10,31 @@ import {
   Image,
   Dimensions,
 } from 'react-native';
-import {useDispatch} from 'react-redux';
 import CheckBox from '@react-native-community/checkbox';
+import { setUser, setLoading, setError, logout }  from '../Redux/Slices/AuthSlice';
 import {login} from '../services/authService';
+import {useDispatch, useSelector} from 'react-redux';
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
 const LoginForm = (props: any) => {
-  const [enableFingerprint, setEnableFingerprint] = useState(false);
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const dispatch = useDispatch();
+  const loading = useSelector(state => state.auth.loading);
+  const error = useSelector(state => state.auth.error);
 
   const handleLogin = async () => {
+    dispatch(setLoading(true));
     try {
-      console.log("i am in api",email,password);
-      const response = await login({email, password});
-      console.log('Login Successful:----', response);
+      console.log("user info---");
+      const user = await login(email,password);
+      dispatch(setUser(user));
+      console.log("user info---",user);
     } catch (error) {
-      console.error('Login Failed:', error.message);
+      dispatch(setError(error.message));
     }
   };
-
-  // const {
-  //   control,
-  //   handleSubmit,
-  //   formState: {errors},
-  // } = useForm();
-
-  // const onSubmit = (data: any) => {
-  //   console.log(data); // Handle form submission here
-  //   // For login functionality, you can call your authentication API here
-  // };
 
   return (
     <View style={styles.container}>
@@ -84,50 +77,58 @@ const styles = StyleSheet.create({
   container: {
     display: 'flex',
     flex: 1,
-    width: windowWidth,
-    height: windowHeight,
+    width: 'auto',
+    height: 'auto',
     backgroundColor: '#ffffff',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'cenetr',
+    padding: 0,
   },
   loginform: {
-    // backgroundColor:'black',
+    marginLeft: 16,
+    marginRight: 16,
   },
   image: {
     width: 'auto',
     height: 54,
-    justifyContent: 'center',
+    justifyContent: 'left',
+    paddingVertical: 8,
     marginBottom: 42,
   },
   inputcontainer: {
+    margintop: 16,
     marginBottom: 12,
   },
   input: {
-    width: 328,
-    height: 44,
+    width: 'auto',
+    height: 'auto',
     borderWidth: 1,
     paddingHorizontal: 16,
+    paddingVertical: 12,
     borderRadius: 8,
-    backgroundColor: '#fff',
+    backgroundColor: '#ffffff',
     color: '#000000',
     borderColor: '#D4D4D4',
     marginBottom: 12,
     fontSize: 12,
     fontFamily: 'Roboto',
     fontWeight: '100',
-    lineHeight: 15.6,
   },
 
   loginButton: {
-    width: 328,
-    height: 44,
-    borderRadius: 8,
     backgroundColor: '#3A2D7D',
-    marginTop: 8,
+    width: 'auto',
+    height: 'auto',
+    borderWidth: 1,
     paddingHorizontal: 16,
-    paddingVertical: 10,
-    justifyContent: 'center', // Center text vertically
-    alignItems: 'center', // Center text horizontally
+    paddingVertical: 12,
+    borderRadius: 8,
+    color: '#000000',
+    borderColor: '#D4D4D4',
+    marginBottom: 12,
+    fontSize: 12,
+    fontFamily: 'Roboto',
+    fontWeight: '100',
   },
   buttonText: {
     fontFamily: 'Roboto',

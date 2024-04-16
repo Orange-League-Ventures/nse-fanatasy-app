@@ -8,7 +8,7 @@ const CustomText = ({ children, style }) => {
 const styles = StyleSheet.create({
   text: {
     fontFamily: 'Roboto',
-    fontSize: 90,
+    fontSize: 15,
   },
 });
 

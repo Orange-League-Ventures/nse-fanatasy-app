@@ -1,11 +1,12 @@
 import React from 'react'
 import { Image, StyleSheet, Text, View } from 'react-native'
+import CustomText from '../common/CustomText'
 
 const Disctionary = () => {
     return (
         <View>
             <View >
-                <Text style={styles.headingText}>Trading Dictionary</Text>
+                <CustomText style={styles.headingText}>Trading Dictionary</CustomText>
             </View>
             <View style={styles.imageContainer}>
                 <Image
@@ -18,8 +19,10 @@ const Disctionary = () => {
 
 const styles = StyleSheet.create({
     headingText: {
-        marginTop: 10,
-        fontSize: 15,
+        marginTop: 20,
+        marginBottom:10,
+        fontSize: 14,
+        fontWeight:'500',
         color: "#000000"
     },
     imageContainer: {

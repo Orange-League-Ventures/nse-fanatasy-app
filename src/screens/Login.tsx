@@ -10,7 +10,7 @@ import {
   Image,
   Dimensions,
 } from 'react-native';
-import CheckBox from '@react-native-community/checkbox';
+// import CheckBox from '@react-native-community/checkbox';
 import { setUser, setLoading, setError, logout }  from '../Redux/Slices/AuthSlice';
 import {login} from '../services/authService';
 import {useDispatch, useSelector} from 'react-redux';
@@ -21,18 +21,18 @@ const LoginForm = (props: any) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
-  const loading = useSelector(state => state.auth.loading);
-  const error = useSelector(state => state.auth.error);
+  const loading = useSelector((state: any) => state.auth.loading);
+  const error = useSelector((state: any) => state.auth.error);
 
   const handleLogin = async () => {
     dispatch(setLoading(true));
     try {
       console.log("user info---");
-      const user = await login(email,password);
+    const user = await login({email,password});
       dispatch(setUser(user));
       console.log("user info---",user);
     } catch (error) {
-      dispatch(setError(error.message));
+      dispatch(setError(error));
     }
   };
 
@@ -42,7 +42,7 @@ const LoginForm = (props: any) => {
         <View style={styles.image}>
           <Image
             source={require('../../assets/images/logo.png')}
-            style={styles.image}
+            // style={styles.image}
           />
         </View>
         <View style={styles.inputcontainer}>
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     height: 'auto',
     backgroundColor: '#ffffff',
     justifyContent: 'center',
-    alignItems: 'cenetr',
+    // alignItems: 'center',
     padding: 0,
   },
   loginform: {
@@ -91,12 +91,12 @@ const styles = StyleSheet.create({
   image: {
     width: 'auto',
     height: 54,
-    justifyContent: 'left',
+    justifyContent: 'center',
     paddingVertical: 8,
     marginBottom: 42,
   },
   inputcontainer: {
-    margintop: 16,
+    marginTop: 16,
     marginBottom: 12,
   },
   input: {

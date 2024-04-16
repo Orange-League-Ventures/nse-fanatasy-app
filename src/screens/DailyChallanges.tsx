@@ -1,5 +1,6 @@
 import React from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
+import Button from '../common/Button';
 
 const DailyChallanges = () => {
   return (
@@ -7,17 +8,15 @@ const DailyChallanges = () => {
       <View>
         <Text style={styles.text2}>Daily Challenges</Text>
       </View>
-      <View style={styles.view3}>
-        <View style={styles.view5}>
-          <Image
-            source={require('../../assets/images/dailyChallenges.png')}
-            style={styles.image1}
-          />
-        </View>
+
+      <View style={styles.view5}>
+        <Image
+          source={require('../../assets/images/dailyChallenges.png')}
+          style={styles.image1}
+        />
       </View>
-      <View style={styles.view7}>
-        <Text>START THE QUIZ</Text>
-      </View>
+
+      <Button onPress={() => {}} title={'START THE QUIZ'} style={styles.view7} textStyle={''}/>
       <View>
         <Text style={styles.text8}>Terms & Conditions Apply</Text>
       </View>
@@ -27,16 +26,19 @@ const DailyChallanges = () => {
 
 const styles = StyleSheet.create({
   view1: {
-    alignItems: 'stretch',
     display: 'flex',
-    maxWidth: 328,
+
     flexDirection: 'column',
+    // backgroundColor: 'red',
+    marginHorizontal: 16,
+    flex: 1,
   },
   text2: {
-    marginLeft: 20,
+    // marginLeft: 20,
     color: '#03050A',
     width: '100%',
     fontSize: 14,
+    fontWeight: '500',
   },
   view3: {
     alignItems: 'stretch',
@@ -63,35 +65,27 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: 'rgba(0, 0, 0, 0.50)',
     fontWeight: '400',
-    padding: 16,
+    paddingVertical:12,
   },
   view6: {fontFamily: 'Roboto, sans-serif'},
   image1: {
-    // width:100,
-    // height:200
+    width: '100%',
+    height: 250,
+    borderRadius: 8,
   },
   view7: {
-    justifyContent: 'center',
-    alignItems: 'center',
     borderRadius: 8,
-    borderColor: 'rgba(37, 211, 102, 1)',
-    borderStyle: 'solid',
-    borderWidth: 1,
     backgroundColor: '#25D366',
-    // marginTop: 8,
-    marginLeft: 15,
-    width: '100%',
     color: '#FFF',
-    textAlign: 'center',
-    paddingTop: 10,
-    paddingBottom: 16,
+    marginBottom: 12,
+    
   },
   text8: {
     color: '#C35516',
     textAlign: 'center',
     alignSelf: 'center',
-    marginTop: 4,
     fontSize: 10,
+    fontWeight : '400',
   },
   customButton: {
     backgroundColor: 'green',

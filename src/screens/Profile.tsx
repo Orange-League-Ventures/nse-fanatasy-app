@@ -102,7 +102,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#F8F8F8',
-    padding: 8,
+    padding: 8,  
+    margin: 16,
+    borderRadius : 8,
   },
   left: {
     marginRight: 8,
@@ -117,11 +119,17 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
   },
   text1: {
-    color: '#717171',
+    color: '#03050A',
     marginBottom: 4,
+    fontSize : 12,
+    fontWeight : '400',
+
   },
   text2: {
-    color: '#03050A',
+    color: '#3A2D7D',
+    fontSize : 14,
+    fontWeight : '600',
+
   },
   subcontainer: {
     backgroundColor: '#F8F8F8',

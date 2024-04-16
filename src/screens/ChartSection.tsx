@@ -1,5 +1,6 @@
 import React from 'react';
 import { Image, View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import CustomText from '../common/CustomText';
 
 const ChartSection = (props: any) => {
     const handleImageClick = (chartType: string) => {
@@ -10,7 +11,7 @@ const ChartSection = (props: any) => {
     return (
         <View >
             <View style={styles.textContainer}>
-                <Text style={styles.headingText} >Understanding Charts</Text>
+                <CustomText style={styles.headingText} >Understanding Charts</CustomText>
             </View>
             <View style={styles.container}>
                 <TouchableOpacity onPress={() => { props.navigation.navigate('ChartList'); }}>
@@ -50,8 +51,10 @@ const styles = StyleSheet.create({
         marginTop: 3
     },
     headingText: {
-        marginTop: 10,
-        fontSize: 15,
+        marginTop: 20,
+        marginBottom:10,
+        fontSize: 14,
+        fontWeight:'500',
         color: "#000000"
     }
 });

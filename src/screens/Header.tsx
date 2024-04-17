@@ -1,5 +1,6 @@
 import React from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
+import CustomText from '../common/CustomText';
 
 const Header = (props: any) => {
   return (
@@ -21,17 +22,26 @@ const Header = (props: any) => {
 
       </View>
       <View style={styles.container}>
-      {
-        props?.isHome ? (
-          <Image
-            source={require('../../assets/images/logo.png')}
-            style={styles.logo}
-          />
-        ) : (
-          <Text style={styles.titlename}>{props.title} </Text>
-        )
-      }
-</View>
+        {
+          props?.isHome ? (
+            <Image
+              source={require('../../assets/images/logo.png')}
+              style={styles.logo}
+            />
+          ) : (
+            <CustomText style={styles.titlename}>{props.title} </CustomText>
+          )
+        }
+      </View>
+      <View style={styles.container}>
+        {
+          (props?.totalPages && props?.currentPage) ? (
+            <CustomText style={styles.pageNumber}>{props.currentPage} / {props?.totalPages} </CustomText>
+          ) : (
+            null
+          )
+        }
+      </View>
     </View>
   );
 };
@@ -65,8 +75,16 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 21,
     color: '#03050A',
-   
+
   },
+  pageNumber: {
+    marginLeft: 100,
+    fontFamily: 'Montserrat',
+    fontWeight: '600',
+    fontSize: 14,
+    lineHeight: 21,
+    color: '#03050A',
+  }
 });
 
 export default Header;

@@ -27,6 +27,7 @@ import Header from './src/screens/Header';
 import Profile from './src/screens/Profile';
 import LearnSection from './src/screens/Learn.Section';
 import ChartList from './src/screens/ChartList';
+import Content from './src/screens/Content';
 
 
 type SectionProps = PropsWithChildren<{
@@ -100,7 +101,9 @@ function App(): React.JSX.Element {
           options={{ title: 'Login' }}
         />
         <Stack.Screen name="Signup" component={SignupForm} />
-        <Stack.Screen name="ChartList" component={ChartList} />
+        <Stack.Screen name="ChartList" options={{ headerShown: false }} component={ChartList} />
+        <Stack.Screen name="Content" options={{ headerShown: false }} component={Content} />
+
       </Stack.Navigator>
     )
   }

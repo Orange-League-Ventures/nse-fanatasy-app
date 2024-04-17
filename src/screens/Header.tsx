@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import CustomText from '../common/CustomText';
 
 const Header = (props: any) => {
@@ -13,10 +13,15 @@ const Header = (props: any) => {
               style={styles.image}
             />
           ) : (
-            <Image
-              source={require('../../assets/images/backIcon.png')}
-              style={styles.image}
-            />
+            <TouchableOpacity onPress={() => {
+              // props.navigation.navigate()
+            }}>
+              <Image
+                source={require('../../assets/images/backIcon.png')}
+                style={styles.image}
+              />
+            </TouchableOpacity>
+
           )
         }
 

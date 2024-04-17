@@ -8,7 +8,3 @@ export const topicByChart = async (query: ITopicReq) => {
         console.log("ERROR IN TOPIC SERVICE", error);
     }
 }
-
-// export const contentByChart = async (query: ITopicReq) => {
-//     return await axiosInstance.get(`/content?page=${query.page}&limit=${query.limit}&chartType=${query.chart_type}`);
-// }

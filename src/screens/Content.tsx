@@ -41,7 +41,7 @@ const Content = () => {
 
     return (
         <>
-            <Header title={topic_name.charAt(0).toUpperCase() + topic_name.slice(1)}  currentPage={currentPage}  totalPages={totalPages}/>
+            <Header title={topic_name.charAt(0).toUpperCase() + topic_name.slice(1)} currentPage={currentPage} totalPages={totalPages} />
             <View style={styles.container}>
                 {contentItem && (
                     <>
@@ -59,7 +59,12 @@ const Content = () => {
                     </>
                 )}
                 <View style={styles.footer}>
-                    <TouchableOpacity style={styles.nextButton} onPress={onNextPage}>
+                    <TouchableOpacity
+                        style={styles.nextButton}
+                        onPress={onNextPage}
+                        disabled={currentPage === totalPages} // Disable the button if currentPage equals totalPages
+
+                    >
                         <Text style={styles.buttonText}>Next</Text>
                     </TouchableOpacity>
                 </View>
@@ -100,6 +105,7 @@ const styles = StyleSheet.create({
     buttonText: {
         color: 'white',
         fontSize: 16,
+        textAlign: 'center'
     },
 });
 

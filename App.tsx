@@ -101,8 +101,12 @@ function App(): React.JSX.Element {
           options={{ title: 'Login' }}
         />
         <Stack.Screen name="Signup" component={SignupForm} />
-        <Stack.Screen name="ChartList" options={{ headerShown: false }} component={ChartList} />
-        <Stack.Screen name="Content" options={{ headerShown: false }} component={Content} />
+        <Stack.Screen name="ChartList"
+          options={({ route }: any) => ({ title: route.params?.state.chart_type.charAt(0).toUpperCase() + route.params?.state.chart_type.slice(1) + ' Chart' })}
+          component={ChartList} />
+        <Stack.Screen name="Content"
+          options={({ route }: any) => ({ title: route.params?.state.topic_name.charAt(0).toUpperCase() + route.params?.state.topic_name.slice(1)  })}
+          component={Content} />
 
       </Stack.Navigator>
     )

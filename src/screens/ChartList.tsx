@@ -25,7 +25,7 @@ const ChartList = (props: any) => {
   useEffect(() => {
     console.log("USE EFFECT");
     getTopics();
-  }, [props]);
+  }, []);
 
   const getTopics = async () => {
     console.log("GET TOPICS");
@@ -51,7 +51,7 @@ const ChartList = (props: any) => {
 
   return (
     <View>
-      <Header title={chart_type.charAt(0).toUpperCase() + chart_type.slice(1) + ' Chart'} />
+      {/* <Header title={chart_type.charAt(0).toUpperCase() + chart_type.slice(1) + ' Chart'} /> */}
       <ScrollView>
         <CustomText style={styles.subTopicText}>Subtopics</CustomText>
         {topicList?.length > 0 ? (

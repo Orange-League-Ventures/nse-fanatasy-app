@@ -41,7 +41,7 @@ const Content = () => {
 
     return (
         <>
-            <Header title={topic_name.charAt(0).toUpperCase() + topic_name.slice(1)} currentPage={currentPage} totalPages={totalPages} />
+            {/* <Header title={topic_name.charAt(0).toUpperCase() + topic_name.slice(1)} currentPage={currentPage} totalPages={totalPages} /> */}
             <View style={styles.container}>
                 {contentItem && (
                     <>

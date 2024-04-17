@@ -10,39 +10,44 @@ import {
   Image,
   Dimensions,
 } from 'react-native';
-// import CheckBox from '@react-native-community/checkbox';
-import { setUser, setLoading, setError, logout }  from '../Redux/Slices/AuthSlice';
+import { setUser, setLoading, setError, logout,setToken }  from '../Redux/Slices/AuthSlice';
 import {login} from '../services/authService';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
 const LoginForm = (props: any) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMsg,setErrorMsg]=useState('');
   const dispatch = useDispatch();
-  const loading = useSelector((state: any) => state.auth.loading);
-  const error = useSelector((state: any) => state.auth.error);
+  const navigation = useNavigation();
 
   const handleLogin = async () => {
-    dispatch(setLoading(true));
+    dispatch(setLoading(true)); // Set loading state to true
     try {
-      console.log("user info---");
-    const user = await login({email,password});
-      dispatch(setUser(user));
-      console.log("user info---",user);
+      const data = await login(email, password);
+      console.log("data in handle login---",data);
+      dispatch(setToken(data.accessToken)); 
+      dispatch(setUser(data.user)); 
+      navigation.navigate('HomeScreen'); 
+      console.log("Login successful! Redirecting to Home screen.", data); 
     } catch (error) {
-      dispatch(setError(error));
+      console.error('Login failed:', error); // Log error message
+      dispatch(setError('Login failed. Please check your credentials.')); 
+      navigation.navigate('Login'); 
+    } finally {
+      dispatch(setLoading(false)); // Always set loading to false regardless of success or failure
     }
   };
-
   return (
     <View style={styles.container}>
       <View style={styles.loginform}>
-        <View style={styles.image}>
+        <View>
           <Image
             source={require('../../assets/images/logo.png')}
-            // style={styles.image}
+            style={styles.image}
           />
         </View>
         <View style={styles.inputcontainer}>
@@ -68,6 +73,7 @@ const LoginForm = (props: any) => {
           activeOpacity={1}>
           <Text style={styles.buttonText}>Log In</Text>
         </TouchableOpacity>
+        {errorMsg && <Text >{errorMsg}</Text>} 
       </View>
     </View>
   );
@@ -81,7 +87,7 @@ const styles = StyleSheet.create({
     height: 'auto',
     backgroundColor: '#ffffff',
     justifyContent: 'center',
-    // alignItems: 'center',
+    // alignItems: 'cenetr',
     padding: 0,
   },
   loginform: {
@@ -90,8 +96,8 @@ const styles = StyleSheet.create({
   },
   image: {
     width: 'auto',
-    height: 54,
-    justifyContent: 'center',
+    height: 60,
+   justifyContent:'center',
     paddingVertical: 8,
     marginBottom: 42,
   },

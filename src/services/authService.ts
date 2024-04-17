@@ -1,46 +1,57 @@
-import axios from 'axios';
-import {ISignup} from '../interfaces/autInterfaces';
+import { ISignup } from '../interfaces/autInterfaces';
 import {axiosInstance} from '../utills/axios';
 
-export const signup = async (data: any) => {
+export const signup = async (name: string | ISignup, email: string | undefined, phone_number: string | undefined, password: string | undefined) => {
   try {
-    console.log('in the auth serivecs', data, axiosInstance);
-    return await axiosInstance.post('/user/signup', data);
+    const data = { name, email, phone_number, password };
+    let response= await axiosInstance.post('/user/signup', data);
+    return response.data;
   } catch (error) {
-    console.log('error in create---', error);
+    console.error('Error creating account:', error);
+    throw error;
   }
 };
 
-export const login = async (data: any) => {
+export const login = async (email: string | undefined, password: string | undefined) => {
   try {
-    console.log('in the auth serivecs', data, axiosInstance);
-    console.log(await axiosInstance.post('/user/login', data));
-    //const  axios.post('http://localhost:8000/api/v1/user/login')
-    return await axiosInstance.post('/user/login', data);
+    const data = {  email, password }; 
+    const response= await axiosInstance.post('/user/login', data);
+    return response.data;
   } catch (error) {
     console.log('error in login---', error);
+    throw error;
   }
 };
 
-// export const login = async (data: any) => {
-//   try {
-//     console.log('in the auth service');
-//     // Make a POST request to the login endpoint
-//     const response = await axios.post(
-//       'http://10.0.2.2:8000/api/v1/user/login',
-//       data,
-//     );
-
-//     // Handle the response, such as storing user data in Redux store or navigating to the home screen
-//     console.log('Login successful:', response.data);
-
-//     // Return the response data if needed
-//     return response.data;
-//   } catch (error) {
-//     // Handle errors, such as displaying error messages or logging errors
-//     console.error('Error in login:', error.message);
-
-//     // Throw the error again to propagate it to the caller if needed
-//     throw error;
-//   }
-// };
+export const updateUser = async (token: string,name: string | ISignup, email: string | undefined, phone_number: string | undefined) => {
+  try {
+    const data = { name, email, phone_number };
+    console.log("data in services keshav",data,token);
+    const response = await axiosInstance.put('/user/update', data, {
+      headers: {
+       "x-access-token": `${token}`,
+      },
+    });
+    console.log("response---",response);
+    return response.data;
+  } catch (error) {
+    console.log('error in upadte user---', error);
+    throw error;
+  }
+};
+export const updateUserAndPassword = async (token: string,name: string | ISignup, email: string | undefined, phone_number: string | undefined,password: string | undefined) => {
+  try {
+    const data = { name, email, phone_number,password };
+    console.log("data in services keshav",data,token);
+    const response = await axiosInstance.put('/user/update', data, {
+      headers: {
+       "x-access-token": `${token}`, 
+      },
+    });
+    console.log("response---",response);
+    return response.data;
+  } catch (error) {
+    console.log('error in upadte user---', error);
+    throw error;
+  }
+};

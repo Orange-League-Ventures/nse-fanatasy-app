@@ -1,7 +1,8 @@
 import React from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, Text, View, Dimensions} from 'react-native';
 import Button from '../common/Button';
 
+const windowWidth = Dimensions.get('window').width;
 const DailyChallanges = () => {
   return (
     <View style={styles.view1}>
@@ -16,9 +17,9 @@ const DailyChallanges = () => {
         />
       </View>
 
-      <Button onPress={() => {}} title={'START THE QUIZ'} style={styles.view7} textStyle={''}/>
+      <Button onPress={() => {}} title={`START THE QUIZ`} style={styles.view7} textStyle={''}/>
       <View>
-        <Text style={styles.text8}>Terms & Conditions Apply</Text>
+        <Text style={styles.text8}>$Terms & Conditions Apply</Text>
       </View>
     </View>
   );
@@ -69,8 +70,9 @@ const styles = StyleSheet.create({
   },
   view6: {fontFamily: 'Roboto, sans-serif'},
   image1: {
-    width: '100%',
-    height: 250,
+    width: (windowWidth-32),
+    resizeMode :'contain',
+    height: windowWidth > 400? 300 :  270,
     borderRadius: 8,
   },
   view7: {

@@ -44,7 +44,7 @@ function App(): React.JSX.Element {
 
   const TabNavigator = () => {
     return (
-      <Tab.Navigator>
+      <Tab.Navigator screenOptions={{  tabBarActiveTintColor : '#3A2D7D' , tabBarLabelStyle: styles.tabBarLabel, tabBarIconStyle : styles.tabBarIcon}}  >
         <Tab.Screen
           name="Home"
           options={{
@@ -88,7 +88,7 @@ function App(): React.JSX.Element {
     );
   };
 
-  const HomeStack = () => {
+  const HomeStack = (props : any) => {
     return (
       <Stack.Navigator initialRouteName="HomeScreen">
         <Stack.Screen
@@ -130,6 +130,15 @@ const styles = StyleSheet.create({
     marginTop: 32,
     paddingHorizontal: 24,
   },
+  tabBarLabel :{
+    paddingBottom : 5,
+    fontWeight : '500',
+    fontSize : 12,
+  },
+  tabBarIcon : {
+    marginTop : 5,
+  }
+
 });
 
 export default App;

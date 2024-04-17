@@ -103,7 +103,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#F8F8F8',
     padding: 8,  
-    margin: 16,
+    marginHorizontal: 16,
+    marginBottom : 8,
     borderRadius : 8,
   },
   left: {

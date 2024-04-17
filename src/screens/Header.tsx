@@ -33,8 +33,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginHorizontal: 16,
+    padding: 10,
 
-    paddingTop: 10,
+    // backgroundColor: 'red',
+
   },
   leftImages: {
     flexDirection: 'row',
@@ -50,8 +52,10 @@ const styles = StyleSheet.create({
     alignItems: 'center', // Optional for vertical centering if needed
   },
   logo: {
+    width : 100,
+    height : 40,
     flex: 1, // Allow logo to grow and center itself within the available space
-    resizeMode: 'cover', // Ensure logo scales properly
+    resizeMode: 'contain', // Ensure logo scales properly
     alignSelf: 'flex-start', // Center the logo vertically within the header
   },
   titlename: {

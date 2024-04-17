@@ -23,10 +23,14 @@ const ChartList = (props: any) => {
   const [selectedTopics, setSelectedTopics] = useState<any>();
 
   useEffect(() => {
+    console.log("USE EFFECT");
     getTopics();
-  }, []);
+  }, [props]);
 
   const getTopics = async () => {
+    console.log("GET TOPICS");
+
+    setTopicList([])
     topicByChart({ chart_type })
       .then((response) => {
         console.log({ data: response?.data });
@@ -35,7 +39,7 @@ const ChartList = (props: any) => {
         setTopicList(topics);
       })
       .catch((error) => {
-        console.log(error);
+        console.log("ERROR",error);
       });
   };
 

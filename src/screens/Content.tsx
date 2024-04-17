@@ -55,6 +55,7 @@ const Content = () => {
                         <RenderHtml
                             contentWidth={width}
                             source={{ html: contentItem?.content_value }}
+                            baseStyle={{ color: 'black' }}
                         />
                     </>
                 )}

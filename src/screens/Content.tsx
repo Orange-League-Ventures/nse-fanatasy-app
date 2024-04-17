@@ -7,7 +7,7 @@ import RenderHtml from 'react-native-render-html';
 import Header from './Header';
 import CustomText from '../common/CustomText';
 
-const Content = () => {
+const Content = (props: any) => {
     const route: any = useRoute();
     const { width } = useWindowDimensions();
 
@@ -21,9 +21,12 @@ const Content = () => {
 
     useEffect(() => {
         getContent();
-    }, [currentPage]);
+    }, [currentPage, totalPages]);
 
     const getContent = async () => {
+        props.navigation.setOptions({
+            headerTitle: `Page ${currentPage} / ${totalPages}`,
+        });
         contentByTopic({ page: currentPage, limit: 1, topic_id }).then((response) => {
             console.log({ data: response?.data });
             const contentResult = response?.data?.content

@@ -14,25 +14,30 @@ import { setError, setLoading, setUser } from '../Redux/Slices/AuthSlice';
 import { useDispatch, useSelector } from 'react-redux';
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
+import { useNavigation } from '@react-navigation/native';
 
 const SignupForm = (props: any) => {
   const [name, setName] = useState('');
-  const [mobileNumber, setMobileNumber] = useState('');
+  const [phone_number, setPhoneNumber] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
-  const loading = useSelector(state => state.auth.loading);
-  const error = useSelector(state => state.auth.error);
+  const loading = useSelector(state => state?.auth?.loading);
+  const error = useSelector(state => state?.auth?.error);
+  const navigation = useNavigation();
 
   const handleSignUp = async () => {
     dispatch(setLoading(true));
     try {
-      const user = await signup(name, email, mobileNumber, password);
+      const user = await signup(name, email, phone_number, password);
       dispatch(setUser(user));
-      console.log("accoint created----");
+      navigation.navigate('Welcome');
     } catch (error) {
-      dispatch(setError(error.message));
-      console.error('create account Failed:', error.message);
+      dispatch(setError(error));
+      console.error('create account Failed:', error);
+    }
+    finally{
+      dispatch(setLoading(false));
     }
   };
   const {
@@ -41,15 +46,7 @@ const SignupForm = (props: any) => {
     formState: {errors},
   } = useForm<ISignup>();
 
-  const onSubmit = async (data: ISignup) => {
-    console.log(data);
-    try {
-      const response = await signup(data);
-      console.log({response});
-    } catch (error) {
-      console.log('err', error);
-    }
-  };
+  
 
   return (
     <View style={styles.container}>
@@ -61,12 +58,11 @@ const SignupForm = (props: any) => {
             start your journey to stock market mastery.
           </Text>
         </View>
-
         <View style={styles.inputcontainer}>
           <TextInput
             style={styles.input}
             placeholder="Name"
-            keyboardType="name"
+            keyboardType="email-address"
             autoCapitalize="none"
             value={name}
             onChangeText={setName}
@@ -84,8 +80,8 @@ const SignupForm = (props: any) => {
             placeholder="Mobile Number"
             keyboardType="phone-pad"
             autoCapitalize="none"
-            value={mobileNumber}
-            onChangeText={setMobileNumber}
+            value={phone_number}
+            onChangeText={setPhoneNumber}
           />
           <TextInput
             style={styles.input}
@@ -105,7 +101,6 @@ const SignupForm = (props: any) => {
         <TouchableOpacity
           style={styles.createButton}
           onPress={handleSignUp}
-          title="Welcome"
           activeOpacity={1}>
           <Text style={styles.buttonText}>Create Account</Text>
         </TouchableOpacity>
@@ -121,8 +116,8 @@ const styles = StyleSheet.create({
     width: 'auto',
     height: 'auto',
     backgroundColor: '#ffffff',
-    justifyContent: 'left',
-    alignItems: 'left',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
     padding: 0,
   },
   loginform: {
@@ -132,7 +127,7 @@ const styles = StyleSheet.create({
   headers: {
     width: 'auto',
     height: 'auto',
-    justifyContent: 'left',
+    justifyContent: 'flex-start',
     paddingVertical: 8,
     marginBottom: 42,
   },
@@ -152,7 +147,7 @@ const styles = StyleSheet.create({
     color: '#717171',
   },
   inputcontainer: {
-    margintop: 16,
+    marginTop: 16,
     marginBottom: 12,
   },
   input: {

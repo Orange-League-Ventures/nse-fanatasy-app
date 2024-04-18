@@ -1,9 +1,16 @@
 import React from 'react';
-import {View, Text, StyleSheet, Image} from 'react-native';
+import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import { useSelector } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 
 const Welcome = () => {
-  return (
+  const details = useSelector((state) => state?.auth);
+  const navigation = useNavigation();
+ const data=details?.user?.user;
+ console.log("data in welcome--",details);
+    return (
     <View style={styles.welcome}>
+      <View style={styles.started}>
       <View style={styles.container1}>
         <View style={styles.left}>
           <Text style={styles.textinfo}>
@@ -20,22 +27,37 @@ const Welcome = () => {
       <View style={styles.container2}>
       <Text style={styles.textContainer}>
       <Text style={styles.welcomeText}>Welcome aboard! </Text>
-      <Text style={styles.userNameText}>Jitendra Singh</Text>
+      <Text style={styles.userNameText}>{data?.name}</Text>
     </Text>
         <Text style={styles.descriptionText}>
           Your account is ready. Get ready to conquer the stock market with fun
           and games!
         </Text>
       </View>
+      <TouchableOpacity
+          style={styles.createButton}
+          onPress={() => navigation.navigate('HomeScreen')}
+          title="Welcome"
+          activeOpacity={1}>
+          <Text style={styles.buttonText}>Get Started</Text>
+        </TouchableOpacity>
+        </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   welcome: {
+    display:'flex',
+    width: 'auto',
+    height: 'auto',
     flex: 1,
     alignItems: 'center',
     backgroundColor: '#F8F8F8',
+  },
+  started: {
+    marginLeft: 16,
+    marginRight: 16,
   },
   container1: {
     flexDirection: 'row',
@@ -53,6 +75,8 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   container2: {
+    width: 'auto',
+    height: 'auto',
     paddingVertical: 8,
     paddingHorizontal:0,
     marginHorizontal:14
@@ -94,6 +118,28 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 15.6,
     color: '#717171',
+  },
+  createButton: {
+    backgroundColor: '#3A2D7D',
+    width: 328,
+    height: 'auto',
+    borderWidth: 1,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderRadius: 8,
+    color: '#000000',
+    borderColor: '#D4D4D4',
+    marginBottom: 12,
+    fontSize: 12,
+    fontFamily: 'Roboto',
+    fontWeight: '100',
+  },
+  buttonText: {
+    fontFamily: 'Roboto',
+    fontWeight: '500',
+    fontSize: 14,
+    textAlign: 'center',
+    color: '#ffffff',
   },
 });
 

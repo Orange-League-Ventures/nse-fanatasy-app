@@ -1,10 +1,17 @@
 import axios from "axios";
-import {REACT_APP_BASE_LOCAL_URL} from "@env"
+import { REACT_APP_BASE_LOCAL_URL } from "@env"
 
-//const baseUrl = REACT_APP_BASE_LOCAL_URL;
-const baseUrl = 'http://localhost:8000';
+// console.log({ REACT_APP_BASE_LOCAL_URL });
 
+
+// const baseUrl = REACT_APP_BASE_LOCAL_URL;
+
+// console.log({ baseUrl });
 
 export const axiosInstance = axios.create({
-  baseURL: `http://localhost:8000/api/v1`,
+  baseURL: `http://192.168.244.144:8000/api/v1`,
+  headers: {
+    'Content-Type': 'application/json',
+  }
 });
+    

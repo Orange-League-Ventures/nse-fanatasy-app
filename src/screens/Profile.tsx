@@ -1,61 +1,78 @@
 import React, { useEffect, useState } from 'react';
-import {BackHandler, Image, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import Header from './Header';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUser, setLoading, setError, logout }  from '../Redux/Slices/AuthSlice';
-import { updateUser, updateUserAndPassword } from '../services/authService';
+import { updateUser } from '../services/authService';
+import { AuthState } from '../interfaces/autInterfaces';
+
 
 const Profile = (props: any) => {
-  const details = useSelector((state) => state?.auth);
-  console.log("details---",details);
-  const data=details?.user;
-   const token=details?.token;
-   console.log("data and token",data,token);
-  const [profileImage,setProfileImage]=useState(data?.profile_picture || '');
+  const details = useSelector((state: AuthState) => state?.auth);
+  console.log("detaiuls---",details);
+   const token=details?.token || '';
   const dispatch = useDispatch();
- const [isPasswordupdate,setIsPasswordUpdate]=useState(false);
+  const [errorMsg,setErrorMsg]=useState('');
   const [userData, setUserData] = useState({
-    name: data?.name || '',
-    phone_number: data?.phone_number || '',
-    email: data?.email || '',
-    password:data?.password || '',
+    name: '',
+    phone_number: '',
+    email: '',
+    password: '',
   });
-  console.log("userData---",userData);
-  const [editMode, setEditMode] = useState(false);
+
+
+  useEffect(() => {
+    console.log("i am in use loop");
+
+    if (details && details.user) {
+      console.log("i am in loop");
+      setUserData({
+        name: details.user.name,
+        phone_number: details.user.phone_number,
+        email: details.user.email,
+        password: details.user.password,
+      });
+    }
+  }, [details]);
+  
+  const [editModes, setEditModes] = useState({
+    name: false,
+    phone_number: false,
+    email: false,
+    password: false,
+  });
   const [isLoading, setIsLoading] = useState(true);
 
 
-
-  const handleChange = (field: string, value: string) => {
-    if(field==='password')
-      {
-        setIsPasswordUpdate(true);
-      }
-    setUserData((prevData) => ({ ...prevData, [field]: value }));
+  const handleChange = (field: keyof typeof userData, value: string) => {
+    setUserData((prevData: any) => ({ ...prevData, [field]: value }));
   };
-  // Improved handleEdit function with validation and error handling
-  const handleEdit = async () => {
+  const handleEdit = async (field: keyof typeof userData) => {
+    dispatch(setLoading(true));
     try {
-      if(editMode)
-     { 
-      console.log("userdata----",userData);
-      setEditMode(false);
-      setIsLoading(true); // Set loading state to tru 
-      const updatedUser = !isPasswordupdate
-      ? await updateUser(token, userData.name, userData.email, userData.phone_number)
-      : await updateUserAndPassword(token, userData.name, userData.email, userData.phone_number, userData.password);
-    
-      dispatch(setUser(updatedUser)); // Update redux state with updated user
-    }
-    else{
-      setEditMode(true); 
-    }
-    } catch (error) {
+      // Toggle edit mode for the selected field
+      setEditModes((prevModes) => ({
+        ...prevModes,
+        [field]: !prevModes[field as keyof typeof editModes],
+      }));
+      if (!editModes[field as keyof typeof editModes]) {
+        return;
+      }
+      const updatedFields: Partial<typeof userData> = { [field]: userData[field] };
+  
+      const updatedUser = await updateUser(token, updatedFields);
+      console.log("updated user---",updateUser);
+      dispatch(setUser(updatedUser.user));
+    } catch (error:any) {
       console.error('Error updating user:', error);
-    } finally {
-      setIsLoading(false);
+      dispatch(setError(error.message)); 
+      setErrorMsg(error.message || 'Login failed. Please check your credentials.');
+    }
+    finally{
+      dispatch(setLoading(false));
     }
   };
+  
  
   return (
     <View>
@@ -97,64 +114,64 @@ const Profile = (props: any) => {
             </View>
                 <View style={styles.details}>
                   <View style={styles.left2}>
-                    {editMode ? (
+                    {editModes.name ? (
                       <TextInput
                         value={userData?.name}
                         onChangeText={(text) => handleChange('name', text)}
                         placeholder="Update your name"
                       />
                     ) : (
-                      <Text style={styles.detailsName}>{userData.name}</Text>
+                      <Text style={styles.detailsName}>{userData?.name}</Text>
                     )}
                     <Text style={styles.refercode}>Name</Text>
                   </View>
                   <View style={styles.right2}>
-                    <TouchableOpacity onPress={handleEdit}>
+                    <TouchableOpacity onPress={() => handleEdit('name')}>
                       <Image style={styles.editIcon} source={require('../../assets/images/EditIcon.png')} />
                     </TouchableOpacity>
                   </View>
                 </View>
                 <View style={styles.details}>
                   <View style={styles.left2}>
-                    {editMode ? (
+                    {editModes.phone_number ? (
                       <TextInput
                         value={userData.phone_number}
                         onChangeText={(text) => handleChange('phone_number', text)}
                         placeholder="Update your MobileNumber"
                       />
                     ) : (
-                      <Text style={styles.detailsName}>{userData.phone_number}</Text>
+                      <Text style={styles.detailsName}>{userData?.phone_number}</Text>
                     )}
                     <Text style={styles.refercode}>Mobile Number</Text>
                   </View>
                   <View style={styles.right2}>
-                    <TouchableOpacity onPress={handleEdit}>
+                    <TouchableOpacity onPress={() => handleEdit('phone_number')}>
                       <Image style={styles.editIcon} source={require('../../assets/images/EditIcon.png')} />
                     </TouchableOpacity>
                   </View>
                 </View>
                 <View style={styles.details}>
                   <View style={styles.left2}>
-                    {editMode ? (
+                    {editModes.email ? (
                       <TextInput
                         value={userData.email}
                         onChangeText={(text) => handleChange('email', text)}
                         placeholder="Update your email"
                       />
                     ) : (
-                      <Text style={styles.detailsName}>{userData.email}</Text>
+                      <Text style={styles.detailsName}>{userData?.email}</Text>
                     )}
                     <Text style={styles.refercode}>Email</Text>
                   </View>
                   <View style={styles.right2}>
-                    <TouchableOpacity onPress={handleEdit}>
+                    <TouchableOpacity onPress={() => handleEdit('email')}>
                       <Image style={styles.editIcon} source={require('../../assets/images/EditIcon.png')} />
                     </TouchableOpacity>
                   </View>
                 </View>
                 <View style={styles.details}>
                   <View style={styles.left2}>
-                    {editMode ? (
+                    {editModes.password ? (
                       <TextInput
                         value={userData?.password}
                         onChangeText={(text) => handleChange('password', text)}
@@ -166,13 +183,15 @@ const Profile = (props: any) => {
                     <Text style={styles.refercode}>password</Text>
                   </View>
                   <View style={styles.right2}>
-                    <TouchableOpacity onPress={handleEdit}>
+                    <TouchableOpacity onPress={() => handleEdit('password')}>
                       <Image style={styles.editIcon} source={require('../../assets/images/EditIcon.png')} />
                     </TouchableOpacity>
                   </View>
                 </View>
           </View>
+          {errorMsg && <Text >{errorMsg}</Text>} 
         </View>
+
       )}
     </View>
   );
@@ -293,3 +312,7 @@ const styles = StyleSheet.create({
 });
 
 export default Profile;
+function setUserData(arg0: (prevData: any) => any) {
+  throw new Error('Function not implemented.');
+}
+

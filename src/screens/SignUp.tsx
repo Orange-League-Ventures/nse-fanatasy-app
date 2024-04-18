@@ -8,9 +8,9 @@ import {
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
-import {ISignup} from '../interfaces/autInterfaces';
+import {AuthState} from '../interfaces/autInterfaces';
 import {signup} from '../services/authService';
-import { setError, setLoading, setUser } from '../Redux/Slices/AuthSlice';
+import { setError, setLoading, setToken, setUser } from '../Redux/Slices/AuthSlice';
 import { useDispatch, useSelector } from 'react-redux';
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
@@ -22,32 +22,25 @@ const SignupForm = (props: any) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
-  const loading = useSelector(state => state?.auth?.loading);
-  const error = useSelector(state => state?.auth?.error);
+  const loading = useSelector((state: AuthState) => state?.auth?.loading);
+  const error = useSelector((state: AuthState) => state?.auth?.error);
   const navigation = useNavigation();
 
   const handleSignUp = async () => {
     dispatch(setLoading(true));
     try {
-      const user = await signup(name, email, phone_number, password);
-      dispatch(setUser(user));
-      navigation.navigate('Welcome');
-    } catch (error) {
-      dispatch(setError(error));
+      const data = await signup(name, email, phone_number, password);
+      dispatch(setToken(data.accessToken)); 
+      dispatch(setUser(data.user)); 
+      props.navigation.navigate('Welcome');
+    } catch (error:any) {
+      dispatch(setError(error.message));
       console.error('create account Failed:', error);
     }
     finally{
       dispatch(setLoading(false));
     }
   };
-  const {
-    control,
-    handleSubmit,
-    formState: {errors},
-  } = useForm<ISignup>();
-
-  
-
   return (
     <View style={styles.container}>
       <View style={styles.loginform}>

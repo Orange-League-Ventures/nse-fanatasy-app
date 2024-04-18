@@ -32,6 +32,7 @@ const LoginForm = (props: any) => {
       dispatch(setUser(data.user)); 
       props.navigation.navigate('HomeScreen'); 
       console.log("Login successful! Redirecting to Home screen.", data); 
+      setErrorMsg('');
     } catch (error:any) {
       console.error('Login failed:', error.message); // Log error message
       dispatch(setError(error.message)); 

@@ -63,6 +63,7 @@ const Profile = (props: any) => {
       const updatedUser = await updateUser(token, updatedFields);
       console.log("updated user---",updateUser);
       dispatch(setUser(updatedUser.user));
+      setErrorMsg('');
     } catch (error:any) {
       console.error('Error updating user:', error);
       dispatch(setError(error.message)); 

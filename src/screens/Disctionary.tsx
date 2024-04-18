@@ -1,18 +1,21 @@
 import React from 'react'
-import { Image, StyleSheet,  View, Dimensions } from 'react-native'
+import { Image, StyleSheet,  View, Dimensions , TouchableOpacity} from 'react-native'
 import CustomText from '../common/CustomText'
 
 const windowWidth : number = Dimensions.get('window').width;
-const Dictionary = () => {
+const Dictionary = (props: any) => {
     return (
         <View>
             <View >
                 <CustomText style={styles.headingText}>Trading Dictionary</CustomText>
             </View>
             <View style={styles.imageContainer}>
-                <Image
-                    source={require('../../assets/images/dictionary_4x.png')} style={ styles.image}
-                />
+                <TouchableOpacity onPress={() => { props.navigation.navigate("Words") }}>
+                    <Image
+                        source={require('../../assets/images/dictionary.png')}
+                    />
+                </TouchableOpacity>
+
             </View>
         </View>
     )
@@ -21,9 +24,10 @@ const Dictionary = () => {
 const styles = StyleSheet.create({
     headingText: {
         marginTop: 20,
+        marginBottom: 10,
         fontSize: 14,
-        fontWeight:'500',
-        color: "#000000",
+        fontWeight: '500',
+        color: "#000000"
     },
     imageContainer: {
         marginVertical: 12,  

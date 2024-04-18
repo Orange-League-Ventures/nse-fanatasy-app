@@ -2,11 +2,12 @@ import React from 'react';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
+import { AuthState } from '../interfaces/autInterfaces';
 
-const Welcome = () => {
-  const details = useSelector((state) => state?.auth);
+const Welcome = (props:any) => {
+  const details = useSelector((state: AuthState)  => state?.auth);
   const navigation = useNavigation();
- const data=details?.user?.user;
+ const data=details?.user;
  console.log("data in welcome--",details);
     return (
     <View style={styles.welcome}>
@@ -36,8 +37,7 @@ const Welcome = () => {
       </View>
       <TouchableOpacity
           style={styles.createButton}
-          onPress={() => navigation.navigate('HomeScreen')}
-          title="Welcome"
+          onPress={() => props.navigation.navigate('HomeScreen')}
           activeOpacity={1}>
           <Text style={styles.buttonText}>Get Started</Text>
         </TouchableOpacity>

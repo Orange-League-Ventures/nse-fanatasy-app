@@ -22,21 +22,22 @@ const LoginForm = (props: any) => {
   const [password, setPassword] = useState('');
   const [errorMsg,setErrorMsg]=useState('');
   const dispatch = useDispatch();
-  const navigation = useNavigation();
 
   const handleLogin = async () => {
-    dispatch(setLoading(true)); // Set loading state to true
+    dispatch(setLoading(true)); 
     try {
       const data = await login(email, password);
       console.log("data in handle login---",data);
       dispatch(setToken(data.accessToken)); 
       dispatch(setUser(data.user)); 
-      navigation.navigate('HomeScreen'); 
+      props.navigation.navigate('HomeScreen'); 
       console.log("Login successful! Redirecting to Home screen.", data); 
-    } catch (error) {
-      console.error('Login failed:', error); // Log error message
-      dispatch(setError('Login failed. Please check your credentials.')); 
-      navigation.navigate('Login'); 
+      setErrorMsg('');
+    } catch (error:any) {
+      console.error('Login failed:', error.message); // Log error message
+      dispatch(setError(error.message)); 
+      setErrorMsg(error.message || 'Login failed. Please check your credentials.');
+      props.navigation.navigate('Login'); 
     } finally {
       dispatch(setLoading(false)); // Always set loading to false regardless of success or failure
     }
@@ -87,7 +88,7 @@ const styles = StyleSheet.create({
     height: 'auto',
     backgroundColor: '#ffffff',
     justifyContent: 'center',
-    // alignItems: 'cenetr',
+    // alignItems: 'center',
     padding: 0,
   },
   loginform: {

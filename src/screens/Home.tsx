@@ -4,21 +4,18 @@ import Profile from './Profile'
 import DailyChallanges from './DailyChallanges'
 import DailyLearning from './DailyLearning'
 import Header from './Header'
-// import { ScrollView } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
-// import Button from '../common/Button';
 
 
-const Home = () => {
+
+const Home = (props: any) => {
   const navigation = useNavigation();
 
   const handlePress = () => {
-    // Navigate to the Login screen
-    navigation.navigate('Login');
+    props.navigation.navigate('Login');
   };
   const handlePress_signup = () => {
-    // Navigate to the Login screen
-    navigation.navigate('Signup');
+    props.navigation.navigate('Signup');
   };
   return (
     <ScrollView style={styles.container}>

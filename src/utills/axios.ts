@@ -9,7 +9,7 @@ const baseUrl = REACT_APP_BASE_LOCAL_URL;
 console.log({ baseUrl });
 
 export const axiosInstance = axios.create({
-  baseURL: `http://192.168.29.119:8000/api/v1`,
+  baseURL: `${baseUrl}/api/v1`,
   headers: {
     'Content-Type': 'application/json',
   }

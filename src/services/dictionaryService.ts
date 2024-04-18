@@ -12,6 +12,8 @@ export const fetchWords = async () => {
 export const fetchWordOfTheDay = async () => {
     try {
         const result = await axiosInstance.get(`/dictionary/word-of-the-day`)
+        console.log({result});
+        
         return result
     } catch (error) {
         console.log("ERROR IN WORD OF THE DAY  SERVICE", error);

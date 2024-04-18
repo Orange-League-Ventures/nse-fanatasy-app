@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import InputBox from '../common/InputBox';
-import { fetchDefinition, fetchWords } from '../services/dictionaryService';
+import { fetchDefinition, fetchWordOfTheDay, fetchWords } from '../services/dictionaryService';
 import CustomText from '../common/CustomText';
 
 interface IWords {
@@ -15,10 +15,16 @@ interface IWord {
     word: string;
 }
 
+interface IWordOfTheDay {
+    word: string;
+    definition: String;
+}
+
 const Words = () => {
     const [wordsState, setWordState] = useState<Array<IWords>>([]);
     const [definition, setDefinition] = useState<string>('')
     const [selectedWord, setSelectedWord] = useState<string | null>(null);
+    const [wordOfTheDayState, setWordOfTheDayState] = useState<IWordOfTheDay>()
     useEffect(() => {
         wordsGroupByLetter();
         wordOfTheDay();
@@ -35,6 +41,14 @@ const Words = () => {
     }
 
     const wordOfTheDay = async () => {
+        fetchWordOfTheDay().then((response) => {
+            const data = response?.data;
+            console.log({ data });
+
+            setWordOfTheDayState(data?.wordOfTheDay)
+        }).catch((error) => {
+
+        })
     }
 
     const wordDefinition = (id: string) => {
@@ -52,19 +66,22 @@ const Words = () => {
     return (
         <View style={styles.container}>
             {/* WORD OF THE DAY  */}
-            <View style={styles.view1}>
-                <View style={styles.view2}>
-                    <CustomText style={styles.wordOfTheDayHeading}>Bond</CustomText>
-                </View>
-                <View style={styles.view3}>
-                    <CustomText style={styles.wordOfTheDay}>
-                        A debt security issued by a corporation or government to raise
-                        capital. Bondholders are essentially creditors of the issuer and
-                        receive periodic interest payments until the bond matures, at which
-                        point they receive the principal amount they invested.
-                    </CustomText>
-                </View>
-            </View>
+            {
+                wordOfTheDayState ? (
+                    <View style={styles.view1}>
+                        <CustomText style={styles.wordOfTheDayHeading}>{
+                            wordOfTheDayState?.word
+                        }</CustomText>
+                        <CustomText style={styles.wordOfTheDay}>
+                            {
+                                wordOfTheDayState?.definition
+
+                            }
+                        </CustomText>
+                    </View>
+                ) : null
+            }
+
             <View style={styles.view2}>
                 <InputBox
                     style={styles.searchBox}

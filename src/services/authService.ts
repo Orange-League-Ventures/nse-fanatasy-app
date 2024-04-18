@@ -11,7 +11,7 @@ export const signup = async (name: string | ISignup, email: string | undefined, 
     if (error?.response) {
       console.error('Server responded with status code:', error?.response?.status);
       console.error('Response data:', error?.response?.data);
-      throw new Error(error?.response?.data); // Throw custom error message
+      throw new Error(error?.response?.data?.message); // Throw custom error message
     } else if (error.request) {
       console.error('No response received from the server');
       throw new Error('No response received from the server');
@@ -33,7 +33,7 @@ export const login = async (email: string | undefined, password: string | undefi
     if (error?.response) {
       console.error('Server responded with status code:', error?.response?.status);
       console.error('Response data:', error?.response?.data);
-      throw new Error(error?.response?.data); // Throw custom error message
+      throw new Error(error?.response?.data?.message); // Throw custom error message
     } else if (error.request) {
       console.error('No response received from the server');
       throw new Error('No response received from the server');
@@ -66,7 +66,7 @@ export const updateUser = async (
     if (error?.response) {
       console.error('Server responded with status code:', error?.response?.status);
       console.error('Response data:', error?.response?.data);
-      throw new Error(error?.response?.data); // Throw custom error message
+      throw new Error(error?.response?.data?.message); // Throw custom error message
     } else if (error.request) {
       console.error('No response received from the server');
       throw new Error('No response received from the server');

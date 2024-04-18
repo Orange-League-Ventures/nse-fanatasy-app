@@ -1,8 +1,62 @@
-import React from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {BackHandler, Image, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import Header from './Header';
+import { useDispatch, useSelector } from 'react-redux';
+import { setUser, setLoading, setError, logout }  from '../Redux/Slices/AuthSlice';
+import { updateUser, updateUserAndPassword } from '../services/authService';
 
 const Profile = (props: any) => {
+  const details = useSelector((state) => state?.auth);
+  console.log("details---",details);
+  const data=details?.user;
+   const token=details?.token;
+   console.log("data and token",data,token);
+  const [profileImage,setProfileImage]=useState(data?.profile_picture || '');
+  const dispatch = useDispatch();
+ const [isPasswordupdate,setIsPasswordUpdate]=useState(false);
+  const [userData, setUserData] = useState({
+    name: data?.name || '',
+    phone_number: data?.phone_number || '',
+    email: data?.email || '',
+    password:data?.password || '',
+  });
+  console.log("userData---",userData);
+  const [editMode, setEditMode] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+
+
+  const handleChange = (field: string, value: string) => {
+    if(field==='password')
+      {
+        setIsPasswordUpdate(true);
+      }
+    setUserData((prevData) => ({ ...prevData, [field]: value }));
+  };
+  // Improved handleEdit function with validation and error handling
+  const handleEdit = async () => {
+    try {
+      if(editMode)
+     { 
+      console.log("userdata----",userData);
+      setEditMode(false);
+      setIsLoading(true); // Set loading state to tru 
+      const updatedUser = !isPasswordupdate
+      ? await updateUser(token, userData.name, userData.email, userData.phone_number)
+      : await updateUserAndPassword(token, userData.name, userData.email, userData.phone_number, userData.password);
+    
+      dispatch(setUser(updatedUser)); // Update redux state with updated user
+    }
+    else{
+      setEditMode(true); 
+    }
+    } catch (error) {
+      console.error('Error updating user:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+ 
   return (
     <View>
       <View>
@@ -20,7 +74,7 @@ const Profile = (props: any) => {
           </View>
           <View style={styles.right}>
             <Text style={styles.text1}>Good morning!!</Text>
-            <Text style={styles.text2}>Jitendra Singh</Text>
+            <Text style={styles.text2}>{userData?.name}</Text>
           </View>
         </View>
       ) : (
@@ -41,56 +95,82 @@ const Profile = (props: any) => {
                 <Text style={styles.copy}>Copy</Text>
               </View>
             </View>
-            <View style={styles.details}>
-              <View style={styles.left2}>
-                <Text style={styles.detailsName}>Jitender Singh</Text>
-                <Text style={styles.refercode}>Name</Text>
-              </View>
-              <View style={styles.right2}>
-                <Image
-                  style={styles.editIcon}
-                  source={require('../../assets/images/EditIcon.png')}
-                />
-              </View>
-            </View>
-            <View style={styles.details}>
-              <View style={styles.left2}>
-                <Text style={styles.detailsName}>+91 9521797178</Text>
-                <Text style={styles.refercode}>Phone Number</Text>
-              </View>
-              <View style={styles.right2}>
-                <Image
-                  style={styles.editIcon}
-                  source={require('../../assets/images/EditIcon.png')}
-                />
-              </View>
-            </View>
-            <View style={styles.details}>
-              <View style={styles.left2}>
-                <Text style={styles.detailsName}>
-                  keshav@onelabventures.com
-                </Text>
-                <Text style={styles.refercode}>Email</Text>
-              </View>
-              <View style={styles.right2}>
-                <Image
-                  style={styles.editIcon}
-                  source={require('../../assets/images/EditIcon.png')}
-                />
-              </View>
-            </View>
-            <View style={styles.details}>
-              <View style={styles.left2}>
-                <Text style={styles.detailsName}>*********</Text>
-                <Text style={styles.refercode}>Password</Text>
-              </View>
-              <View style={styles.right2}>
-                <Image
-                  style={styles.editIcon}
-                  source={require('../../assets/images/EditIcon.png')}
-                />
-              </View>
-            </View>
+                <View style={styles.details}>
+                  <View style={styles.left2}>
+                    {editMode ? (
+                      <TextInput
+                        value={userData?.name}
+                        onChangeText={(text) => handleChange('name', text)}
+                        placeholder="Update your name"
+                      />
+                    ) : (
+                      <Text style={styles.detailsName}>{userData.name}</Text>
+                    )}
+                    <Text style={styles.refercode}>Name</Text>
+                  </View>
+                  <View style={styles.right2}>
+                    <TouchableOpacity onPress={handleEdit}>
+                      <Image style={styles.editIcon} source={require('../../assets/images/EditIcon.png')} />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                <View style={styles.details}>
+                  <View style={styles.left2}>
+                    {editMode ? (
+                      <TextInput
+                        value={userData.phone_number}
+                        onChangeText={(text) => handleChange('phone_number', text)}
+                        placeholder="Update your MobileNumber"
+                      />
+                    ) : (
+                      <Text style={styles.detailsName}>{userData.phone_number}</Text>
+                    )}
+                    <Text style={styles.refercode}>Mobile Number</Text>
+                  </View>
+                  <View style={styles.right2}>
+                    <TouchableOpacity onPress={handleEdit}>
+                      <Image style={styles.editIcon} source={require('../../assets/images/EditIcon.png')} />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                <View style={styles.details}>
+                  <View style={styles.left2}>
+                    {editMode ? (
+                      <TextInput
+                        value={userData.email}
+                        onChangeText={(text) => handleChange('email', text)}
+                        placeholder="Update your email"
+                      />
+                    ) : (
+                      <Text style={styles.detailsName}>{userData.email}</Text>
+                    )}
+                    <Text style={styles.refercode}>Email</Text>
+                  </View>
+                  <View style={styles.right2}>
+                    <TouchableOpacity onPress={handleEdit}>
+                      <Image style={styles.editIcon} source={require('../../assets/images/EditIcon.png')} />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                <View style={styles.details}>
+                  <View style={styles.left2}>
+                    {editMode ? (
+                      <TextInput
+                        value={userData?.password}
+                        onChangeText={(text) => handleChange('password', text)}
+                        placeholder="Update your password"
+                      />
+                    ) : (
+                      <Text style={styles.detailsName}>********</Text>
+                    )}
+                    <Text style={styles.refercode}>password</Text>
+                  </View>
+                  <View style={styles.right2}>
+                    <TouchableOpacity onPress={handleEdit}>
+                      <Image style={styles.editIcon} source={require('../../assets/images/EditIcon.png')} />
+                    </TouchableOpacity>
+                  </View>
+                </View>
           </View>
         </View>
       )}
@@ -102,7 +182,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#F8F8F8',
-    padding: 8,
+    padding: 8,  
+    marginHorizontal: 16,
+    marginBottom : 8,
+    borderRadius : 8,
   },
   left: {
     marginRight: 8,
@@ -117,11 +200,17 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
   },
   text1: {
-    color: '#717171',
+    color: '#03050A',
     marginBottom: 4,
+    fontSize : 12,
+    fontWeight : '400',
+
   },
   text2: {
-    color: '#03050A',
+    color: '#3A2D7D',
+    fontSize : 14,
+    fontWeight : '600',
+
   },
   subcontainer: {
     backgroundColor: '#F8F8F8',

@@ -1,8 +1,9 @@
 import React from 'react'
-import { Image, StyleSheet, Text, View } from 'react-native'
+import { Image, StyleSheet,  View, Dimensions } from 'react-native'
 import CustomText from '../common/CustomText'
 
-const Disctionary = () => {
+const windowWidth : number = Dimensions.get('window').width;
+const Dictionary = () => {
     return (
         <View>
             <View >
@@ -10,7 +11,7 @@ const Disctionary = () => {
             </View>
             <View style={styles.imageContainer}>
                 <Image
-                    source={require('../../assets/images/dictionary.png')}
+                    source={require('../../assets/images/dictionary_4x.png')} style={ styles.image}
                 />
             </View>
         </View>
@@ -20,14 +21,20 @@ const Disctionary = () => {
 const styles = StyleSheet.create({
     headingText: {
         marginTop: 20,
-        marginBottom:10,
         fontSize: 14,
         fontWeight:'500',
-        color: "#000000"
+        color: "#000000",
     },
     imageContainer: {
-        marginTop: 20
+        marginVertical: 12,  
+        // backgroundColor :'red',
+    },
+    image : {
+        borderRadius: 8,
+        width: (windowWidth-32),
+        height : windowWidth > 400 ? 170 : 150,
+        resizeMode: windowWidth > 400? 'cover' : 'contain',
     }
 })
 
-export default Disctionary
+export default Dictionary

@@ -1,19 +1,19 @@
 // ChartList.tsx
 
 import React, { useEffect, useState } from 'react';
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View , Dimensions } from 'react-native';
 import Header from './Header';
 import { topicByChart } from '../services/topicservice';
 import { useRoute } from '@react-navigation/native';
 import CustomText from '../common/CustomText';
 import CheckboxComponent from '../common/CheckBoxComponent';
+import { windowHeight , windowWidth } from '../common/Dimensions';
 
 interface ITopic {
   topic_name: string;
   icon: string;
   id: string;
 }
-
 const ChartList = (props: any) => {
   const route: any = useRoute();
   const chart_type = route?.params?.state?.chart_type;
@@ -50,7 +50,7 @@ const ChartList = (props: any) => {
   }
 
   return (
-    <View>
+    <View style={styles.mainContainer}>
       {/* <Header title={chart_type.charAt(0).toUpperCase() + chart_type.slice(1) + ' Chart'} /> */}
       <ScrollView>
         <CustomText style={styles.subTopicText}>Subtopics</CustomText>
@@ -71,7 +71,8 @@ const ChartList = (props: any) => {
                     {topic.topic_name.charAt(0).toUpperCase() + topic.topic_name.slice(1)}
                   </Text>
                 </View>
-                <CheckboxComponent isChecked={false} onChange={(newValue) => { }} />
+                
+                {/* <CheckboxComponent isChecked={false} onChange={(newValue) => { }} /> */}
               </TouchableOpacity>
             ))}
           </>
@@ -82,6 +83,11 @@ const ChartList = (props: any) => {
 };
 
 const styles = StyleSheet.create({
+  mainContainer :{
+    width : windowWidth, 
+    height : windowHeight,
+    backgroundColor : '#fff'
+  },
   subTopicText: {
     marginLeft: 20,
     marginTop: 20,

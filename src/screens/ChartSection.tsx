@@ -1,64 +1,100 @@
 import React from 'react';
-import { Image, View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import {
+  Image,
+  View,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  Dimensions,
+} from 'react-native';
 import CustomText from '../common/CustomText';
 
+const windowWidth: number = Dimensions.get('window').width;
+const windowHeight: number = Dimensions.get('window').height;
+const imageContainerWidth: number = (windowWidth - 40) / 2;
 const ChartSection = (props: any) => {
-    const handleImageClick = (chartType: string) => {
-        // chartType will be passed as state
-        props.navigation.navigate('ChartList');
-    }
+  // const handleImageClick =
 
-    return (
-        <View >
-            <View style={styles.textContainer}>
-                <CustomText style={styles.headingText} >Understanding Charts</CustomText>
-            </View>
-            <View style={styles.container}>
-                <TouchableOpacity onPress={() => { props.navigation.navigate('ChartList', { state: { chart_type: "line" } }); }}>
-                    <View style={styles.imageContainer}>
-                        <Image
-                            source={require('../../assets/images/lineChart.png')}
-                        />
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => { props.navigation.navigate('ChartList', { state: { chart_type: "candelstick" } }); }}>
-                    <View style={styles.imageContainer}>
-                        <Image
-                            source={require('../../assets/images/candelStick.png')}
-                        />
-                    </View>
-                </TouchableOpacity>
-            </View>
-            <View style={styles.chartPatternContainer}>
-                <Image
-                    source={require('../../assets/images/chartPattern.png')}
-                />
-            </View>
-        </View>
-    );
+  return (
+    <View>
+      <View style={styles.textContainer}>
+        <CustomText style={styles.headingText}>Understanding Charts</CustomText>
+      </View>
+      <View style={styles.container}>
+        <TouchableOpacity
+          onPress={() => {
+            props.navigation.navigate('ChartList', {
+              state: {chart_type: 'line'},
+            });
+          }}>
+          <View style={styles.imageContainer}>
+            <Image
+              source={require('../../assets/images/linechart_4x.png')}
+              style={styles.image}
+            />
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            props.navigation.navigate('ChartList', {
+              state: {chart_type: 'candelstick'},
+            });
+          }}>
+          <View style={styles.imageContainer}>
+            <Image
+              source={require('../../assets/images/candlestick_4x.png')}
+              style={styles.image}
+            />
+          </View>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.chartPatternContainer}>
+        <Image
+          source={require('../../assets/images/chartPattern_4x.png')}
+          style={styles.chartImage}
+        />
+      </View>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        marginTop: 10,
-        flexDirection: 'row',
-    },
-    imageContainer: {
-        marginRight: 5,
-    },
-    chartPatternContainer: {
-        marginTop: 5
-    },
-    textContainer: {
-        marginTop: 3
-    },
-    headingText: {
-        marginTop: 20,
-        marginBottom: 10,
-        fontSize: 14,
-        fontWeight: '500',
-        color: "#000000"
-    }
+  container: {
+    flexDirection: 'row',
+    width: windowWidth - 32,
+    justifyContent: 'space-between',
+    gap: 4,
+  },
+  imageContainer: {
+    overflow: 'hidden',
+    marginTop: 12,
+  },
+  image: {
+    height: 180,
+    borderRadius: 8,
+    width: imageContainerWidth,
+    resizeMode: 'cover',
+  },
+  chartPatternContainer: {
+    width: windowWidth - 32,
+    // backgroundColor :'green',
+    height: 180,
+    marginTop: 12,
+  },
+  textContainer: {
+    marginTop: 8,
+  },
+  chartImage: {
+    height: 180,
+    resizeMode: 'cover',
+    borderRadius: 8,
+    width: windowWidth - 32,
+  },
+  headingText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#000000',
+  },
 });
 
 export default ChartSection;

@@ -8,10 +8,7 @@ const Header = (props: any) => {
       <View style={styles.leftImages}>
         {
           props?.isTab ? (
-            <Image
-              source={require('../../assets/images/menu.png')}
-              style={styles.image}
-            />
+           <></>
           ) : (
             <TouchableOpacity onPress={() => {
               // props.navigation.navigate()
@@ -55,8 +52,11 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 10,
-    paddingTop: 10,
+    marginHorizontal: 16,
+    padding: 10,
+
+    // backgroundColor: 'red',
+
   },
   leftImages: {
     flexDirection: 'row',
@@ -65,14 +65,18 @@ const styles = StyleSheet.create({
     marginRight: 8, // Adjust spacing between images as needed
   },
   container: {
+    // height : 0,
     flex: 1, // Make the container take up the full width
     justifyContent: 'center',
+
     alignItems: 'center', // Optional for vertical centering if needed
   },
   logo: {
+    width : 100,
+    height : 40,
     flex: 1, // Allow logo to grow and center itself within the available space
     resizeMode: 'contain', // Ensure logo scales properly
-    alignSelf: 'center', // Center the logo vertically within the header
+    alignSelf: 'flex-start', // Center the logo vertically within the header
   },
   titlename: {
     fontFamily: 'Montserrat',

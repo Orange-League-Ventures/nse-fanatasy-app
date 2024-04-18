@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet, useWindowDimensions } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet, useWindowDimensions, ScrollView } from 'react-native';
 import { contentByTopic } from '../services/contentService';
 import { useRoute } from '@react-navigation/native';
 import RenderHtml from 'react-native-render-html';
@@ -44,6 +44,7 @@ const Content = (props: any) => {
 
     return (
         <>
+        <ScrollView>
             {/* <Header title={topic_name.charAt(0).toUpperCase() + topic_name.slice(1)} currentPage={currentPage} totalPages={totalPages} /> */}
             <View style={styles.container}>
                 {contentItem && (
@@ -73,6 +74,7 @@ const Content = (props: any) => {
                     </TouchableOpacity>
                 </View>
             </View>
+            </ScrollView>
         </>
 
     );

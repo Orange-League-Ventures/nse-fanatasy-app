@@ -28,7 +28,7 @@ import Profile from './src/screens/Profile';
 import LearnSection from './src/screens/Learn.Section';
 import ChartList from './src/screens/ChartList';
 import Content from './src/screens/Content';
-
+import Words from './src/screens/Words';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -109,6 +109,10 @@ function App(): React.JSX.Element {
         <Stack.Screen name="Content"
           options={({ route }: any) => ({ title: route.params?.state.topic_name.charAt(0).toUpperCase() + route.params?.state.topic_name.slice(1) })}
           component={Content} />
+
+        <Stack.Screen name="Words"
+          options={{ title: "Dictionary" }}
+          component={Words} />
 
       </Stack.Navigator>
     )

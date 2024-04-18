@@ -11,7 +11,7 @@ const LearnSection = (props: any) => {
       <Header title={"LEARN"} isTab={true} />
       <ScrollView style={styles.mainContainer}>
         <ChartSection navigation={props.navigation} />
-        <Disctionary />
+        <Disctionary navigation={props.navigation} />
       </ScrollView>
     </View>
   )

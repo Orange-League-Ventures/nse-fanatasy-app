@@ -89,9 +89,8 @@ const styles = StyleSheet.create({
     backgroundColor : '#fff'
   },
   subTopicText: {
-    marginLeft: 20,
+    marginLeft : 16,
     marginTop: 20,
-    marginBottom: 15,
     fontSize: 14,
     fontWeight: '500',
     color: '#000000',
@@ -99,12 +98,13 @@ const styles = StyleSheet.create({
   },
   topicItem: {
     borderRadius: 20,
-    backgroundColor: '#F8F8F8',
+    // backgroundColor: '#F8F8F8',
+    backgroundColor: 'red',
     flexDirection: 'row',
     alignItems: 'center',
     padding: 25,
-    marginHorizontal: 20,
-    marginVertical: 10
+    marginHorizontal: 16,
+    marginTop: 12,
   },
   icon: {
     width: 50,

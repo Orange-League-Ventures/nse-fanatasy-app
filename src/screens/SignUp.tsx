@@ -1,53 +1,47 @@
-import React, {useState, useEffect} from 'react';
-import {useForm, Controller} from 'react-hook-form';
+import React, {useState} from 'react';
 import {
   View,
   TextInput,
   Text,
   StyleSheet,
   TouchableOpacity,
-  Dimensions,
 } from 'react-native';
-import {ISignup} from '../interfaces/autInterfaces';
 import {signup} from '../services/authService';
-import { setError, setLoading, setUser } from '../Redux/Slices/AuthSlice';
-import { useDispatch, useSelector } from 'react-redux';
-const windowHeight = Dimensions.get('window').height;
-const windowWidth = Dimensions.get('window').width;
-import { useNavigation } from '@react-navigation/native';
+import { setError, setLoading, setToken, setUser } from '../Redux/Slices/AuthSlice';
+import { useDispatch} from 'react-redux';
+
 
 const SignupForm = (props: any) => {
   const [name, setName] = useState('');
   const [phone_number, setPhoneNumber] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMsg,setErrorMsg]=useState('');
+
   const dispatch = useDispatch();
-  const loading = useSelector(state => state?.auth?.loading);
-  const error = useSelector(state => state?.auth?.error);
-  const navigation = useNavigation();
 
   const handleSignUp = async () => {
     dispatch(setLoading(true));
     try {
-      const user = await signup(name, email, phone_number, password);
-      dispatch(setUser(user));
-      navigation.navigate('Welcome');
-    } catch (error) {
-      dispatch(setError(error));
+      if (!email || !password || !phone_number || !password) {
+        setErrorMsg("All fields are required.");
+        return;
+      }
+      const data = await signup(name, email, phone_number, password);
+      dispatch(setToken(data.accessToken)); 
+      dispatch(setUser(data.user)); 
+      props.navigation.navigate('Welcome');
+      setErrorMsg('');
+    } catch (error:any) {
+      dispatch(setError(error.message));
+      setErrorMsg(error.message || 'create account Failed:');
       console.error('create account Failed:', error);
+      props.navigation.navigate('Signup'); 
     }
     finally{
       dispatch(setLoading(false));
     }
   };
-  const {
-    control,
-    handleSubmit,
-    formState: {errors},
-  } = useForm<ISignup>();
-
-  
-
   return (
     <View style={styles.container}>
       <View style={styles.loginform}>
@@ -104,6 +98,7 @@ const SignupForm = (props: any) => {
           activeOpacity={1}>
           <Text style={styles.buttonText}>Create Account</Text>
         </TouchableOpacity>
+        {errorMsg && <Text style={styles.errorMsg}>{errorMsg}</Text>} 
       </View>
     </View>
   );
@@ -187,6 +182,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#ffffff',
   },
+  errorMsg: {
+    color: '#CB0505',
+    fontSize: 10,
+    marginTop: 10,
+  }
 });
 
 export default SignupForm;

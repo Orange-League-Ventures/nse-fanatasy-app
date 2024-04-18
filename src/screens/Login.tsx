@@ -1,42 +1,40 @@
-import React, {useState, useEffect} from 'react';
-import {useForm, Controller} from 'react-hook-form';
+import React, {useState} from 'react';
 import {
   View,
   TextInput,
-  Button,
   Text,
   StyleSheet,
   TouchableOpacity,
   Image,
-  Dimensions,
 } from 'react-native';
 import { setUser, setLoading, setError, logout,setToken }  from '../Redux/Slices/AuthSlice';
 import {login} from '../services/authService';
 import {useDispatch} from 'react-redux';
-import { useNavigation } from '@react-navigation/native';
-const windowHeight = Dimensions.get('window').height;
-const windowWidth = Dimensions.get('window').width;
+
 
 const LoginForm = (props: any) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMsg,setErrorMsg]=useState('');
   const dispatch = useDispatch();
-  const navigation = useNavigation();
 
   const handleLogin = async () => {
-    dispatch(setLoading(true)); // Set loading state to true
+    dispatch(setLoading(true)); 
     try {
+      if (!email || !password) {
+        setErrorMsg("Email and password are required.");
+        return;
+      }
       const data = await login(email, password);
-      console.log("data in handle login---",data);
       dispatch(setToken(data.accessToken)); 
       dispatch(setUser(data.user)); 
-      navigation.navigate('HomeScreen'); 
-      console.log("Login successful! Redirecting to Home screen.", data); 
-    } catch (error) {
-      console.error('Login failed:', error); // Log error message
-      dispatch(setError('Login failed. Please check your credentials.')); 
-      navigation.navigate('Login'); 
+      props.navigation.navigate('HomeScreen'); 
+      setErrorMsg('');
+    } catch (error:any) {
+      console.error('Login failed:', error.message); // Log error message
+      dispatch(setError(error.message)); 
+      setErrorMsg(error.message || 'Login failed. Please check your credentials.');
+      props.navigation.navigate('Login'); 
     } finally {
       dispatch(setLoading(false)); // Always set loading to false regardless of success or failure
     }
@@ -73,7 +71,7 @@ const LoginForm = (props: any) => {
           activeOpacity={1}>
           <Text style={styles.buttonText}>Log In</Text>
         </TouchableOpacity>
-        {errorMsg && <Text >{errorMsg}</Text>} 
+        {errorMsg && <Text style={styles.errorMsg}>{errorMsg}</Text>} 
       </View>
     </View>
   );
@@ -87,7 +85,7 @@ const styles = StyleSheet.create({
     height: 'auto',
     backgroundColor: '#ffffff',
     justifyContent: 'center',
-    // alignItems: 'cenetr',
+    // alignItems: 'center',
     padding: 0,
   },
   loginform: {
@@ -144,6 +142,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#ffffff',
   },
+  errorMsg: {
+    color: '#CB0505',
+    fontSize: 10,
+    marginTop: 10,
+  }
 });
 
 export default LoginForm;

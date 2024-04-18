@@ -84,7 +84,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 21,
     color: '#03050A',
-
   },
   pageNumber: {
     marginLeft: 100,

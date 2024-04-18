@@ -1,8 +1,3 @@
-export interface ISignup{
-    name:string;
-    email:string;
-    password:string;
-}
 export interface AuthState {
     auth: {
         token: string | null;
@@ -18,6 +13,6 @@ export interface UserData {
     phone_number: string;
     email: string;
     password: string;
-  }
+}
   
   

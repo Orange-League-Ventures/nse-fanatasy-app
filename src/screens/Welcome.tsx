@@ -1,12 +1,10 @@
 import React from 'react';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import { useSelector } from 'react-redux';
-import { useNavigation } from '@react-navigation/native';
 import { AuthState } from '../interfaces/autInterfaces';
 
 const Welcome = (props:any) => {
   const details = useSelector((state: AuthState)  => state?.auth);
-  const navigation = useNavigation();
  const data=details?.user;
  console.log("data in welcome--",details);
     return (

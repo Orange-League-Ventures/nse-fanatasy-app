@@ -1,21 +1,16 @@
-import React, {useState, useEffect} from 'react';
-import {useForm, Controller} from 'react-hook-form';
+import React, {useState} from 'react';
 import {
   View,
   TextInput,
-  Button,
   Text,
   StyleSheet,
   TouchableOpacity,
   Image,
-  Dimensions,
 } from 'react-native';
 import { setUser, setLoading, setError, logout,setToken }  from '../Redux/Slices/AuthSlice';
 import {login} from '../services/authService';
 import {useDispatch} from 'react-redux';
-import { useNavigation } from '@react-navigation/native';
-const windowHeight = Dimensions.get('window').height;
-const windowWidth = Dimensions.get('window').width;
+
 
 const LoginForm = (props: any) => {
   const [email, setEmail] = useState('');
@@ -26,12 +21,14 @@ const LoginForm = (props: any) => {
   const handleLogin = async () => {
     dispatch(setLoading(true)); 
     try {
+      if (!email || !password) {
+        setErrorMsg("Email and password are required.");
+        return;
+      }
       const data = await login(email, password);
-      console.log("data in handle login---",data);
       dispatch(setToken(data.accessToken)); 
       dispatch(setUser(data.user)); 
       props.navigation.navigate('HomeScreen'); 
-      console.log("Login successful! Redirecting to Home screen.", data); 
       setErrorMsg('');
     } catch (error:any) {
       console.error('Login failed:', error.message); // Log error message
@@ -74,7 +71,7 @@ const LoginForm = (props: any) => {
           activeOpacity={1}>
           <Text style={styles.buttonText}>Log In</Text>
         </TouchableOpacity>
-        {errorMsg && <Text >{errorMsg}</Text>} 
+        {errorMsg && <Text style={styles.errorMsg}>{errorMsg}</Text>} 
       </View>
     </View>
   );
@@ -145,6 +142,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#ffffff',
   },
+  errorMsg: {
+    color: '#CB0505',
+    fontSize: 10,
+    marginTop: 10,
+  }
 });
 
 export default LoginForm;

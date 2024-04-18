@@ -1,7 +1,6 @@
-import { ISignup } from '../interfaces/autInterfaces';
 import {axiosInstance} from '../utills/axios';
 
-export const signup = async (name: string | ISignup, email: string | undefined, phone_number: string | undefined, password: string | undefined) => {
+export const signup = async (name: string | undefined, email: string | undefined, phone_number: string | undefined, password: string | undefined) => {
   try {
     const data = { name, email, phone_number, password };
     let response= await axiosInstance.post('/user/signup', data);
@@ -35,11 +34,11 @@ export const login = async (email: string | undefined, password: string | undefi
       console.error('Response data:', error?.response?.data);
       throw new Error(error?.response?.data?.message); // Throw custom error message
     } else if (error.request) {
-      console.error('No response received from the server');
-      throw new Error('No response received from the server');
+      console.error('No response received from the server',error);
+      throw new Error('Please Check your credentials');
     } else {
       console.error('Error setting up the request:', error?.message);
-      throw new Error(error?.message);
+     throw new Error(error?.message);
     }
   }
 };

@@ -1,160 +1,189 @@
-import React from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import { View, TextInput, Button, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { ISignup } from '../interfaces/autInterfaces';
-import { signup } from '../services/authService';
+import React, {useState, useEffect} from 'react';
+import {useForm, Controller} from 'react-hook-form';
+import {
+  View,
+  TextInput,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Dimensions,
+} from 'react-native';
+import {AuthState} from '../interfaces/autInterfaces';
+import {signup} from '../services/authService';
+import { setError, setLoading, setToken, setUser } from '../Redux/Slices/AuthSlice';
+import { useDispatch, useSelector } from 'react-redux';
+const windowHeight = Dimensions.get('window').height;
+const windowWidth = Dimensions.get('window').width;
+import { useNavigation } from '@react-navigation/native';
 
 const SignupForm = (props: any) => {
-  const { control, handleSubmit, formState: { errors } } = useForm<ISignup>();
+  const [name, setName] = useState('');
+  const [phone_number, setPhoneNumber] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const dispatch = useDispatch();
+  const loading = useSelector((state: AuthState) => state?.auth?.loading);
+  const error = useSelector((state: AuthState) => state?.auth?.error);
+  const navigation = useNavigation();
 
-  const onSubmit = async(data: ISignup) => {
-    console.log(data);
+  const handleSignUp = async () => {
+    dispatch(setLoading(true));
     try {
-      const response = await signup(data);
-      console.log({response});
-      
-    } catch (error) {
-        console.log("err",error);
-        
+      const data = await signup(name, email, phone_number, password);
+      dispatch(setToken(data.accessToken)); 
+      dispatch(setUser(data.user)); 
+      props.navigation.navigate('Welcome');
+    } catch (error:any) {
+      dispatch(setError(error.message));
+      console.error('create account Failed:', error);
+    }
+    finally{
+      dispatch(setLoading(false));
     }
   };
-
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>Create  account</Text>
-      <Controller
-        control={control}
-        render={({ field: { onChange, onBlur, value } }) => (
+      <View style={styles.loginform}>
+        <View style={styles.headers}>
+          <Text style={styles.createAccountText}>Create Account</Text>
+          <Text style={styles.textInfo}>
+            Unlock the fun of investing! Create your free NSE Learn account and
+            start your journey to stock market mastery.
+          </Text>
+        </View>
+        <View style={styles.inputcontainer}>
           <TextInput
             style={styles.input}
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
             placeholder="Name"
-            placeholderTextColor="gray"
+            keyboardType="email-address"
+            autoCapitalize="none"
+            value={name}
+            onChangeText={setName}
           />
-        )}
-        name="name"
-        rules={{ required: true }}
-      />
-      {errors.name && <Text style={styles.error}>Name  is required.</Text>}
-
-      <Controller
-        control={control}
-        render={({ field: { onChange, onBlur, value } }) => (
           <TextInput
             style={styles.input}
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            placeholder="Email"
-            placeholderTextColor="gray"
+            placeholder="Email-Address"
+            keyboardType="email-address"
+            autoCapitalize="none"
+            value={email}
+            onChangeText={setEmail}
           />
-        )}
-        name="email"
-        rules={{ required: true }}
-      />
-      {errors.email && <Text style={styles.error}>Email  is required.</Text>}
-      {/* <Controller
-        control={control}
-        render={({ field: { onChange, onBlur, value } }) => (
           <TextInput
             style={styles.input}
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            placeholder="Phone Number"
+            placeholder="Mobile Number"
             keyboardType="phone-pad"
-            placeholderTextColor="gray"
+            autoCapitalize="none"
+            value={phone_number}
+            onChangeText={setPhoneNumber}
           />
-        )}
-        name="phone"
-        rules={{ required: true }}
-      />
-      {errors.phone && <Text style={styles.error}>Phone number is required.</Text>} */}
-      <Controller
-        control={control}
-        render={({ field: { onChange, onBlur, value } }) => (
           <TextInput
             style={styles.input}
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
             placeholder="Password"
-            placeholderTextColor="gray"
             secureTextEntry
+            value={password}
+            onChangeText={setPassword}
           />
-        )}
-        name="password"
-        rules={{ required: true }}
-      />
-      {errors.password && <Text style={styles.error}>Password is required.</Text>}
-
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.buttonContainer} onPress={handleSubmit(onSubmit)}>
-          <Text style={styles.buttonText}>Sign Up</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Confirm Password"
+            secureTextEntry
+            value={password}
+            onChangeText={setPassword}
+          />
+        </View>
+        <TouchableOpacity
+          style={styles.createButton}
+          onPress={handleSignUp}
+          activeOpacity={1}>
+          <Text style={styles.buttonText}>Create Account</Text>
         </TouchableOpacity>
       </View>
-
-      <View style={styles.inlineContainer}>
-        <Text style={styles.loginText}>Already have an account?</Text>
-        <Button title='Login' onPress={() => props.navigation.navigate('Login')} />
-      </View>
-
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  heading: {
-    color: 'black',
-    fontSize: 30,
-    fontWeight: 'bold'
-  },
   container: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-    backgroundColor: '#f5f5f5',
-    marginTop: 100,
+    display: 'flex',
+    flex: 1,
+    width: 'auto',
+    height: 'auto',
+    backgroundColor: '#ffffff',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    padding: 0,
+  },
+  loginform: {
+    marginLeft: 16,
+    marginRight: 16,
+  },
+  headers: {
+    width: 'auto',
+    height: 'auto',
+    justifyContent: 'flex-start',
+    paddingVertical: 8,
+    marginBottom: 42,
+  },
+  createAccountText: {
+    fontFamily: 'Montserrat',
+    fontWeight: '600',
+    fontSize: 14,
+    lineHeight: 21,
+    color: '#03050A', // Specify your desired text color
+    marginBottom: 16,
+  },
+  textInfo: {
+    fontFamily: 'Roboto',
+    fontWeight: '400',
+    fontSize: 12,
+    lineHeight: 15.6,
+    color: '#717171',
+  },
+  inputcontainer: {
+    marginTop: 16,
+    marginBottom: 12,
   },
   input: {
-    width: '100%',
-    height: 50,
+    width: 'auto',
+    height: 'auto',
     borderWidth: 1,
-    marginBottom: 20,
-    paddingHorizontal: 10,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
     borderRadius: 8,
-    backgroundColor: '#fff',
-    color: 'black'
+    backgroundColor: '#ffffff',
+    color: '#000000',
+    borderColor: '#D4D4D4',
+    marginBottom: 12,
+    fontSize: 12,
+    fontFamily: 'Roboto',
+    fontWeight: '100',
   },
-  error: {
-    color: 'red',
-    marginBottom: 10,
-  },
-  inlineContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 15,
-  },
-  buttonContainer: {
-    width: '80%',
-    padding: 5, // Adjust padding as needed
-    backgroundColor: '#0080FF', // Example background color
-    borderRadius: 5, // Example border radius
-    marginTop: 10, // Adjust margin as needed
+  createButton: {
+    backgroundColor: '#3A2D7D',
+    width: 'auto',
+    height: 'auto',
+    borderWidth: 1,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderRadius: 8,
+    color: '#000000',
+    borderColor: '#D4D4D4',
+    marginBottom: 12,
+    fontSize: 12,
+    fontFamily: 'Roboto',
+    fontWeight: '100',
   },
   buttonText: {
-    color: 'white', // Example text color
-    textAlign: 'center', // Center text within the button
-    fontWeight: 'bold'
+    fontFamily: 'Roboto',
+    fontWeight: '500',
+    fontSize: 14,
+    textAlign: 'center',
+    color: '#ffffff',
   },
-  loginText: {
-    color: 'black',
-    marginRight: 5,
-    fontSize: 18
-  }
 });
 
 export default SignupForm;
+function dispatch(arg0: { payload: any; type: "auth/setError"; }) {
+  throw new Error('Function not implemented.');
+}
+

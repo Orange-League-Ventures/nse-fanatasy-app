@@ -27,6 +27,8 @@ import LearnSection from './src/screens/Learn.Section';
 import ChartList from './src/screens/ChartList';
 import {Provider} from 'react-redux';
 import store from './src/Redux/store';
+import Content from './src/screens/Content';
+
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -111,7 +113,15 @@ function App(): React.JSX.Element {
           component={Welcome}
           options={{title: 'Welcome'}}
         />
-        <Stack.Screen name="ChartList" component={ChartList} />
+        <Stack.Screen name="ChartList"
+          options={({ route }: any) => (
+            { title: route.params?.state.chart_type.charAt(0).toUpperCase() + route.params?.state.chart_type.slice(1) + ' Chart' }
+          )}
+          component={ChartList} />
+        <Stack.Screen name="Content"
+          options={({ route }: any) => ({ title: route.params?.state.topic_name.charAt(0).toUpperCase() + route.params?.state.topic_name.slice(1) })}
+          component={Content} />
+
       </Stack.Navigator>
     );
   };

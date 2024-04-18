@@ -14,18 +14,20 @@ const ChartSection = (props: any) => {
                 <CustomText style={styles.headingText} >Understanding Charts</CustomText>
             </View>
             <View style={styles.container}>
-                <TouchableOpacity onPress={() => { props.navigation.navigate('ChartList'); }}>
+                <TouchableOpacity onPress={() => { props.navigation.navigate('ChartList', { state: { chart_type: "line" } }); }}>
                     <View style={styles.imageContainer}>
                         <Image
                             source={require('../../assets/images/lineChart.png')}
                         />
                     </View>
                 </TouchableOpacity>
-                <View style={styles.imageContainer}>
-                    <Image
-                        source={require('../../assets/images/candelStick.png')}
-                    />
-                </View>
+                <TouchableOpacity onPress={() => { props.navigation.navigate('ChartList', { state: { chart_type: "candelstick" } }); }}>
+                    <View style={styles.imageContainer}>
+                        <Image
+                            source={require('../../assets/images/candelStick.png')}
+                        />
+                    </View>
+                </TouchableOpacity>
             </View>
             <View style={styles.chartPatternContainer}>
                 <Image
@@ -52,9 +54,9 @@ const styles = StyleSheet.create({
     },
     headingText: {
         marginTop: 20,
-        marginBottom:10,
+        marginBottom: 10,
         fontSize: 14,
-        fontWeight:'500',
+        fontWeight: '500',
         color: "#000000"
     }
 });

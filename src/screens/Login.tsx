@@ -72,6 +72,13 @@ const LoginForm = (props: any) => {
           <Text style={styles.buttonText}>Log In</Text>
         </TouchableOpacity>
         {errorMsg && <Text style={styles.errorMsg}>{errorMsg}</Text>} 
+        <Text style={styles.moreOptions}>Don't have an account?</Text>
+        <TouchableOpacity
+          style={styles.SignupButton}
+          onPress={()=> props.navigation.navigate('Signup')}
+          >
+          <Text style={styles.SignupbuttonText}>Sign up with Email</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -134,19 +141,49 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
     fontWeight: '100',
   },
+  SignupButton:{
+    backgroundColor: '#ffffff',
+    width: 'auto',
+    height: 'auto',
+    borderWidth: 1,
+    color: '#03050A',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderRadius: 8,
+    borderColor: '#D4D4D4',
+    marginBottom: 12,
+    fontSize: 12,
+    fontFamily: 'Roboto',
+    fontWeight: '500',
+  },
   buttonText: {
     fontFamily: 'Roboto',
     fontWeight: '500',
     fontSize: 14,
-    lineHeight: 16.41,
     textAlign: 'center',
     color: '#ffffff',
+  },
+  SignupbuttonText: {
+    fontFamily: 'Roboto',
+    fontWeight: '500',
+    fontSize: 12,
+    textAlign: 'center',
+    color: '#03050A',
   },
   errorMsg: {
     color: '#CB0505',
     fontSize: 10,
     marginTop: 10,
+  },
+  moreOptions: {
+    color: '#717171',
+    fontFamily: 'Roboto',
+    fontWeight: '400',
+    fontSize: 12,
+    marginVertical: 32,
+    textAlign: 'center',
   }
+  
 });
 
 export default LoginForm;

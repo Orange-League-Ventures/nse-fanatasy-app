@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import type {PropsWithChildren} from 'react';
 import {
   Image,
@@ -26,9 +26,11 @@ import Profile from './src/screens/Profile';
 import LearnSection from './src/screens/Learn.Section';
 import ChartList from './src/screens/ChartList';
 import {Provider} from 'react-redux';
+import { useSelector } from 'react-redux';
 import store from './src/Redux/store';
 import Content from './src/screens/Content';
 import Words from './src/screens/Words';
+import { AuthState } from './src/interfaces/autInterfaces';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -36,10 +38,10 @@ type SectionProps = PropsWithChildren<{
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
-
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const Stack = createNativeStackNavigator();
   const Tab = createBottomTabNavigator();
@@ -130,12 +132,34 @@ function App(): React.JSX.Element {
       </Stack.Navigator>
     );
   };
-
+  const AppWrapper = (props : any) => {
+    const isLoggedIn = useSelector((state: AuthState) => state.auth.isAuthenticated); // Access isLoggedIn from the store
+    console.log("islogged in------",isLoggedIn); // Log the isLoggedIn value
+  
+    return(
+      <NavigationContainer>
+      {isLoggedIn ? (
+        <TabNavigator />
+      ) : (
+        <Stack.Navigator initialRouteName="Login">
+          <Stack.Screen
+            name="Login"
+            component={LoginForm}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="Signup"
+            component={SignupForm}
+            options={{title: 'Signup'}}
+          />
+        </Stack.Navigator>
+      )}
+        </NavigationContainer>
+    );
+  };
   return (
     <Provider store={store}>
-      <NavigationContainer>
-        <TabNavigator />
-      </NavigationContainer>
+       <AppWrapper/>
     </Provider>
   );
 }

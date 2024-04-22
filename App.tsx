@@ -177,7 +177,6 @@ function App(): React.JSX.Element {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        {/* <TabNavigator /> */}
         {openQuiz ? (
           <Quiz
             openQuiz={openQuiz}

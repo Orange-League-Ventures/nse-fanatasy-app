@@ -9,6 +9,9 @@ import {
   getQuestionBasedOnQuestionId,
   getQuestionsBasedOnQuizType,
 } from '../services/quizServices';
+import { Dimensions } from 'react-native';
+
+const windowWidth = Dimensions.get('window').width;
 
 const Quiz = ({openQuiz, setOpenQuiz, quizType}) => {
   const [quizData, setQuizData] = useState([]);
@@ -291,9 +294,13 @@ const Quiz = ({openQuiz, setOpenQuiz, quizType}) => {
 };
 
 const styles = StyleSheet.create({
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
   button: {
     backgroundColor: '#3A2D7D',
-    width: 320,
+    width: windowWidth * 0.9, // Adjust percentage as needed
     padding: 15,
     borderRadius: 10,
     alignItems: 'center',

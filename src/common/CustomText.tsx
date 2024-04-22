@@ -1,8 +1,8 @@
 import React from 'react';
 import { Text, StyleSheet } from 'react-native';
 
-const CustomText = (props:any) => {
-  return <Text style={[styles.text, props.style]}>{props.children}</Text>;
+const CustomText = ({ text, style }) => {
+  return <Text style={[styles.text, style]}>{text}</Text>;
 };
 
 const styles = StyleSheet.create({

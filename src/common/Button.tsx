@@ -9,7 +9,7 @@ const Button = (props:any) => (
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: 'blue',
+    backgroundColor: '#3A2D7D',
     padding: 10,
     borderRadius: 5,
     alignItems: 'center',

@@ -1,3 +1,5 @@
+import axios from 'axios';
+import {ISignup} from '../interfaces/autInterfaces';
 import {axiosInstance} from '../utills/axios';
 
 export const signup = async (name: string | undefined, email: string | undefined, phone_number: string | undefined, password: string | undefined) => {

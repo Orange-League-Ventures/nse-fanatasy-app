@@ -4,11 +4,20 @@ import Button from '../common/Button';
 import CustomText from '../common/CustomText';
 import {Image} from 'react-native';
 import imageGif from '../assets/image.gif';
+import { useEffect } from 'react';
+import { UpdateReport } from '../services/quizServices';
+import { useSelector } from 'react-redux';
+import { AuthState } from '../interfaces/autInterfaces';
 
-const ReportPage = ({setOpenQuiz,openQuiz,totalQuestions,score}) => {
+const ReportPage = ({setOpenQuiz,openQuiz,totalQuestions,score,quizType}) => {
+  const details = useSelector((state: AuthState) => state?.auth);
   const handlePress = () => {
     setOpenQuiz(!openQuiz);
   };
+  const userId=details.user.id
+  useEffect(()=>{
+    UpdateReport({score,quizType,userId})
+  })
   return (
     <View style={{padding: 20}}>
       <View style={{height: 600}}>

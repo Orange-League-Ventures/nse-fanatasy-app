@@ -8,19 +8,10 @@ const Play = ({route}) => {
   const {openQuiz, setOpenQuiz,setQuizData,quizData,setQuizType} = route.params;
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (quizType) => {
+  const handleSubmit = (quizType:string) => {
     setOpenQuiz(!openQuiz);
     setLoading(true);
     setQuizType(quizType)
-    getQuizQuestions({quizType})
-      .then(res => {
-        setQuizData(res?.data?.quiz);
-        setLoading(false);
-      })
-      .catch(error => {
-        setLoading(false);
-        console.log('Error fetching auditor data:', error);
-      });
   };
 
   return (

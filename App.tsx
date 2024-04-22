@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import type {PropsWithChildren} from 'react';
 import {
   Image,
@@ -27,21 +27,22 @@ import LearnSection from './src/screens/Learn.Section';
 import ChartList from './src/screens/ChartList';
 import Play from './src/screens/Play';
 import Quiz from './src/screens/Quiz';
-import {Provider} from 'react-redux';
+import {Provider, useSelector} from 'react-redux';
 import store from './src/Redux/store';
 import Content from './src/screens/Content';
 import Words from './src/screens/Words';
+import { AuthState } from './src/interfaces/autInterfaces';
 
 type SectionProps = PropsWithChildren<{
   title: string;
 }>;
 
 function App(): React.JSX.Element {
-  const[openQuiz,setOpenQuiz]=useState(false);
+  const [openQuiz, setOpenQuiz] = useState(false);
   const isDarkMode = useColorScheme() === 'dark';
 
   const [quizData, setQuizData] = useState();
-  const [quizType,setQuizType]=useState()
+  const [quizType, setQuizType] = useState();
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
@@ -51,7 +52,12 @@ function App(): React.JSX.Element {
 
   const TabNavigator = () => {
     return (
-      <Tab.Navigator screenOptions={{  tabBarActiveTintColor : '#3A2D7D' , tabBarLabelStyle: styles.tabBarLabel, tabBarIconStyle : styles.tabBarIcon}}  >
+      <Tab.Navigator
+        screenOptions={{
+          tabBarActiveTintColor: '#3A2D7D',
+          tabBarLabelStyle: styles.tabBarLabel,
+          tabBarIconStyle: styles.tabBarIcon,
+        }}>
         <Tab.Screen
           name="Home"
           options={{
@@ -91,38 +97,30 @@ function App(): React.JSX.Element {
           }}
           component={Profile}
         />
-        {/* <Tab.Screen
-          name='Play'
+        <Tab.Screen
+          name="Play"
           options={{
-            headerShown: false,
             tabBarIcon: ({color, size}) => (
               <Image
-                source={require('./assets/images/profile.png')}
+                source={require('./assets/images/home.png')}
                 style={{width: size, height: size, tintColor: color}}
               />
             ),
           }}
           component={Play}
-          initialParams={{ openQuiz, setOpenQuiz }}
-        /> */}
-        <Tab.Screen
-          name='Play'
-          options={{
-            tabBarIcon: ({ color, size }) => (
-              <Image
-                source={require('./assets/images/home.png')}
-                style={{ width: size, height: size, tintColor: color }}
-              />
-            ),
+          initialParams={{
+            openQuiz,
+            setOpenQuiz,
+            setQuizData,
+            quizData,
+            setQuizType,
           }}
-          component={Play}
-          initialParams={{ openQuiz, setOpenQuiz ,setQuizData,quizData,setQuizType}}
         />
       </Tab.Navigator>
     );
   };
 
-  const HomeStack = (props : any) => {
+  const HomeStack = (props: any) => {
     return (
       <Stack.Navigator initialRouteName="HomeScreen">
         <Stack.Screen
@@ -140,35 +138,57 @@ function App(): React.JSX.Element {
           component={SignupForm}
           options={{title: 'Signup'}}
         />
-          <Stack.Screen
+        <Stack.Screen
           name="Welcome"
           component={Welcome}
           options={{title: 'Welcome'}}
         />
         {/* <Stack.Screen name="Signup" component={SignupForm} /> */}
         {/* <Stack.Screen name="NewScreen" component={Quiz} /> */}
-        <Stack.Screen name="ChartList"
-          options={({ route }: any) => (
-            { title: route.params?.state.chart_type.charAt(0).toUpperCase() + route.params?.state.chart_type.slice(1) + ' Chart' }
-          )}
-          component={ChartList} />
-        <Stack.Screen name="Content"
-          options={({ route }: any) => ({ title: route.params?.state.topic_name.charAt(0).toUpperCase() + route.params?.state.topic_name.slice(1) })}
-          component={Content} />
+        <Stack.Screen
+          name="ChartList"
+          options={({route}: any) => ({
+            title:
+              route.params?.state.chart_type.charAt(0).toUpperCase() +
+              route.params?.state.chart_type.slice(1) +
+              ' Chart',
+          })}
+          component={ChartList}
+        />
+        <Stack.Screen
+          name="Content"
+          options={({route}: any) => ({
+            title:
+              route.params?.state.topic_name.charAt(0).toUpperCase() +
+              route.params?.state.topic_name.slice(1),
+          })}
+          component={Content}
+        />
 
-        <Stack.Screen name="Words"
-          options={{ title: "Dictionary" }}
-          component={Words} />
-
+        <Stack.Screen
+          name="Words"
+          options={{title: 'Dictionary'}}
+          component={Words}
+        />
       </Stack.Navigator>
     );
   };
-
+  
   return (
-    <NavigationContainer>
-      {/* <TabNavigator /> */}
-      {openQuiz ? <Quiz openQuiz={openQuiz} setOpenQuiz={setOpenQuiz} setQuizData={setQuizData} quizData={quizData} quizType={quizType}/> : <TabNavigator />}
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        {/* <TabNavigator /> */}
+        {openQuiz ? (
+          <Quiz
+            openQuiz={openQuiz}
+            setOpenQuiz={setOpenQuiz}
+            quizType={quizType}
+          />
+        ) : (
+          <TabNavigator />
+        )}
+      </NavigationContainer>
+    </Provider>
   );
 }
 
@@ -177,15 +197,14 @@ const styles = StyleSheet.create({
     marginTop: 32,
     paddingHorizontal: 24,
   },
-  tabBarLabel :{
-    paddingBottom : 5,
-    fontWeight : '500',
-    fontSize : 12,
+  tabBarLabel: {
+    paddingBottom: 5,
+    fontWeight: '500',
+    fontSize: 12,
   },
-  tabBarIcon : {
-    marginTop : 5,
-  }
-
+  tabBarIcon: {
+    marginTop: 5,
+  },
 });
 
 export default App;

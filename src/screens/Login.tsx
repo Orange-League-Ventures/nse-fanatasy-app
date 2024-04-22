@@ -1,117 +1,151 @@
-import React from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import { View, TextInput, Button, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { useDispatch } from 'react-redux';
-// import { login } from '../Redux/actions';
+import React, {useState} from 'react';
+import {
+  View,
+  TextInput,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+} from 'react-native';
+import { setUser, setLoading, setError, logout,setToken }  from '../Redux/Slices/AuthSlice';
+import {login} from '../services/authService';
+import {useDispatch} from 'react-redux';
 
 
 const LoginForm = (props: any) => {
-  const { control, handleSubmit, formState: { errors } } = useForm();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMsg,setErrorMsg]=useState('');
+  const dispatch = useDispatch();
 
-  const onSubmit = (data: any) => {
-    console.log(data); // Handle form submission here
-    // For login functionality, you can call your authentication API here
+  const handleLogin = async () => {
+    dispatch(setLoading(true)); 
+    try {
+      if (!email || !password) {
+        setErrorMsg("Email and password are required.");
+        return;
+      }
+      const data = await login(email, password);
+      dispatch(setToken(data.accessToken)); 
+      dispatch(setUser(data.user)); 
+      props.navigation.navigate('HomeScreen'); 
+      setErrorMsg('');
+    } catch (error:any) {
+      console.error('Login failed:', error.message); // Log error message
+      dispatch(setError(error.message)); 
+      setErrorMsg(error.message || 'Login failed. Please check your credentials.');
+      props.navigation.navigate('Login'); 
+    } finally {
+      dispatch(setLoading(false)); // Always set loading to false regardless of success or failure
+    }
   };
-
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>Login</Text>
-      <Controller
-        control={control}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
-            style={styles.input}
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            placeholder="Email"
-            placeholderTextColor="gray"
+      <View style={styles.loginform}>
+        <View>
+          <Image
+            source={require('../../assets/images/logo.png')}
+            style={styles.image}
           />
-        )}
-        name="email"
-        rules={{ required: true }}
-      />
-      {errors.email && <Text style={styles.error}>Email is required.</Text>}
-      
-      <Controller
-        control={control}
-        render={({ field: { onChange, onBlur, value } }) => (
+        </View>
+        <View style={styles.inputcontainer}>
           <TextInput
             style={styles.input}
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
+            placeholder="Email-Address"
+            keyboardType="email-address"
+            autoCapitalize="none"
+            value={email}
+            onChangeText={setEmail}
+          />
+          <TextInput
+            style={styles.input}
             placeholder="Password"
-            placeholderTextColor="gray"
             secureTextEntry
+            value={password}
+            onChangeText={setPassword}
           />
-        )}
-        name="password"
-        rules={{ required: true }}
-      />
-      {errors.password && <Text style={styles.error}>Password is required.</Text>}
-
-      <TouchableOpacity style={styles.buttonContainer} onPress={handleSubmit(onSubmit)}>
-        <Text style={styles.buttonText}>Login</Text>
-      </TouchableOpacity>
-
-      <View style={styles.inlineContainer}>
-        <Text style={styles.signupText}>Don't have an account?</Text>
-        <Button title='Sign Up' onPress={() => props.navigation.navigate('Signup')} />
+        </View>
+        <TouchableOpacity
+          style={styles.loginButton}
+          onPress={handleLogin}
+          activeOpacity={1}>
+          <Text style={styles.buttonText}>Log In</Text>
+        </TouchableOpacity>
+        {errorMsg && <Text style={styles.errorMsg}>{errorMsg}</Text>} 
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  heading: {
-    color: 'black',
-    fontSize: 30,
-    fontWeight:'bold'
-  },
   container: {
+    display: 'flex',
+    flex: 1,
+    width: 'auto',
+    height: 'auto',
+    backgroundColor: '#ffffff',
     justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-    backgroundColor: '#f5f5f5',
-    marginTop: 100,
+    // alignItems: 'center',
+    padding: 0,
+  },
+  loginform: {
+    marginLeft: 16,
+    marginRight: 16,
+  },
+  image: {
+    width: 'auto',
+    height: 60,
+   justifyContent:'center',
+    paddingVertical: 8,
+    marginBottom: 42,
+  },
+  inputcontainer: {
+    marginTop: 16,
+    marginBottom: 12,
   },
   input: {
-    width: '100%',
-    height: 50,
+    width: 'auto',
+    height: 'auto',
     borderWidth: 1,
-    marginBottom: 20,
-    paddingHorizontal: 10,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
     borderRadius: 8,
-    backgroundColor: '#fff',
-    color: 'black'
+    backgroundColor: '#ffffff',
+    color: '#000000',
+    borderColor: '#D4D4D4',
+    marginBottom: 12,
+    fontSize: 12,
+    fontFamily: 'Roboto',
+    fontWeight: '100',
   },
-  error: {
-    color: 'red',
-    marginBottom: 10,
-  },
-  inlineContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 15,
-  },
-  buttonContainer: {
-    width: '80%',
-    padding: 10,
-    backgroundColor: '#0080FF',
-    borderRadius: 5,
-    marginTop: 10,
+
+  loginButton: {
+    backgroundColor: '#3A2D7D',
+    width: 'auto',
+    height: 'auto',
+    borderWidth: 1,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderRadius: 8,
+    color: '#000000',
+    borderColor: '#D4D4D4',
+    marginBottom: 12,
+    fontSize: 12,
+    fontFamily: 'Roboto',
+    fontWeight: '100',
   },
   buttonText: {
-    color: 'white',
+    fontFamily: 'Roboto',
+    fontWeight: '500',
+    fontSize: 14,
+    lineHeight: 16.41,
     textAlign: 'center',
-    fontWeight:'bold'
+    color: '#ffffff',
   },
-  signupText: {
-    color: 'black',
-    marginRight:5,
-    fontSize:18
+  errorMsg: {
+    color: '#CB0505',
+    fontSize: 10,
+    marginTop: 10,
   }
 });
 

@@ -1,16 +1,21 @@
 import React from 'react'
-import { Image, StyleSheet, Text, View } from 'react-native'
+import { Image, StyleSheet,  View, Dimensions , TouchableOpacity} from 'react-native'
+import CustomText from '../common/CustomText'
 
-const Disctionary = () => {
+const windowWidth : number = Dimensions.get('window').width;
+const Dictionary = (props: any) => {
     return (
         <View>
             <View >
-                <Text style={styles.headingText}>Trading Dictionary</Text>
+                <CustomText style={styles.headingText}>Trading Dictionary</CustomText>
             </View>
             <View style={styles.imageContainer}>
-                <Image
-                    source={require('../../assets/images/dictionary.png')}
-                />
+                <TouchableOpacity onPress={() => { props.navigation.navigate("Words") }}>
+                    <Image
+                        source={require('../../assets/images/dictionary.png')}
+                    />
+                </TouchableOpacity>
+
             </View>
         </View>
     )
@@ -18,13 +23,22 @@ const Disctionary = () => {
 
 const styles = StyleSheet.create({
     headingText: {
-        marginTop: 10,
-        fontSize: 15,
+        marginTop: 20,
+        marginBottom: 10,
+        fontSize: 14,
+        fontWeight: '500',
         color: "#000000"
     },
     imageContainer: {
-        marginTop: 20
+        marginVertical: 12,  
+        // backgroundColor :'red',
+    },
+    image : {
+        borderRadius: 8,
+        width: (windowWidth-32),
+        height : windowWidth > 400 ? 170 : 150,
+        resizeMode: windowWidth > 400? 'cover' : 'contain',
     }
 })
 
-export default Disctionary
+export default Dictionary

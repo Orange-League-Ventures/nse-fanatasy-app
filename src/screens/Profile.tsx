@@ -190,7 +190,7 @@ const Profile = (props: any) => {
                   </View>
                 </View>
           </View>
-          {errorMsg && <Text >{errorMsg}</Text>} 
+          {errorMsg && <Text style={styles.errorMsg}>{errorMsg}</Text>} 
         </View>
 
       )}
@@ -311,6 +311,11 @@ const styles = StyleSheet.create({
     width: 15,
     height: 15,
   },
+  errorMsg: {
+    color: '#CB0505',
+    fontSize: 10,
+    marginTop: 10,
+  }
 });
 
 export default Profile;

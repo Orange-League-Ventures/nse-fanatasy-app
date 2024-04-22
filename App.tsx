@@ -39,6 +39,8 @@ function App(): React.JSX.Element {
   const[openQuiz,setOpenQuiz]=useState(false);
   const isDarkMode = useColorScheme() === 'dark';
 
+  const [quizData, setQuizData] = useState();
+  const [quizType,setQuizType]=useState()
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
@@ -113,7 +115,7 @@ function App(): React.JSX.Element {
             ),
           }}
           component={Play}
-          initialParams={{ openQuiz, setOpenQuiz }}
+          initialParams={{ openQuiz, setOpenQuiz ,setQuizData,quizData,setQuizType}}
         />
       </Tab.Navigator>
     )
@@ -139,7 +141,7 @@ function App(): React.JSX.Element {
   return (
     <NavigationContainer>
       {/* <TabNavigator /> */}
-      {openQuiz ? <Quiz openQuiz={openQuiz} setOpenQuiz={setOpenQuiz}/> : <TabNavigator />}
+      {openQuiz ? <Quiz openQuiz={openQuiz} setOpenQuiz={setOpenQuiz} setQuizData={setQuizData} quizData={quizData} quizType={quizType}/> : <TabNavigator />}
     </NavigationContainer>
   );
 }

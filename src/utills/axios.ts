@@ -7,5 +7,5 @@ console.log({baseUrl});
 
 
 export const axiosInstance = axios.create({
-  baseURL: `${baseUrl}/api`,
+  baseURL: `${baseUrl}/api/v1`,
 });

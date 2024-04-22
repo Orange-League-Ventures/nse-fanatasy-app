@@ -1,0 +1,100 @@
+import {View} from 'react-native';
+import {Text} from 'react-native-paper';
+import Button from '../common/Button';
+import CustomText from '../common/CustomText';
+import {Image} from 'react-native';
+import imageGif from '../assets/image.gif';
+
+const ReportPage = ({setOpenQuiz,openQuiz,totalQuestions,score}) => {
+  const handlePress = () => {
+    setOpenQuiz(!openQuiz);
+  };
+  return (
+    <View style={{padding: 20}}>
+      <View style={{height: 600}}>
+        <CustomText
+          style={{
+            textAlign: 'center',
+            fontSize: 14,
+            fontWeight: 600,
+            fontFamily: 'Montserrat',
+            marginBottom: 20,
+          }}
+          text="Result"
+        />
+        <View
+          style={{
+            backgroundColor: '#F8F8F8',
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: 20,
+          }}>
+          <CustomText
+            style={{
+              textAlign: 'center',
+              marginBottom: 10,
+              fontSize: 12,
+              fontWeight: 500,
+            }}
+            text="Your Final Score Is"
+          />
+          <Text
+            style={{
+              fontSize: 32,
+              fontWeight: '600',
+              marginBottom: 10,
+              color: '#FF7520',
+            }}>
+            {score}/{totalQuestions}
+          </Text>
+          <CustomText
+            style={{
+              textAlign: 'center',
+              marginBottom: 10,
+              fontSize: 12,
+              fontWeight: 400,
+            }}
+            text={`${score} correct answers out of total ${totalQuestions} questions.`}
+          />
+        </View>
+        <View style={{flexDirection: 'row'}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'flex-start',
+              alignItems: 'center',
+            }}>
+            <Image
+              source={imageGif}
+              style={{width: '100%', height: 300, marginLeft: -100}}
+              resizeMode="cover"
+            />
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'flex-end',
+              alignItems: 'center',
+            }}>
+            <Image
+              source={imageGif}
+              style={{
+                width: '100%',
+                height: 300,
+                transform: [{scaleX: -1}],
+                marginRight: 90,
+              }}
+              resizeMode="cover"
+            />
+          </View>
+        </View>
+      </View>
+      <Button
+        style={{borderRadius: 10}}
+        title="Finish"
+        onPress={handlePress}
+      />
+    </View>
+  );
+};
+export default ReportPage;

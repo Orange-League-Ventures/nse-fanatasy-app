@@ -1,14 +1,28 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Text, TouchableOpacity, View, StyleSheet} from 'react-native';
 import Button from '../common/Button';
 import CustomText from '../common/CustomText';
+import {getQuizQuestions} from '../services/authService';
 
 const Play = ({route}) => {
-  const {openQuiz, setOpenQuiz} = route.params;
+  const {openQuiz, setOpenQuiz,setQuizData,quizData,setQuizType} = route.params;
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = () => {
+  const handleSubmit = (quizType) => {
     setOpenQuiz(!openQuiz);
+    setLoading(true);
+    setQuizType(quizType)
+    getQuizQuestions({quizType})
+      .then(res => {
+        setQuizData(res?.data?.quiz);
+        setLoading(false);
+      })
+      .catch(error => {
+        setLoading(false);
+        console.log('Error fetching auditor data:', error);
+      });
   };
+
   return (
     <View>
       <View style={{padding: 20}}>
@@ -22,14 +36,9 @@ const Play = ({route}) => {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          {/* <Text style={styles.text}>Game -1 Quiz</Text> */}
-
-          {/* <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>Play</Text>
-          </TouchableOpacity> */}
-          <CustomText text="Game -1 Quiz" style={styles.text}/>
+          <CustomText text="Game -1 Quiz" style={styles.text} />
           <Button
-            onPress={() => handleSubmit()}
+            onPress={() => handleSubmit('Quiz 1')}
             title="Play"
             style={styles.button}
             textStyle={styles.buttonText}
@@ -44,10 +53,9 @@ const Play = ({route}) => {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          {/* <Text style={styles.text}>Game -2 Pattern Identifier</Text> */}
-          <CustomText text="Game -2 Pattern Identifier" style={styles.text}/>
+          <CustomText text="Game -2 Pattern Identifier" style={styles.text} />
           <Button
-            onPress={() => handleSubmit()}
+            onPress={() => handleSubmit('Quiz 2')}
             title="Play"
             style={styles.button}
             textStyle={styles.buttonText}

@@ -98,8 +98,7 @@ const styles = StyleSheet.create({
   },
   topicItem: {
     borderRadius: 20,
-    // backgroundColor: '#F8F8F8',
-    backgroundColor: 'red',
+    backgroundColor: '#F8F8F8',
     flexDirection: 'row',
     alignItems: 'center',
     padding: 25,

@@ -7,7 +7,7 @@ const Dictionary = (props: any) => {
     return (
         <View>
             <View >
-                <CustomText style={styles.headingText}>Trading Dictionary</CustomText>
+                <CustomText text={'Trading Dictionary'} style={styles.headingText}/>
             </View>
             <View style={styles.imageContainer}>
                 <TouchableOpacity onPress={() => { props.navigation.navigate("Words") }}>
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
         marginTop: 20,
         fontSize: 14,
         fontWeight: '500',
-        color: "#000000"
+        color:'#03050A'
     },
     imageContainer: {
         marginVertical: 12,  

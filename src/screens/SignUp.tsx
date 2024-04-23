@@ -4,6 +4,7 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { useForm, Controller } from 'react-hook-form';
@@ -22,7 +23,7 @@ const SignupForm = (props: any) => {
   const { control, handleSubmit, formState: { errors } } = useForm<FormValues>();
   const dispatch = useDispatch();
   const [errorMsg, setErrorMsg] = useState('');
-
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const handleSignUp = async (formData: any) => {
     dispatch(setLoading(true));
     try {
@@ -48,6 +49,10 @@ const SignupForm = (props: any) => {
     } finally {
       dispatch(setLoading(false));
     }
+  };
+
+  const handleShowPassword = () => {
+    setShowPassword(!showPassword); 
   };
 
   return (
@@ -114,21 +119,29 @@ const SignupForm = (props: any) => {
           />
           {errors?.phone_number && <Text style={styles.errorMsg}>{errors.phone_number.message}</Text>}
 
+          <View style={styles.passwordContainer}>
           <Controller
             control={control}
             render={({ field }) => (
               <InputBox
                 style={styles.input}
                 placeholder="Password"
-                secureTextEntry
+                secureTextEntry={!showPassword}
                 value={field.value}
-                onChangeText={field.onChange}
+                onChangeText={field.onChange} 
               />
             )}
             name="password"
             rules={{ required: 'Password is required' }}
             defaultValue=""
           />
+          <TouchableOpacity style={styles.passwordIcon} onPress={handleShowPassword}>
+          <Image
+              source={require('../../assets/images/eye.png')}
+              style={styles.eyeIcon}
+            />
+          </TouchableOpacity>
+        </View>
           {errors?.password && <Text style={styles.errorMsg}>{errors.password.message}</Text>}
 
           <Controller
@@ -244,6 +257,19 @@ const styles = StyleSheet.create({
     fontSize: 10,
     marginTop:0,
     marginBottom: 10,
+  },
+  passwordContainer : {
+    position : 'relative', 
+  },
+  passwordIcon : {
+    position : 'absolute',
+    right : 10,
+    top: '20%'
+  },
+  eyeIcon : {
+    width : 25,
+    height : 25,
+    color : '#D4D4D4',
   }
 });
 

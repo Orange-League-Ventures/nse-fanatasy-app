@@ -22,6 +22,7 @@ const LoginForm = (props: any) => {
   const { control, handleSubmit, formState: { errors } } = useForm<FormData>();
   const dispatch = useDispatch();
   const [loginError, setLoginError] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const handleLogin = async (formData: { email: string, password: string }) => {
     dispatch(setLoading(true)); 
     try {
@@ -38,13 +39,17 @@ const LoginForm = (props: any) => {
     }
   };
 
+  const handleShowPassword = () => {
+    setShowPassword(!showPassword); 
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.loginform}>
         <View>
           <Image
             source={require('../../assets/images/nseLogo.png')}
-            style={styles.image}
+            style={styles.image} 
           />
         </View>
         <View style={styles.inputcontainer}>
@@ -65,13 +70,14 @@ const LoginForm = (props: any) => {
             rules={{ required: "email is required" }}
           />
           {errors?.email && <Text style={styles.errorMsg}>{errors?.email?.message}</Text>}
+          <View style={styles.passwordContainer}>
           <Controller
             control={control}
             render={({ field: { onChange, onBlur, value } }) => (
               <InputBox
                 style={styles.input}
                 placeholder="Password"
-                secureTextEntry
+                secureTextEntry={!showPassword}
                 value={value}
                 onBlur={onBlur}
                 onChangeText={onChange}
@@ -81,6 +87,13 @@ const LoginForm = (props: any) => {
             rules={{ required: 'Password is required' }}
             defaultValue=""
           />
+          <TouchableOpacity style={styles.passwordIcon} onPress={handleShowPassword}>
+          <Image
+              source={require('../../assets/images/eye.png')}
+              style={styles.eyeIcon}
+            />
+          </TouchableOpacity>
+        </View>
           {errors?.password && <Text style={styles.errorMsg}>{errors?.password?.message}</Text>}
         </View>
 
@@ -203,6 +216,19 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginVertical: 32,
     textAlign: 'center',
+  },
+  passwordContainer : {
+    position : 'relative', 
+  },
+  passwordIcon : {
+    position : 'absolute',
+    right : 10,
+    top: '20%'
+  },
+  eyeIcon : {
+    width : 25,
+    height : 25,
+    color : "#D4D4D4",
   }
   
 });

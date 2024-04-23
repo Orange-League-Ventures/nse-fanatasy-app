@@ -7,75 +7,104 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
+import { useForm, Controller } from 'react-hook-form';
 import { setUser, setLoading, setError, logout,setToken }  from '../Redux/Slices/AuthSlice';
 import {login} from '../services/authService';
 import {useDispatch} from 'react-redux';
+import InputBox from '../common/InputBox';
 
+type FormData = {
+  email: string;
+  password: string;
+};
 
 const LoginForm = (props: any) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [errorMsg,setErrorMsg]=useState('');
+  const { control, handleSubmit, formState: { errors } } = useForm<FormData>();
   const dispatch = useDispatch();
-
-  const handleLogin = async () => {
+  const [loginError, setLoginError] = useState<string | null>(null);
+  const handleLogin = async (formData: { email: string, password: string }) => {
     dispatch(setLoading(true)); 
     try {
-      if (!email || !password) {
-        setErrorMsg("Email and password are required.");
-        return;
-      }
-      const data = await login(email, password);
+      const data = await login(formData.email, formData.password);
       dispatch(setToken(data.accessToken)); 
       dispatch(setUser(data.user)); 
-      props.navigation.navigate('HomeScreen'); 
-      setErrorMsg('');
+      props.navigation.navigate('Home'); 
     } catch (error:any) {
-      console.error('Login failed:', error.message); // Log error message
-      dispatch(setError(error.message)); 
-      setErrorMsg(error.message || 'Login failed. Please check your credentials.');
-      props.navigation.navigate('Login'); 
+      console.error('Login failed:', error?.response?.data?.message); 
+      dispatch(setError(error?.response?.data?.message || 'Login failed. Please check your credentials.'));
+      setLoginError(error?.response?.data?.message);
     } finally {
-      dispatch(setLoading(false)); // Always set loading to false regardless of success or failure
+      dispatch(setLoading(false)); 
     }
   };
+
   return (
     <View style={styles.container}>
       <View style={styles.loginform}>
         <View>
           <Image
-            source={require('../../assets/images/logo.png')}
+            source={require('../../assets/images/nseLogo.png')}
             style={styles.image}
           />
         </View>
         <View style={styles.inputcontainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="Email-Address"
-            keyboardType="email-address"
-            autoCapitalize="none"
-            value={email}
-            onChangeText={setEmail}
+          <Controller
+            control={control}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <InputBox
+                style={styles.input}
+                placeholder="Email Address"
+                keyboardType="email-address"
+                autoCapitalize="none"
+                value={value}
+                onBlur={onBlur}
+                onChangeText={onChange}
+              />
+            )}
+            name="email"
+            rules={{ required: "email is required" }}
           />
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            secureTextEntry
-            value={password}
-            onChangeText={setPassword}
+          {errors?.email && <Text style={styles.errorMsg}>{errors?.email?.message}</Text>}
+          <Controller
+            control={control}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <InputBox
+                style={styles.input}
+                placeholder="Password"
+                secureTextEntry
+                value={value}
+                onBlur={onBlur}
+                onChangeText={onChange}
+              />
+            )}
+            name="password"
+            rules={{ required: 'Password is required' }}
+            defaultValue=""
           />
+          {errors?.password && <Text style={styles.errorMsg}>{errors?.password?.message}</Text>}
         </View>
+
         <TouchableOpacity
           style={styles.loginButton}
-          onPress={handleLogin}
-          activeOpacity={1}>
+          onPress={handleSubmit(handleLogin)}
+          activeOpacity={1}
+        >
           <Text style={styles.buttonText}>Log In</Text>
         </TouchableOpacity>
-        {errorMsg && <Text style={styles.errorMsg}>{errorMsg}</Text>} 
+        {loginError && <Text style={styles.errorMsg}>{loginError}</Text>}
+        <Text style={styles.moreOptions}>Don't have an account?</Text>
+        <TouchableOpacity
+          style={styles.SignupButton}
+          onPress={() => props.navigation.navigate('Signup')}
+        >
+          <Text style={styles.SignupbuttonText}>Sign up with Email</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
 };
+
+
 
 const styles = StyleSheet.create({
   container: {
@@ -85,7 +114,6 @@ const styles = StyleSheet.create({
     height: 'auto',
     backgroundColor: '#ffffff',
     justifyContent: 'center',
-    // alignItems: 'center',
     padding: 0,
   },
   loginform: {
@@ -134,19 +162,49 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
     fontWeight: '100',
   },
+  SignupButton:{
+    backgroundColor: '#ffffff',
+    width: 'auto',
+    height: 'auto',
+    borderWidth: 1,
+    color: '#03050A',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderRadius: 8,
+    borderColor: '#D4D4D4',
+    marginBottom: 12,
+    fontSize: 12,
+    fontFamily: 'Roboto',
+    fontWeight: '500',
+  },
   buttonText: {
     fontFamily: 'Roboto',
     fontWeight: '500',
     fontSize: 14,
-    lineHeight: 16.41,
     textAlign: 'center',
     color: '#ffffff',
+  },
+  SignupbuttonText: {
+    fontFamily: 'Roboto',
+    fontWeight: '500',
+    fontSize: 12,
+    textAlign: 'center',
+    color: '#03050A',
   },
   errorMsg: {
     color: '#CB0505',
     fontSize: 10,
-    marginTop: 10,
+    marginVertical: 5,
+  },
+  moreOptions: {
+    color: '#717171',
+    fontFamily: 'Roboto',
+    fontWeight: '400',
+    fontSize: 12,
+    marginVertical: 32,
+    textAlign: 'center',
   }
+  
 });
 
 export default LoginForm;

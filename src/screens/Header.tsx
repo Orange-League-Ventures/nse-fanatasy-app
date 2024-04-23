@@ -1,6 +1,7 @@
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import CustomText from '../common/CustomText';
+import { windowWidth } from '../common/Dimensions';
 
 const Header = (props: any) => {
   return (
@@ -54,9 +55,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginHorizontal: 16,
     padding: 10,
-
-    // backgroundColor: 'red',
-
   },
   leftImages: {
     flexDirection: 'row',
@@ -65,10 +63,9 @@ const styles = StyleSheet.create({
     marginRight: 8, // Adjust spacing between images as needed
   },
   container: {
-    // height : 0,
-    flex: 1, // Make the container take up the full width
+    width : '100%',
+    // flex: 1, // Make the container take up the full width
     justifyContent: 'center',
-
     alignItems: 'center', // Optional for vertical centering if needed
   },
   logo: {
@@ -84,6 +81,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 21,
     color: '#03050A',
+    alignSelf: 'center',
   },
   pageNumber: {
     marginLeft: 100,

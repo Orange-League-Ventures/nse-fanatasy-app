@@ -13,6 +13,7 @@ const Dictionary = (props: any) => {
                 <TouchableOpacity onPress={() => { props.navigation.navigate("Words") }}>
                     <Image
                         source={require('../../assets/images/dictionary.png')}
+                        style={styles.image}
                     />
                 </TouchableOpacity>
 
@@ -24,14 +25,12 @@ const Dictionary = (props: any) => {
 const styles = StyleSheet.create({
     headingText: {
         marginTop: 20,
-        marginBottom: 10,
         fontSize: 14,
         fontWeight: '500',
         color: "#000000"
     },
     imageContainer: {
         marginVertical: 12,  
-        // backgroundColor :'red',
     },
     image : {
         borderRadius: 8,

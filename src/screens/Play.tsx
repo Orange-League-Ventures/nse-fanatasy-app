@@ -5,8 +5,6 @@ import CustomText from '../common/CustomText';
 import Quiz from './Quiz';
 
 const Play = (props: any) => {
-  console.log(props, 'propsldfnldf');
-
   const {openQuiz, setOpenQuiz, setQuizData, quizData, setQuizType, quizType} =
     props.route.params;
   const [loading, setLoading] = useState(false);

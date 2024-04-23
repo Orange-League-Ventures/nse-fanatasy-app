@@ -1,5 +1,4 @@
 import axios from 'axios';
-import {ISignup} from '../interfaces/autInterfaces';
 import {axiosInstance} from '../utills/axios';
 
 export const signup = async (name: string | undefined, email: string | undefined, phone_number: string | undefined, password: string | undefined) => {
@@ -9,17 +8,7 @@ export const signup = async (name: string | undefined, email: string | undefined
     return response.data;
   } catch (error:any) {
     console.error('Error in signup:', error);
-    if (error?.response) {
-      console.error('Server responded with status code:', error?.response?.status);
-      console.error('Response data:', error?.response?.data);
-      throw new Error(error?.response?.data?.message); // Throw custom error message
-    } else if (error.request) {
-      console.error('No response received from the server');
-      throw new Error('No response received from the server');
-    } else {
-      console.error('Error setting up the request:', error?.message);
-      throw new Error(error?.message);
-    }
+    throw error;
   }
 };
 
@@ -31,17 +20,7 @@ export const login = async (email: string | undefined, password: string | undefi
     return response.data;
   } catch (error:any) {
     console.error('Error in login:', error);
-    if (error?.response) {
-      console.error('Server responded with status code:', error?.response?.status);
-      console.error('Response data:', error?.response?.data);
-      throw new Error(error?.response?.data?.message); // Throw custom error message
-    } else if (error.request) {
-      console.error('No response received from the server',error);
-      throw new Error('Please Check your credentials');
-    } else {
-      console.error('Error setting up the request:', error?.message);
-     throw new Error(error?.message);
-    }
+     throw error;
   }
 };
 
@@ -50,32 +29,17 @@ export const updateUser = async (
   updatedFields: { name?: string, email?: string, phone_number?: string, password?: string }
 ) => {
   try {
-    console.log("data in services ", updatedFields);
     const filteredFields = Object.fromEntries(
       Object.entries(updatedFields).filter(([_, value]) => value !== undefined)
     );
-    console.log("data in services", filteredFields, token);
     const response = await axiosInstance.put('/user/update', filteredFields, {
       headers: {
         "x-access-token": `${token}`,
       },
     });
-    console.log("response---", response);
     return response.data;
   } catch (error:any) {
     console.error('Error updating user:', error);
-    if (error?.response) {
-      console.error('Server responded with status code:', error?.response?.status);
-      console.error('Response data:', error?.response?.data);
-      throw new Error(error?.response?.data?.message); // Throw custom error message
-    } else if (error.request) {
-      console.error('No response received from the server');
-      throw new Error('No response received from the server');
-    } else {
-      console.error('Error setting up the request:', error?.message);
-      throw new Error(error?.message);
-    }
-
     throw error; 
   }
 };

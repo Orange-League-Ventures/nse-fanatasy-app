@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import Header from './Header';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUser, setLoading, setError, logout }  from '../Redux/Slices/AuthSlice';
 import { updateUser } from '../services/authService';
 import { AuthState } from '../interfaces/autInterfaces';
 
-
 const Profile = (props: any) => {
   const details = useSelector((state: AuthState) => state?.auth);
-  console.log("detaiuls---",details);
+  //console.log("details---",details);
    const token=details?.token || '';
   const dispatch = useDispatch();
   const [errorMsg,setErrorMsg]=useState('');
@@ -22,10 +21,7 @@ const Profile = (props: any) => {
 
 
   useEffect(() => {
-    console.log("i am in use loop");
-
     if (details && details.user) {
-      console.log("i am in loop");
       setUserData({
         name: details.user.name,
         phone_number: details.user.phone_number,
@@ -41,8 +37,6 @@ const Profile = (props: any) => {
     email: false,
     password: false,
   });
-  const [isLoading, setIsLoading] = useState(true);
-
 
   const handleChange = (field: keyof typeof userData, value: string) => {
     setUserData((prevData: any) => ({ ...prevData, [field]: value }));
@@ -50,7 +44,6 @@ const Profile = (props: any) => {
   const handleEdit = async (field: keyof typeof userData) => {
     dispatch(setLoading(true));
     try {
-      // Toggle edit mode for the selected field
       setEditModes((prevModes) => ({
         ...prevModes,
         [field]: !prevModes[field as keyof typeof editModes],
@@ -61,13 +54,12 @@ const Profile = (props: any) => {
       const updatedFields: Partial<typeof userData> = { [field]: userData[field] };
   
       const updatedUser = await updateUser(token, updatedFields);
-      console.log("updated user---",updateUser);
       dispatch(setUser(updatedUser.user));
       setErrorMsg('');
     } catch (error:any) {
-      console.error('Error updating user:', error);
+      console.error('Error updating user :', error.response.data.message);
       dispatch(setError(error.message)); 
-      setErrorMsg(error.message || 'Login failed. Please check your credentials.');
+      setErrorMsg( error.response.data.message || 'Error updating user.');
     }
     finally{
       dispatch(setLoading(false));
@@ -76,6 +68,7 @@ const Profile = (props: any) => {
   
  
   return (
+    <ScrollView>
     <View>
       <View>
         {!props?.isHome ? <Header title={'PROFILE'} isTab={true} /> : null}
@@ -190,11 +183,12 @@ const Profile = (props: any) => {
                   </View>
                 </View>
           </View>
-          {errorMsg && <Text >{errorMsg}</Text>} 
+          {errorMsg && <Text style={styles.errorMsg}>{errorMsg}</Text>} 
         </View>
 
       )}
     </View>
+    </ScrollView>
   );
 };
 const styles = StyleSheet.create({
@@ -311,10 +305,11 @@ const styles = StyleSheet.create({
     width: 15,
     height: 15,
   },
+  errorMsg: {
+    color: '#CB0505',
+    fontSize: 10,
+    marginTop: 10,
+  }
 });
 
 export default Profile;
-function setUserData(arg0: (prevData: any) => any) {
-  throw new Error('Function not implemented.');
-}
-

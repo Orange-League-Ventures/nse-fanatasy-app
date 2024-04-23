@@ -132,10 +132,10 @@ function App(): React.JSX.Element {
 
   const HomeStack = (props: any) => {
     return (
-      <Stack.Navigator initialRouteName="HomeScreen">
+      <Stack.Navigator initialRouteName="Home">
         <Stack.Screen
           options={{ headerShown: false }}
-          name="HomeScreen"
+          name="Home"
           component={Home}
         />
         {/* <Stack.Screen
@@ -241,6 +241,11 @@ function App(): React.JSX.Element {
             name="Signup"
             component={SignupForm}
             options={{ title: 'Signup' }}
+          />
+            <Stack.Screen
+            name="Welcome"
+            component={Welcome}
+            options={{ title: 'Welcome' }}
           />
           <Stack.Screen
             name="Quiz"

@@ -1,47 +1,48 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
-  TextInput,
   Text,
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import {signup} from '../services/authService';
+import { useDispatch } from 'react-redux';
+import { useForm, Controller } from 'react-hook-form';
+import { signup } from '../services/authService';
 import { setError, setLoading, setToken, setUser } from '../Redux/Slices/AuthSlice';
-import { useDispatch} from 'react-redux';
-
+import InputBox from '../common/InputBox';
 
 const SignupForm = (props: any) => {
-  const [name, setName] = useState('');
-  const [phone_number, setPhoneNumber] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [errorMsg,setErrorMsg]=useState('');
-
+  const { control, handleSubmit, formState: { errors } } = useForm();
   const dispatch = useDispatch();
+  const [errorMsg, setErrorMsg] = useState('');
 
-  const handleSignUp = async () => {
+  const handleSignUp = async (formData: any) => {
     dispatch(setLoading(true));
     try {
-      if (!email || !password || !phone_number || !password) {
+      const { email, password, phone_number, name, confirmPassword } = formData;
+
+      if (!email || !password || !phone_number || !name || !confirmPassword) {
         setErrorMsg("All fields are required.");
         return;
       }
+      if (password !== confirmPassword) {
+        setErrorMsg("Passwords do not match.");
+        return;
+      }
       const data = await signup(name, email, phone_number, password);
-      dispatch(setToken(data.accessToken)); 
-      dispatch(setUser(data.user)); 
+      dispatch(setToken(data.accessToken));
+      dispatch(setUser(data.user));
       props.navigation.navigate('Welcome');
       setErrorMsg('');
     } catch (error:any) {
-      dispatch(setError(error.message));
-      setErrorMsg(error.message || 'create account Failed:');
       console.error('create account Failed:', error);
-      props.navigation.navigate('Signup'); 
-    }
-    finally{
+      dispatch(setError(error.message));
+      setErrorMsg(error.response.data.message || 'Sign up failed. Please try again later.');
+    } finally {
       dispatch(setLoading(false));
     }
   };
+
   return (
     <View style={styles.container}>
       <View style={styles.loginform}>
@@ -53,56 +54,105 @@ const SignupForm = (props: any) => {
           </Text>
         </View>
         <View style={styles.inputcontainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="Name"
-            keyboardType="email-address"
-            autoCapitalize="none"
-            value={name}
-            onChangeText={setName}
+          <Controller
+            control={control}
+            render={({ field }) => (
+              <InputBox
+                style={styles.input}
+                placeholder="Name"
+                autoCapitalize="none"
+                value={field.value}
+                onChangeText={field.onChange}
+              />
+            )}
+            name="name"
+            rules={{ required: 'Name is required' }} // Define validation rules
+            defaultValue=""
           />
-          <TextInput
-            style={styles.input}
-            placeholder="Email-Address"
-            keyboardType="email-address"
-            autoCapitalize="none"
-            value={email}
-            onChangeText={setEmail}
+          {errors?.name && <Text style={styles.errorMsg}>{errors.name.message}</Text>}
+
+          <Controller
+            control={control}
+            render={({ field }) => (
+              <InputBox
+                style={styles.input}
+                placeholder="Email Address"
+                keyboardType="email-address"
+                autoCapitalize="none"
+                value={field.value}
+                onChangeText={field.onChange}
+              />
+            )}
+            name="email"
+            rules={{ required: 'Email is required' }}
+            defaultValue=""
           />
-          <TextInput
-            style={styles.input}
-            placeholder="Mobile Number"
-            keyboardType="phone-pad"
-            autoCapitalize="none"
-            value={phone_number}
-            onChangeText={setPhoneNumber}
+          {errors?.email && <Text style={styles.errorMsg}>{errors.email.message}</Text>}
+
+          <Controller
+            control={control}
+            render={({ field }) => (
+              <InputBox
+                style={styles.input}
+                placeholder="Mobile Number"
+                keyboardType="numeric"
+                autoCapitalize="none"
+                value={field.value}
+                onChangeText={field.onChange}
+              />
+            )}
+            name="phone_number"
+            rules={{ required: 'Mobile number is required' }}
+            defaultValue=""
           />
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            secureTextEntry
-            value={password}
-            onChangeText={setPassword}
+          {errors?.phone_number && <Text style={styles.errorMsg}>{errors.phone_number.message}</Text>}
+
+          <Controller
+            control={control}
+            render={({ field }) => (
+              <InputBox
+                style={styles.input}
+                placeholder="Password"
+                secureTextEntry
+                value={field.value}
+                onChangeText={field.onChange}
+              />
+            )}
+            name="password"
+            rules={{ required: 'Password is required' }}
+            defaultValue=""
           />
-          <TextInput
-            style={styles.input}
-            placeholder="Confirm Password"
-            secureTextEntry
-            value={password}
-            onChangeText={setPassword}
+          {errors?.password && <Text style={styles.errorMsg}>{errors.password.message}</Text>}
+
+          <Controller
+            control={control}
+            render={({ field }) => (
+              <InputBox
+                style={styles.input}
+                placeholder="Confirm Password"
+                secureTextEntry
+                value={field.value}
+                onChangeText={field.onChange}
+              />
+            )}
+            name="confirmPassword"
+            rules={{ required: 'Confirm password is required' }}
+            defaultValue=""
           />
+          {errors?.confirmPassword && <Text style={styles.errorMsg}>{errors.confirmPassword.message}</Text>}
         </View>
         <TouchableOpacity
           style={styles.createButton}
-          onPress={handleSignUp}
+          onPress={handleSubmit(handleSignUp)}
           activeOpacity={1}>
           <Text style={styles.buttonText}>Create Account</Text>
         </TouchableOpacity>
-        {errorMsg && <Text style={styles.errorMsg}>{errorMsg}</Text>} 
+        {errorMsg && <Text style={styles.errorMsg}>{errorMsg}</Text>}
       </View>
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {
@@ -131,7 +181,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: 14,
     lineHeight: 21,
-    color: '#03050A', // Specify your desired text color
+    color: '#03050A',
     marginBottom: 16,
   },
   textInfo: {
@@ -185,12 +235,9 @@ const styles = StyleSheet.create({
   errorMsg: {
     color: '#CB0505',
     fontSize: 10,
-    marginTop: 10,
+    marginTop:0,
+    marginBottom: 10,
   }
 });
 
 export default SignupForm;
-function dispatch(arg0: { payload: any; type: "auth/setError"; }) {
-  throw new Error('Function not implemented.');
-}
-

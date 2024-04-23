@@ -247,11 +247,7 @@ function App(): React.JSX.Element {
             component={Welcome}
             options={{ title: 'Welcome' }}
           />
-          <Stack.Screen
-            name="Quiz"
-            component={Quiz}
-            options={{ title: 'Quiz' }}
-          />
+
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

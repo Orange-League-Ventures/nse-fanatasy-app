@@ -101,7 +101,6 @@ function App(): React.JSX.Element {
         <Tab.Screen
           name="Play"
           options={{
-            headerShown: !openQuiz && true,
             tabBarIcon: ({color, size}) => (
               <Image
                 source={require('./assets/images/home.png')}

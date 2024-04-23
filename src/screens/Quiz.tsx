@@ -9,18 +9,26 @@ import {
   getQuestionBasedOnQuestionId,
   getQuestionsBasedOnQuizType,
 } from '../services/quizServices';
-import { Dimensions } from 'react-native';
+import {Dimensions, Platform} from 'react-native';
 
 const windowWidth = Dimensions.get('window').width;
 
-const Quiz = ({openQuiz, setOpenQuiz, quizType}) => {
+const {height} = Dimensions.get('window');
+
+interface IProps {
+  openQuiz: any;
+  setOpenQuiz: any;
+  quizType: any;
+}
+
+const Quiz = ({openQuiz, setOpenQuiz, quizType}: IProps) => {
   const [quizData, setQuizData] = useState([]);
   const [currentQuizId, setCurrentQuizId] = useState('');
   const [questionData, setQuestionData] = useState([]);
   const [questionNumber, setQuestionNumber] = useState(0);
   const [lastQuestion, setLastQuestion] = useState(false);
 
-  const progressWidth = ((questionNumber + 1) / quizData.length) * 100;
+  const progressWidth = ((questionNumber + 1) / questionData?.questions?.length) * 100;
   const navigation = useNavigation();
 
   const handlePress = () => {
@@ -34,8 +42,8 @@ const Quiz = ({openQuiz, setOpenQuiz, quizType}) => {
       setLoading(true);
       getQuestionsBasedOnQuizType(quizType)
         .then(response => {
-          setQuizData(response.data.quiz);
-          setCurrentQuizId(response.data.quiz[0].id);
+          setQuizData(response?.data.quiz);
+          setCurrentQuizId(response?.data.quiz[0].id);
           setLoading(false);
         })
         .catch(error => {
@@ -61,13 +69,11 @@ const Quiz = ({openQuiz, setOpenQuiz, quizType}) => {
     };
     fetchQuestionBasedOnQuestonId();
   }, [currentQuizId]);
-
+  const [currentIndex, setCurrentIndex] = useState(0);
   const handleNextQuestion = () => {
-    const currentIndex = quizData.findIndex(
-      item => item?.['id'] === currentQuizId,
-    );
-    if (currentIndex < quizData.length - 1) {
-      setCurrentQuizId(quizData[currentIndex + 1]?.['id']);
+    if (currentIndex < questionData?.questions?.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+      setCurrentQuizId(quizData[0]?.['id']);
       setQuestionNumber(questionNumber + 1); // Reset question index for the new quiz
     } else {
       setLastQuestion(!lastQuestion);
@@ -86,7 +92,7 @@ const Quiz = ({openQuiz, setOpenQuiz, quizType}) => {
   const [score, setScore] = useState(0);
 
   const handleSubmit = () => {
-    const currentQuestion = questionData.questions?.[questionNumber];
+    const currentQuestion = questionData?.questions?.[questionNumber];
     let vv;
     currentQuestion?.option?.map(item => {
       setCorrectOption(item);
@@ -102,6 +108,20 @@ const Quiz = ({openQuiz, setOpenQuiz, quizType}) => {
   };
 
   let kk;
+
+  let dynamicHeight;
+
+  if (Platform.OS === 'ios') {
+    if (height < 700) {
+      // Assuming iPhone SE (3rd generation)
+      dynamicHeight = '75%';
+    } else {
+      // Assuming iPhone 15 or similar
+      dynamicHeight = '80%';
+    }
+  } else {
+    dynamicHeight = '75%'; // For Android or other platforms
+  }
   return (
     <View>
       {!lastQuestion ? (
@@ -126,56 +146,58 @@ const Quiz = ({openQuiz, setOpenQuiz, quizType}) => {
               marginBottom: 20,
             }}>
             <Text>
-              Q.{questionNumber + 1}/{quizData.length}
+              Q.{questionNumber + 1}/{questionData?.questions?.length}
             </Text>
           </View>
           <View style={styles.container}>
             <View style={[styles.progressBar, {width: `${progressWidth}%`}]} />
           </View>
-          <View style={{maxHeight: 900, height: 480}}>
+          <View style={{maxHeight: '90%', height: dynamicHeight}}>
             <Text style={{color: '#03050A', fontSize: 14, fontWeight: '600'}}>
               Q{questionNumber + 1}.{' '}
-              {questionData?.questions?.[0]?.['question_text']}
+              {questionData?.questions?.[currentIndex]?.['question_text']}
             </Text>
             <View>
-              {questionData?.questions?.[0]?.option?.map((option, index) => (
-                <View
-                  key={index}
-                  style={{
-                    ...(selectedOption === option.option_text && submitted
-                      ? {
-                          backgroundColor: isCorrect ? '#007A00' : '#CB0505',
-                          borderRadius: 10,
-                        }
-                      : selectedOption === option.option_text
-                      ? {backgroundColor: '#E7E7F7', borderRadius: 10}
-                      : {}),
-                  }}>
+              {questionData?.questions?.[currentIndex]?.option?.map(
+                (option, index) => (
                   <View
+                    key={index}
                     style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      padding: 10,
+                      ...(selectedOption === option.option_text && submitted
+                        ? {
+                            backgroundColor: isCorrect ? '#007A00' : '#CB0505',
+                            borderRadius: 10,
+                          }
+                        : selectedOption === option.option_text
+                        ? {backgroundColor: '#E7E7F7', borderRadius: 10}
+                        : {}),
                     }}>
-                    <RadioButton.Android
-                      value={option.option_text}
-                      status={
-                        selectedOption === option.option_text
-                          ? 'checked'
-                          : 'unchecked'
-                      }
-                      onPress={() => handleOptionSelect(option.option_text)}
-                      color={submitted ? 'white' : '#C35516'}
-                      style={
-                        selectedOption === option.option_text
-                          ? {backgroundColor: isCorrect ? 'green' : 'green'}
-                          : {}
-                      }
-                    />
-                    <Text>{option.option_text}</Text>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        padding: 10,
+                      }}>
+                      <RadioButton.Android
+                        value={option.option_text}
+                        status={
+                          selectedOption === option.option_text
+                            ? 'checked'
+                            : 'unchecked'
+                        }
+                        onPress={() => handleOptionSelect(option.option_text)}
+                        color={submitted ? 'white' : '#C35516'}
+                        style={
+                          selectedOption === option.option_text
+                            ? {backgroundColor: isCorrect ? 'green' : 'green'}
+                            : {}
+                        }
+                      />
+                      <Text>{option.option_text}</Text>
+                    </View>
                   </View>
-                </View>
-              ))}
+                ),
+              )}
             </View>
             {submitted && (
               <View>
@@ -283,10 +305,11 @@ const Quiz = ({openQuiz, setOpenQuiz, quizType}) => {
       ) : (
         <ReportPage
           score={score}
-          totalQuestions={quizData.length}
+          totalQuestions={questionData?.questions?.length}
           setOpenQuiz={setOpenQuiz}
           openQuiz={openQuiz}
           quizType={quizType}
+          dynamicHeight={dynamicHeight}
         />
       )}
     </View>

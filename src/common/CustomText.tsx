@@ -1,7 +1,12 @@
 import React from 'react';
 import { Text, StyleSheet } from 'react-native';
 
-const CustomText = ({ text, style }) => {
+interface IProps{
+  style:any;
+  text:string;
+}
+
+const CustomText = ({style,text}:IProps) => {
   return <Text style={[styles.text, style]}>{text}</Text>;
 };
 

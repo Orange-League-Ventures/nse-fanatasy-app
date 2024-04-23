@@ -31,7 +31,7 @@ import {Provider, useSelector} from 'react-redux';
 import store from './src/Redux/store';
 import Content from './src/screens/Content';
 import Words from './src/screens/Words';
-import { AuthState } from './src/interfaces/autInterfaces';
+import {AuthState} from './src/interfaces/autInterfaces';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -57,6 +57,7 @@ function App(): React.JSX.Element {
           tabBarActiveTintColor: '#3A2D7D',
           tabBarLabelStyle: styles.tabBarLabel,
           tabBarIconStyle: styles.tabBarIcon,
+          tabBarStyle: openQuiz ? {display: 'none'} : {},
         }}>
         <Tab.Screen
           name="Home"
@@ -68,6 +69,7 @@ function App(): React.JSX.Element {
                 style={{width: size, height: size, tintColor: color}}
               />
             ),
+            tabBarItemStyle: openQuiz ? {display: 'none'} : {},
           }}
           component={HomeStack}
         />
@@ -81,6 +83,7 @@ function App(): React.JSX.Element {
                 style={{width: size, height: size, tintColor: color}}
               />
             ),
+            tabBarItemStyle: openQuiz ? {display: 'none'} : {},
           }}
           component={LearnSection}
         />
@@ -94,20 +97,23 @@ function App(): React.JSX.Element {
                 style={{width: size, height: size, tintColor: color}}
               />
             ),
+            tabBarItemStyle: openQuiz ? {display: 'none'} : {},
           }}
           component={Profile}
         />
         <Tab.Screen
           name="Play"
           options={{
+            headerShown: !openQuiz && true,
             tabBarIcon: ({color, size}) => (
               <Image
                 source={require('./assets/images/home.png')}
                 style={{width: size, height: size, tintColor: color}}
               />
             ),
+            tabBarItemStyle: openQuiz ? {display: 'none'} : {},
           }}
-          component={Play}
+          component={PlayStack}
           initialParams={{
             openQuiz,
             setOpenQuiz,
@@ -117,6 +123,26 @@ function App(): React.JSX.Element {
           }}
         />
       </Tab.Navigator>
+    );
+  };
+
+  const PlayStack = () => {
+    return (
+      <Stack.Navigator initialRouteName="PlayScreen">
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="PlayScreen"
+          component={Play}
+          initialParams={{
+            openQuiz,
+            setOpenQuiz,
+            setQuizData,
+            quizData,
+            setQuizType,
+            quizType,
+          }}
+        />
+      </Stack.Navigator>
     );
   };
 
@@ -173,19 +199,11 @@ function App(): React.JSX.Element {
       </Stack.Navigator>
     );
   };
-  
+
   return (
     <Provider store={store}>
       <NavigationContainer>
-        {openQuiz ? (
-          <Quiz
-            openQuiz={openQuiz}
-            setOpenQuiz={setOpenQuiz}
-            quizType={quizType}
-          />
-        ) : (
-          <TabNavigator />
-        )}
+        <TabNavigator />
       </NavigationContainer>
     </Provider>
   );

@@ -1,6 +1,11 @@
 import {axiosInstance} from '../utills/axios';
 
-export const UpdateReport = async ({score, quizType, userId}) => {
+interface IProps{
+    score:any;
+    quizType:any;
+    userId:any;
+}
+export const UpdateReport = async ({score, quizType, userId}:IProps) => {
   try {
     return await axiosInstance.post('/report', {
       result: score,
@@ -25,6 +30,7 @@ export const getQuestionsBasedOnQuizType = async (quizType: string) => {
 export const getQuestionBasedOnQuestionId = async (currentQuizId: string) => {
     try {
       const result = await axiosInstance.get(`/question?quizId=${currentQuizId}`);
+      
   
       return result;
     } catch (error) {

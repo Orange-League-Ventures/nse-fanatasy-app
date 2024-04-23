@@ -4,23 +4,38 @@ import Button from '../common/Button';
 import CustomText from '../common/CustomText';
 import {Image} from 'react-native';
 import imageGif from '../assets/image.gif';
-import { useEffect } from 'react';
-import { UpdateReport } from '../services/quizServices';
-import { useSelector } from 'react-redux';
-import { AuthState } from '../interfaces/autInterfaces';
+import {useEffect} from 'react';
+import {UpdateReport} from '../services/quizServices';
+import {useSelector} from 'react-redux';
+import {AuthState} from '../interfaces/autInterfaces';
 
-const ReportPage = ({setOpenQuiz,openQuiz,totalQuestions,score,quizType}) => {
+interface IProps {
+  setOpenQuiz: any;
+  openQuiz: any;
+  totalQuestions: any;
+  score: any;
+  quizType: any;
+  dynamicHeight: any;
+}
+const ReportPage = ({
+  setOpenQuiz,
+  openQuiz,
+  totalQuestions,
+  score,
+  quizType,
+  dynamicHeight,
+}: IProps) => {
   const details = useSelector((state: AuthState) => state?.auth);
   const handlePress = () => {
     setOpenQuiz(!openQuiz);
   };
-  const userId=details.user.id
-  useEffect(()=>{
-    UpdateReport({score,quizType,userId})
-  })
+  const userId = details?.user?.id;
+  useEffect(() => {
+    UpdateReport({score, quizType, userId});
+  });
   return (
     <View style={{padding: 20}}>
-      <View style={{height: 600}}>
+      <View style={{maxHeight: '100%', height: '94%'}}>
         <CustomText
           style={{
             textAlign: 'center',
@@ -98,11 +113,7 @@ const ReportPage = ({setOpenQuiz,openQuiz,totalQuestions,score,quizType}) => {
           </View>
         </View>
       </View>
-      <Button
-        style={{borderRadius: 10}}
-        title="Finish"
-        onPress={handlePress}
-      />
+      <Button style={{borderRadius: 10}} title="Finish" onPress={handlePress} />
     </View>
   );
 };

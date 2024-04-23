@@ -310,6 +310,7 @@ const Quiz = ({openQuiz, setOpenQuiz, quizType}: IProps) => {
           openQuiz={openQuiz}
           quizType={quizType}
           dynamicHeight={dynamicHeight}
+          quizId={quizData[0]?.['id']}
         />
       )}
     </View>

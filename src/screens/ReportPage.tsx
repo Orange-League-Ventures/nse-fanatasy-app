@@ -16,6 +16,7 @@ interface IProps {
   score: any;
   quizType: any;
   dynamicHeight: any;
+  quizId:any;
 }
 const ReportPage = ({
   setOpenQuiz,
@@ -24,6 +25,7 @@ const ReportPage = ({
   score,
   quizType,
   dynamicHeight,
+  quizId,
 }: IProps) => {
   const details = useSelector((state: AuthState) => state?.auth);
   const handlePress = () => {
@@ -31,8 +33,8 @@ const ReportPage = ({
   };
   const userId = details?.user?.id;
   useEffect(() => {
-    UpdateReport({score, quizType, userId});
-  });
+    UpdateReport({score, quizId, userId});
+  },[score,quizType,userId]);
   return (
     <View style={{padding: 20}}>
       <View style={{maxHeight: '100%', height: '94%'}}>

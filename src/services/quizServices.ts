@@ -4,12 +4,14 @@ interface IProps{
     score:any;
     quizType:any;
     userId:any;
+    quizId:any;
 }
-export const UpdateReport = async ({score, quizType, userId}:IProps) => {
+export const UpdateReport = async ({score, quizId, userId}:IProps) => {
+  
   try {
     return await axiosInstance.post('/report', {
       result: score,
-      quizId: quizType,
+      quizId: quizId,
       userId: userId,
     });
   } catch (error) {

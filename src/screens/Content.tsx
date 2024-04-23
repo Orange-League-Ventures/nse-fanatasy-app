@@ -58,7 +58,7 @@ const Content = (props: any) => {
       <View style={styles.container}>
         {contentItem && (
           <>
-            <CustomText></CustomText>
+            <CustomText/>
             {contentItem.content_image ? (
               <Image
                 source={{uri: contentItem.content_image}}

@@ -61,7 +61,7 @@ function App(): React.JSX.Element {
           tabBarIconStyle: styles.tabBarIcon,
         }}>
         <Tab.Screen
-          name="Home"
+          name="Home "
           options={{
             headerShown: false,
             tabBarIcon: ({ color, size }) => (

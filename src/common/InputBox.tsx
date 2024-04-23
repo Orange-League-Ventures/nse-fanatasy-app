@@ -7,6 +7,8 @@ const InputBox = (props:any) => (
     value={props.value}
     onChangeText={props.onChangeText}
     placeholder={props.placeholder}
+    keyboardType={props.keyboardType}
+    placeholderTextColor="gray"
   />
 );
 

@@ -35,7 +35,7 @@ const Welcome = (props:any) => {
       </View>
       <TouchableOpacity
           style={styles.createButton}
-          onPress={() => props.navigation.navigate('HomeScreen')}
+          onPress={() => props.navigation.navigate('Home')}
           activeOpacity={1}>
           <Text style={styles.buttonText}>Get Started</Text>
         </TouchableOpacity>

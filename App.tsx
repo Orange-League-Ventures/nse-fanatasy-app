@@ -87,12 +87,12 @@ function App(): React.JSX.Element {
           component={LearnSection}
         />
         <Tab.Screen
-          name="Profile"
+          name="Settings"
           options={{
             // headerShown: false,
             tabBarIcon: ({ color, size }) => (
               <Image
-                source={require('./assets/images/profile.png')}
+                source={require('./assets/images/settings.png')}
                 style={{ width: size, height: size, tintColor: color }}
               />
             ),

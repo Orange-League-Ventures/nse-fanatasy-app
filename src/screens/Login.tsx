@@ -28,7 +28,7 @@ const LoginForm = (props: any) => {
       const data = await login(email, password);
       dispatch(setToken(data.accessToken)); 
       dispatch(setUser(data.user)); 
-      props.navigation.navigate('HomeScreen'); 
+      props.navigation.navigate('Home'); 
       setErrorMsg('');
     } catch (error:any) {
       console.error('Login failed:', error.message); // Log error message

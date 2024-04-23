@@ -53,7 +53,8 @@ const ChartList = (props: any) => {
     <View style={styles.mainContainer}>
       {/* <Header title={chart_type.charAt(0).toUpperCase() + chart_type.slice(1) + ' Chart'} /> */}
       <ScrollView>
-        <CustomText style={styles.subTopicText}>Subtopics</CustomText>
+        <CustomText text='Subtopics' style={styles.subTopicText} />
+        {/* </CustomText> */}
         {topicList?.length > 0 ? (
           <>
             {topicList.map((topic: ITopic, index: number) => (

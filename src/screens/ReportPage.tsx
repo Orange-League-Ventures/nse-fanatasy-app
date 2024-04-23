@@ -18,18 +18,12 @@ interface IProps {
   dynamicHeight: any;
   quizId:any;
 }
-const ReportPage = ({
-  setOpenQuiz,
-  openQuiz,
-  totalQuestions,
-  score,
-  quizType,
-  dynamicHeight,
-  quizId,
-}: IProps) => {
+const ReportPage = (props:any) => {
+  const{score,quizId,quizType,totalQuestions}=props.route.params
+  
   const details = useSelector((state: AuthState) => state?.auth);
   const handlePress = () => {
-    setOpenQuiz(!openQuiz);
+    props.navigation.navigate("HomeScreen")
   };
   const userId = details?.user?.id;
   useEffect(() => {

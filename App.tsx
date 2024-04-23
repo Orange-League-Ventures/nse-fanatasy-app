@@ -32,6 +32,7 @@ import store from './src/Redux/store';
 import Content from './src/screens/Content';
 import Words from './src/screens/Words';
 import {AuthState} from './src/interfaces/autInterfaces';
+import ReportPage from './src/screens/ReportPage';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -57,7 +58,6 @@ function App(): React.JSX.Element {
           tabBarActiveTintColor: '#3A2D7D',
           tabBarLabelStyle: styles.tabBarLabel,
           tabBarIconStyle: styles.tabBarIcon,
-          tabBarStyle: openQuiz ? {display: 'none'} : {},
         }}>
         <Tab.Screen
           name="Home"
@@ -69,7 +69,6 @@ function App(): React.JSX.Element {
                 style={{width: size, height: size, tintColor: color}}
               />
             ),
-            tabBarItemStyle: openQuiz ? {display: 'none'} : {},
           }}
           component={HomeStack}
         />
@@ -83,7 +82,6 @@ function App(): React.JSX.Element {
                 style={{width: size, height: size, tintColor: color}}
               />
             ),
-            tabBarItemStyle: openQuiz ? {display: 'none'} : {},
           }}
           component={LearnSection}
         />
@@ -97,7 +95,6 @@ function App(): React.JSX.Element {
                 style={{width: size, height: size, tintColor: color}}
               />
             ),
-            tabBarItemStyle: openQuiz ? {display: 'none'} : {},
           }}
           component={Profile}
         />
@@ -111,16 +108,8 @@ function App(): React.JSX.Element {
                 style={{width: size, height: size, tintColor: color}}
               />
             ),
-            tabBarItemStyle: openQuiz ? {display: 'none'} : {},
           }}
           component={PlayStack}
-          initialParams={{
-            openQuiz,
-            setOpenQuiz,
-            setQuizData,
-            quizData,
-            setQuizType,
-          }}
         />
       </Tab.Navigator>
     );
@@ -133,14 +122,6 @@ function App(): React.JSX.Element {
           options={{headerShown: false}}
           name="PlayScreen"
           component={Play}
-          initialParams={{
-            openQuiz,
-            setOpenQuiz,
-            setQuizData,
-            quizData,
-            setQuizType,
-            quizType,
-          }}
         />
       </Stack.Navigator>
     );
@@ -182,6 +163,15 @@ function App(): React.JSX.Element {
           component={ChartList}
         />
         <Stack.Screen
+          name="Play"
+          component={Play}
+        />
+        <Stack.Screen
+          name="ReportPage"
+          options={{headerShown: false}}
+          component={ReportPage}
+        />
+        <Stack.Screen
           name="Content"
           options={({route}: any) => ({
             title:
@@ -199,13 +189,49 @@ function App(): React.JSX.Element {
       </Stack.Navigator>
     );
   };
+  const MainTabStackNavigator = () => {
+    return (
+      <Stack.Navigator>
+        <Stack.Screen name="MainTabs" component={TabNavigator} options={{ headerShown: false }} />
+      </Stack.Navigator>
+    );
+  }
 
   return (
     <Provider store={store}>
+      {/* <AppWrapper /> */}
       <NavigationContainer>
-        <TabNavigator />
+        <Stack.Navigator initialRouteName="Login">
+          <Stack.Screen
+            name="Home"
+            component={MainTabStackNavigator}
+          options={{ headerShown:false }}
+          />
+          <Stack.Screen
+            name="Login"
+            component={LoginForm}
+            options={{ title: 'Login' }}
+          />
+          <Stack.Screen
+            name="Signup"
+            component={SignupForm}
+            options={{ title: 'Signup' }}
+          />
+            <Stack.Screen
+            name="Welcome"
+            component={Welcome}
+            options={{ title: 'Welcome' }}
+          />
+          <Stack.Screen
+            name="Quiz"
+            component={Quiz}
+            options={{headerShown: false}}
+          />
+
+        </Stack.Navigator>
       </NavigationContainer>
     </Provider>
+
   );
 }
 

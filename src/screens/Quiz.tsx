@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import {Text, View, StyleSheet, Button, TouchableOpacity} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import axios from 'axios';
 import {RadioButton} from 'react-native-paper';
 import ReportPage from './ReportPage';
@@ -21,18 +21,22 @@ interface IProps {
   quizType: any;
 }
 
-const Quiz = ({openQuiz, setOpenQuiz, quizType}: IProps) => {
+const Quiz = (props: any) => { 
+  const route: any = useRoute();
+  
   const [quizData, setQuizData] = useState([]);
   const [currentQuizId, setCurrentQuizId] = useState('');
   const [questionData, setQuestionData] = useState([]);
   const [questionNumber, setQuestionNumber] = useState(0);
   const [lastQuestion, setLastQuestion] = useState(false);
+  const [score, setScore] = useState(0);
+
 
   const progressWidth = ((questionNumber + 1) / questionData?.questions?.length) * 100;
   const navigation = useNavigation();
 
   const handlePress = () => {
-    setOpenQuiz(!openQuiz);
+    props.navigation.navigate("Play")
   };
 
   const [loading, setLoading] = useState(false);
@@ -40,10 +44,10 @@ const Quiz = ({openQuiz, setOpenQuiz, quizType}: IProps) => {
   useEffect(() => {
     const fetchQuestionsBasedOnQuizType = () => {
       setLoading(true);
-      getQuestionsBasedOnQuizType(quizType)
+      getQuestionsBasedOnQuizType(route?.params?.state?.quizTypes)
         .then(response => {
           setQuizData(response?.data.quiz);
-          setCurrentQuizId(response?.data.quiz[0].id);
+          setCurrentQuizId(response?.data.quiz[0]?.id);
           setLoading(false);
         })
         .catch(error => {
@@ -52,7 +56,7 @@ const Quiz = ({openQuiz, setOpenQuiz, quizType}: IProps) => {
         });
     };
     fetchQuestionsBasedOnQuizType();
-  }, [quizType]);
+  }, []);
 
   useEffect(() => {
     const fetchQuestionBasedOnQuestonId = () => {
@@ -76,7 +80,7 @@ const Quiz = ({openQuiz, setOpenQuiz, quizType}: IProps) => {
       setCurrentQuizId(quizData[0]?.['id']);
       setQuestionNumber(questionNumber + 1); // Reset question index for the new quiz
     } else {
-      setLastQuestion(!lastQuestion);
+      props.navigation.navigate('ReportPage',{score:score,quizId:quizData[0]?.['id'],quizType:route?.params?.state?.quizTypes,totalQuestions:questionData?.questions?.length})
     }
     setSubmitted(false);
   };
@@ -89,7 +93,6 @@ const Quiz = ({openQuiz, setOpenQuiz, quizType}: IProps) => {
   const handleOptionSelect = optionText => {
     setSelectedOption(optionText);
   };
-  const [score, setScore] = useState(0);
 
   const handleSubmit = () => {
     const currentQuestion = questionData?.questions?.[questionNumber];
@@ -245,7 +248,7 @@ const Quiz = ({openQuiz, setOpenQuiz, quizType}: IProps) => {
                           }}>
                           Explanation
                         </Text>
-                        {questionData.questions?.[0]?.option?.map(item => {
+                        {questionData?.questions?.[0]?.option?.map(item => {
                           if (item.option_text === selectedOption) {
                             kk = item?.explaination?.explaination_text;
                           }
@@ -303,15 +306,16 @@ const Quiz = ({openQuiz, setOpenQuiz, quizType}: IProps) => {
           </View>
         </View>
       ) : (
-        <ReportPage
-          score={score}
-          totalQuestions={questionData?.questions?.length}
-          setOpenQuiz={setOpenQuiz}
-          openQuiz={openQuiz}
-          quizType={quizType}
-          dynamicHeight={dynamicHeight}
-          quizId={quizData[0]?.['id']}
-        />
+        <></>
+        // <ReportPage
+        //   score={score}
+        //   totalQuestions={questionData?.questions?.length}
+        //   // setOpenQuiz={setOpenQuiz}
+        //   // openQuiz={openQuiz}
+        //   quizType={route?.params?.state?.quizTypes}
+        //   dynamicHeight={dynamicHeight}
+        //   quizId={quizData[0]?.['id']}
+        // />
       )}
     </View>
   );

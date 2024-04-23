@@ -5,19 +5,16 @@ import CustomText from '../common/CustomText';
 import Quiz from './Quiz';
 
 const Play = (props: any) => {
-  const {openQuiz, setOpenQuiz, setQuizData, quizData, setQuizType, quizType} =
-    props.route.params;
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (quizType: string) => {
-    setOpenQuiz(!openQuiz);
-    setLoading(true);
-    setQuizType(quizType);
+  const handleSubmit = (quizTypes: string) => {
+    props.navigation.navigate('Quiz', { state: { quizTypes }})
+    // setOpenQuiz(!openQuiz);
+    // setLoading(true);
   };
 
   return (
     <View>
-      {!openQuiz ? (
         <View style={{padding: 20}}>
           <View
             style={{
@@ -55,13 +52,7 @@ const Play = (props: any) => {
             />
           </View>
         </View>
-      ) : (
-        <Quiz
-          openQuiz={openQuiz}
-          setOpenQuiz={setOpenQuiz}
-          quizType={quizType}
-        />
-      )}
+      
     </View>
   );
 };

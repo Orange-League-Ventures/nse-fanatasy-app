@@ -11,8 +11,15 @@ import { signup } from '../services/authService';
 import { setError, setLoading, setToken, setUser } from '../Redux/Slices/AuthSlice';
 import InputBox from '../common/InputBox';
 
+type FormValues = {
+  name: string;
+  email: string;
+  phone_number: string;
+  password: string;
+  confirmPassword: string;
+};
 const SignupForm = (props: any) => {
-  const { control, handleSubmit, formState: { errors } } = useForm();
+  const { control, handleSubmit, formState: { errors } } = useForm<FormValues>();
   const dispatch = useDispatch();
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -36,8 +43,8 @@ const SignupForm = (props: any) => {
       setErrorMsg('');
     } catch (error:any) {
       console.error('create account Failed:', error);
-      dispatch(setError(error.message));
-      setErrorMsg(error.response.data.message || 'Sign up failed. Please try again later.');
+      dispatch(setError(error?.response?.data?.message));
+      setErrorMsg(error?.response?.data?.message || 'Sign up failed. Please try again later.');
     } finally {
       dispatch(setLoading(false));
     }

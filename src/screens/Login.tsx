@@ -30,9 +30,9 @@ const LoginForm = (props: any) => {
       dispatch(setUser(data.user)); 
       props.navigation.navigate('Home'); 
     } catch (error:any) {
-      console.error('Login failed:', error.response?.data?.message); 
-      dispatch(setError(error.response?.data?.message || 'Login failed. Please check your credentials.'));
-      setLoginError(error.response?.data?.message);
+      console.error('Login failed:', error?.response?.data?.message); 
+      dispatch(setError(error?.response?.data?.message || 'Login failed. Please check your credentials.'));
+      setLoginError(error?.response?.data?.message);
     } finally {
       dispatch(setLoading(false)); 
     }

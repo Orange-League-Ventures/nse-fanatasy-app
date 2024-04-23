@@ -24,35 +24,38 @@ type FormValues = {
 const SignupForm = (props: any) => {
   const { control, handleSubmit, formState: { errors } } = useForm<FormValues>();
   const dispatch = useDispatch();
-  const [errorMsg, setErrorMsg] = useState(null);
+   const errorMsg=useSelector((state: AuthState) => state?.auth?.error);
   const loading=useSelector((state: AuthState) => state?.auth?.loading);
-  const handleSignUp = async (formData: any) => {
+  const handleSignUp = (formData: any) => {
     dispatch(setLoading(true));
-    try {
-      const { email, password, phone_number, name, confirmPassword } = formData;
-      if (!email || !password || !phone_number || !name || !confirmPassword) {
-        setErrorMsg("All fields are required.");
-        return;
-      }
-      if (password !== confirmPassword) {
-        setErrorMsg("Passwords do not match.");
-        return;
-      }
-      const data = await signup(name, email, phone_number, password);
-      dispatch(setToken(data.accessToken));
-      dispatch(setUser(data.user));
-      props.navigation.navigate('Welcome');
-      setErrorMsg(null);
-    } catch (error:any) {
-      console.error('create account Failed:', error);
-      dispatch(setError(error?.response?.data?.message));
-      setErrorMsg(error?.response?.data?.message || 'Sign up failed. Please try again later.');
-    }
-    finally{
+    const { email, password, phone_number, name, confirmPassword } = formData;
+    if (!email || !password || !phone_number || !name || !confirmPassword) {
+      dispatch(setError("All fields are required."));
       dispatch(setLoading(false));
+      return;
     }
+    if (password !== confirmPassword) {
+      dispatch(setError("Passwords do not match."));
+      dispatch(setLoading(false));
+      return;
+    }
+  
+    signup(name, email, phone_number, password)
+      .then((data) => {
+        dispatch(setToken(data.accessToken));
+        dispatch(setUser(data.user));
+        props.navigation.navigate('Welcome');
+        dispatch(setError(null));
+      })
+      .catch((error: any) => {
+        console.error('create account Failed:', error);
+        dispatch(setError(error?.response?.data?.message));
+      })
+      .finally(() => {
+        dispatch(setLoading(false));
+      });
   };
-
+  
   return (
     <View style={styles.container}>
       <View style={styles.loginform}>

@@ -2,57 +2,57 @@ import React, {useEffect, useState} from 'react';
 import {Text, TouchableOpacity, View, StyleSheet} from 'react-native';
 import Button from '../common/Button';
 import CustomText from '../common/CustomText';
-import {getQuizQuestions} from '../services/authService';
+import Quiz from './Quiz';
 
-const Play = ({route}) => {
-  const {openQuiz, setOpenQuiz,setQuizData,quizData,setQuizType} = route.params;
+const Play = (props: any) => {
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (quizType:string) => {
-    setOpenQuiz(!openQuiz);
-    setLoading(true);
-    setQuizType(quizType)
+  const handleSubmit = (quizTypes: string) => {
+    props.navigation.navigate('Quiz', { state: { quizTypes }})
+    // setOpenQuiz(!openQuiz);
+    // setLoading(true);
   };
 
   return (
     <View>
-      <View style={{padding: 20}}>
-        <View
-          style={{
-            borderWidth: 1,
-            borderColor: '#D4D4D4',
-            borderRadius: 12,
-            padding: 10,
-            marginBottom: 20,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <CustomText text="Game -1 Quiz" style={styles.text} />
-          <Button
-            onPress={() => handleSubmit('Quiz 1')}
-            title="Play"
-            style={styles.button}
-            textStyle={styles.buttonText}
-          />
+        <View style={{padding: 20}}>
+          <View
+            style={{
+              borderWidth: 1,
+              borderColor: '#D4D4D4',
+              borderRadius: 12,
+              padding: 10,
+              marginBottom: 20,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <CustomText text="Game -1 Quiz" style={styles.text} />
+            <Button
+              onPress={() => handleSubmit('Quiz 1')}
+              title="Play"
+              style={styles.button}
+              textStyle={styles.buttonText}
+            />
+          </View>
+          <View
+            style={{
+              borderWidth: 1,
+              borderColor: '#D4D4D4',
+              borderRadius: 12,
+              padding: 10,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <CustomText text="Game -2 Pattern Identifier" style={styles.text} />
+            <Button
+              onPress={() => handleSubmit('Quiz 2')}
+              title="Play"
+              style={styles.button}
+              textStyle={styles.buttonText}
+            />
+          </View>
         </View>
-        <View
-          style={{
-            borderWidth: 1,
-            borderColor: '#D4D4D4',
-            borderRadius: 12,
-            padding: 10,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <CustomText text="Game -2 Pattern Identifier" style={styles.text} />
-          <Button
-            onPress={() => handleSubmit('Quiz 2')}
-            title="Play"
-            style={styles.button}
-            textStyle={styles.buttonText}
-          />
-        </View>
-      </View>
+      
     </View>
   );
 };
@@ -75,6 +75,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 50,
+    color:'#03050A'
   },
   container: {
     // flex: 1,

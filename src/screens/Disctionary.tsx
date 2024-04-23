@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
         marginTop: 20,
         fontSize: 14,
         fontWeight: '500',
-        color: "#000000"
+        color:'#03050A'
     },
     imageContainer: {
         marginVertical: 12,  

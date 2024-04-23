@@ -108,21 +108,9 @@ function App(): React.JSX.Element {
               />
             ),
           }}
-          component={PlayStack}
-        />
-      </Tab.Navigator>
-    );
-  };
-
-  const PlayStack = () => {
-    return (
-      <Stack.Navigator initialRouteName="PlayScreen">
-        <Stack.Screen
-          options={{headerShown: false}}
-          name="PlayScreen"
           component={Play}
         />
-      </Stack.Navigator>
+      </Tab.Navigator>
     );
   };
 

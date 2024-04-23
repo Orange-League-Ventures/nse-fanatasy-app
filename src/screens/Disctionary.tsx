@@ -7,7 +7,7 @@ const Dictionary = (props: any) => {
     return (
         <View>
             <View >
-                <CustomText style={styles.headingText}>Trading Dictionary</CustomText>
+                <CustomText text={'Trading Dictionary'} style={styles.headingText}/>
             </View>
             <View style={styles.imageContainer}>
                 <TouchableOpacity onPress={() => { props.navigation.navigate("Words") }}>

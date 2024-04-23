@@ -60,7 +60,7 @@ function App(): React.JSX.Element {
           tabBarIconStyle: styles.tabBarIcon,
         }}>
         <Tab.Screen
-          name="Home"
+          name="Home "
           options={{
             headerShown: false,
             tabBarIcon: ({color, size}) => (
@@ -86,13 +86,13 @@ function App(): React.JSX.Element {
           component={LearnSection}
         />
         <Tab.Screen
-          name="Profile"
+          name="Settings"
           options={{
             headerShown: false,
             tabBarIcon: ({color, size}) => (
               <Image
-                source={require('./assets/images/profile.png')}
-                style={{width: size, height: size, tintColor: color}}
+                source={require('./assets/images/settings.png')}
+                style={{ width: size, height: size, tintColor: color }}
               />
             ),
           }}

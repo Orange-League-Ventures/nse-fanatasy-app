@@ -63,6 +63,8 @@ const LoginForm = (props: any) => {
                 onBlur={onBlur}
                 onChangeText={onChange}
                 secureTextEntry={false}
+                error={!!errors.email || !!loginError}
+
               />
             )}
             name="email"
@@ -79,6 +81,7 @@ const LoginForm = (props: any) => {
                 onBlur={onBlur}
                 onChangeText={onChange}
                 secureTextEntry={true}
+                error={!!errors.password || !!loginError}
               />
             )}
             name="password"

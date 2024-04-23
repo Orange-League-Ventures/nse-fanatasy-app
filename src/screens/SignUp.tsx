@@ -4,12 +4,15 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
+  Image,
+  ActivityIndicator
 } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { useSelector,useDispatch } from 'react-redux';
 import { useForm, Controller } from 'react-hook-form';
 import { signup } from '../services/authService';
 import { setError, setLoading, setToken, setUser } from '../Redux/Slices/AuthSlice';
 import InputBox from '../common/InputBox';
+import { AuthState } from '../interfaces/autInterfaces';
 
 type FormValues = {
   name: string;
@@ -21,13 +24,12 @@ type FormValues = {
 const SignupForm = (props: any) => {
   const { control, handleSubmit, formState: { errors } } = useForm<FormValues>();
   const dispatch = useDispatch();
-  const [errorMsg, setErrorMsg] = useState('');
-
+  const [errorMsg, setErrorMsg] = useState(null);
+  const loading=useSelector((state: AuthState) => state?.auth?.loading);
   const handleSignUp = async (formData: any) => {
     dispatch(setLoading(true));
     try {
       const { email, password, phone_number, name, confirmPassword } = formData;
-
       if (!email || !password || !phone_number || !name || !confirmPassword) {
         setErrorMsg("All fields are required.");
         return;
@@ -40,12 +42,13 @@ const SignupForm = (props: any) => {
       dispatch(setToken(data.accessToken));
       dispatch(setUser(data.user));
       props.navigation.navigate('Welcome');
-      setErrorMsg('');
+      setErrorMsg(null);
     } catch (error:any) {
       console.error('create account Failed:', error);
       dispatch(setError(error?.response?.data?.message));
       setErrorMsg(error?.response?.data?.message || 'Sign up failed. Please try again later.');
-    } finally {
+    }
+    finally{
       dispatch(setLoading(false));
     }
   };
@@ -70,6 +73,7 @@ const SignupForm = (props: any) => {
                 autoCapitalize="none"
                 value={field.value}
                 onChangeText={field.onChange}
+                secureTextEntry={false}
               />
             )}
             name="name"
@@ -88,6 +92,7 @@ const SignupForm = (props: any) => {
                 autoCapitalize="none"
                 value={field.value}
                 onChangeText={field.onChange}
+                secureTextEntry={false}
               />
             )}
             name="email"
@@ -106,6 +111,7 @@ const SignupForm = (props: any) => {
                 autoCapitalize="none"
                 value={field.value}
                 onChangeText={field.onChange}
+                secureTextEntry={false}
               />
             )}
             name="phone_number"
@@ -120,9 +126,9 @@ const SignupForm = (props: any) => {
               <InputBox
                 style={styles.input}
                 placeholder="Password"
-                secureTextEntry
                 value={field.value}
                 onChangeText={field.onChange}
+                secureTextEntry={true}
               />
             )}
             name="password"
@@ -137,7 +143,7 @@ const SignupForm = (props: any) => {
               <InputBox
                 style={styles.input}
                 placeholder="Confirm Password"
-                secureTextEntry
+                secureTextEntry={true}
                 value={field.value}
                 onChangeText={field.onChange}
               />
@@ -155,6 +161,15 @@ const SignupForm = (props: any) => {
           <Text style={styles.buttonText}>Create Account</Text>
         </TouchableOpacity>
         {errorMsg && <Text style={styles.errorMsg}>{errorMsg}</Text>}
+        {loading && (
+        <View style={styles.loadingContainer}>
+                {/* <Image
+            source={require('../../assets/images/LoaderIcon.gif')}
+            style={styles.loadingImage}
+          /> */}
+          <ActivityIndicator size="large" color="#3A2D7D"/>
+        </View>
+      )}
       </View>
     </View>
   );
@@ -244,7 +259,15 @@ const styles = StyleSheet.create({
     fontSize: 10,
     marginTop:0,
     marginBottom: 10,
-  }
+  },
+  loadingContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  // loadingImage: {
+  //   width: 'auto', // Adjust the width and height of the image as needed
+  //   height: 'auto',
+  // },
 });
 
 export default SignupForm;

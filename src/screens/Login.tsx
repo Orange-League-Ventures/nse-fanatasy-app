@@ -1,17 +1,18 @@
 import React, {useState} from 'react';
 import {
   View,
-  TextInput,
   Text,
   StyleSheet,
   TouchableOpacity,
   Image,
+  ActivityIndicator
 } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { setUser, setLoading, setError, logout,setToken }  from '../Redux/Slices/AuthSlice';
 import {login} from '../services/authService';
-import {useDispatch} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import InputBox from '../common/InputBox';
+import { AuthState } from '../interfaces/autInterfaces';
 
 type FormData = {
   email: string;
@@ -19,22 +20,25 @@ type FormData = {
 };
 
 const LoginForm = (props: any) => {
-  const { control, handleSubmit, formState: { errors } } = useForm<FormData>();
+  const { control, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormData>();
   const dispatch = useDispatch();
   const [loginError, setLoginError] = useState<string | null>(null);
+  const loading=useSelector((state: AuthState) => state?.auth?.loading);
   const handleLogin = async (formData: { email: string, password: string }) => {
-    dispatch(setLoading(true)); 
+    dispatch(setLoading(true));
     try {
-      const data = await login(formData.email, formData.password);
+      const {email,password}=formData;
+      const data = await login(email,password);
       dispatch(setToken(data.accessToken)); 
       dispatch(setUser(data.user)); 
       props.navigation.navigate('Home'); 
     } catch (error:any) {
-      console.error('Login failed:', error?.response?.data?.message); 
+      console.error('Login failed:', error); 
       dispatch(setError(error?.response?.data?.message || 'Login failed. Please check your credentials.'));
-      setLoginError(error?.response?.data?.message);
-    } finally {
-      dispatch(setLoading(false)); 
+      setLoginError(error?.response?.data?.message || 'Login failed. Please check your credentials.');
+    }
+    finally{
+      dispatch(setLoading(false));
     }
   };
 
@@ -55,10 +59,10 @@ const LoginForm = (props: any) => {
                 style={styles.input}
                 placeholder="Email Address"
                 keyboardType="email-address"
-                autoCapitalize="none"
                 value={value}
                 onBlur={onBlur}
                 onChangeText={onChange}
+                secureTextEntry={false}
               />
             )}
             name="email"
@@ -71,10 +75,10 @@ const LoginForm = (props: any) => {
               <InputBox
                 style={styles.input}
                 placeholder="Password"
-                secureTextEntry
                 value={value}
                 onBlur={onBlur}
                 onChangeText={onChange}
+                secureTextEntry={true}
               />
             )}
             name="password"
@@ -91,7 +95,7 @@ const LoginForm = (props: any) => {
         >
           <Text style={styles.buttonText}>Log In</Text>
         </TouchableOpacity>
-        {loginError && <Text style={styles.errorMsg}>{loginError}</Text>}
+        {loginError && !loading && <Text style={styles.errorMsg}>{loginError}</Text>}
         <Text style={styles.moreOptions}>Don't have an account?</Text>
         <TouchableOpacity
           style={styles.SignupButton}
@@ -99,6 +103,15 @@ const LoginForm = (props: any) => {
         >
           <Text style={styles.SignupbuttonText}>Sign up with Email</Text>
         </TouchableOpacity>
+        { loading && (
+        <View style={styles.loadingContainer}>
+          {/* <Image
+            source={require('../../assets/images/LoaderIcon.gif')}
+            style={styles.loadingImage}
+          /> */}
+          <ActivityIndicator size="large" color="#3A2D7D"/>
+        </View>
+      )}
       </View>
     </View>
   );
@@ -121,9 +134,9 @@ const styles = StyleSheet.create({
     marginRight: 16,
   },
   image: {
-    width: 'auto',
-    height: 60,
-   justifyContent:'center',
+    width: 205,
+    height: 54,
+   justifyContent:'flex-end',
     paddingVertical: 8,
     marginBottom: 42,
   },
@@ -203,7 +216,16 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginVertical: 32,
     textAlign: 'center',
-  }
+  },
+  loadingContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    Color: '#3A2D7D',
+  },
+  loadingImage: {
+    width: 100, // Adjust the width and height of the image as needed
+    height: 100,
+  },
   
 });
 

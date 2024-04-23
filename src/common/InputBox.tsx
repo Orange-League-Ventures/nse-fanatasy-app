@@ -9,6 +9,7 @@ const InputBox = (props:any) => (
     placeholder={props.placeholder}
     keyboardType={props.keyboardType}
     placeholderTextColor="gray"
+    secureTextEntry={props.secureTextEntry}
   />
 );
 

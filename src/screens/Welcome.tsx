@@ -16,7 +16,6 @@ import {windowWidth} from '../common/Dimensions';
 const Welcome = (props: any) => {
   const details = useSelector((state: AuthState) => state?.auth);
   const data = details?.user;
-  console.log('data in welcome--', details);
   return (
     <SafeAreaView style={styles.mainContainer}>
       <View style={styles.welcome}>

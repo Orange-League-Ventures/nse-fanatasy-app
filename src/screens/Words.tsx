@@ -169,6 +169,9 @@ const styles = StyleSheet.create({
     color: '#E66F25',
     textAlign: 'center',
   },
+  item:{
+    color:"#4A4A4A"
+  },
   view5: {
     alignItems: 'stretch',
     borderRadius: 8,

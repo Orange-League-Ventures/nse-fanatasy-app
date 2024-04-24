@@ -33,6 +33,7 @@ import Content from './src/screens/Content';
 import Words from './src/screens/Words';
 import {AuthState} from './src/interfaces/autInterfaces';
 import ReportPage from './src/screens/ReportPage';
+import imageUrls from './src/constants/imageurls';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -65,7 +66,7 @@ function App(): React.JSX.Element {
             headerShown: false,
             tabBarIcon: ({color, size}) => (
               <Image
-                source={require('./assets/images/home.png')}
+                source={imageUrls.home}
                 style={{width: size, height: size, tintColor: color}}
               />
             ),
@@ -73,12 +74,24 @@ function App(): React.JSX.Element {
           component={HomeStack}
         />
         <Tab.Screen
+          name="Play"
+          options={{
+            tabBarIcon: ({color, size}) => (
+              <Image
+                source={imageUrls.gamepad}
+                style={{width: size, height: size, tintColor: color}}
+              />
+            ),
+          }}
+          component={Play}
+        />
+        <Tab.Screen
           name="Learn"
           options={{
             headerShown: false,
             tabBarIcon: ({color, size}) => (
               <Image
-                source={require('./assets/images/learn.png')}
+                source={imageUrls.learn}
                 style={{width: size, height: size, tintColor: color}}
               />
             ),
@@ -91,24 +104,12 @@ function App(): React.JSX.Element {
             headerShown: false,
             tabBarIcon: ({color, size}) => (
               <Image
-                source={require('./assets/images/settings.png')}
-                style={{ width: size, height: size, tintColor: color }}
-              />
-            ),
-          }}
-          component={Profile}
-        />
-        <Tab.Screen
-          name="Play"
-          options={{
-            tabBarIcon: ({color, size}) => (
-              <Image
-                source={require('./assets/images/home.png')}
+                source={imageUrls.settings}
                 style={{width: size, height: size, tintColor: color}}
               />
             ),
           }}
-          component={Play}
+          component={Profile}
         />
       </Tab.Navigator>
     );
@@ -123,9 +124,9 @@ function App(): React.JSX.Element {
           component={Home}
         />
         <Stack.Screen
+          options={{headerShown: false}}
           name="Login"
           component={LoginForm}
-          options={{title: 'Login'}}
         />
         <Stack.Screen
           name="Signup"
@@ -149,10 +150,7 @@ function App(): React.JSX.Element {
           })}
           component={ChartList}
         />
-        <Stack.Screen
-          name="Play"
-          component={Play}
-        />
+        <Stack.Screen name="Play" component={Play} />
         <Stack.Screen
           name="ReportPage"
           options={{headerShown: false}}
@@ -179,10 +177,14 @@ function App(): React.JSX.Element {
   const MainTabStackNavigator = () => {
     return (
       <Stack.Navigator>
-        <Stack.Screen name="MainTabs" component={TabNavigator} options={{ headerShown: false }} />
+        <Stack.Screen
+          name="MainTabs"
+          component={TabNavigator}
+          options={{headerShown: false}}
+        />
       </Stack.Navigator>
     );
-  }
+  };
 
   return (
     <Provider store={store}>
@@ -192,33 +194,31 @@ function App(): React.JSX.Element {
           <Stack.Screen
             name="Home"
             component={MainTabStackNavigator}
-          options={{ headerShown:false }}
+            options={{headerShown: false}}
           />
           <Stack.Screen
             name="Login"
             component={LoginForm}
-            options={{ title: 'Login' }}
+           options={{ headerShown: false }}
           />
           <Stack.Screen
             name="Signup"
             component={SignupForm}
-            options={{ title: 'Signup' }}
+            options={{title: 'Signup'}}
           />
-            <Stack.Screen
+          <Stack.Screen
             name="Welcome"
             component={Welcome}
-            options={{ title: 'Welcome' }}
+            options={{title: 'Welcome'}}
           />
           <Stack.Screen
             name="Quiz"
             component={Quiz}
             options={{headerShown: false}}
           />
-
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
-
   );
 }
 

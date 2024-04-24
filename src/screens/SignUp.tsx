@@ -1,15 +1,18 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
-import {useDispatch} from 'react-redux';
-import {useForm, Controller} from 'react-hook-form';
-import {signup} from '../services/authService';
 import {
-  setError,
-  setLoading,
-  setToken,
-  setUser,
-} from '../Redux/Slices/AuthSlice';
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  ActivityIndicator
+} from 'react-native';
+import { useSelector,useDispatch } from 'react-redux';
+import { useForm, Controller } from 'react-hook-form';
+import { signup } from '../services/authService';
+import { setError, setLoading, setToken, setUser } from '../Redux/Slices/AuthSlice';
 import InputBox from '../common/InputBox';
+import { AuthState } from '../interfaces/autInterfaces';
 import imageUrls from '../constants/imageurls';
 
 type FormValues = {
@@ -26,36 +29,31 @@ const SignupForm = (props: any) => {
     formState: {errors},
   } = useForm<FormValues>();
   const dispatch = useDispatch();
-  const [errorMsg, setErrorMsg] = useState('');
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [passwordError,setPasswordError]=useState<string | null>(null);
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const handleSignUp = async (formData: any) => {
+  const loading=useSelector((state: AuthState) => state?.auth?.loading);
+  const handleSignUp = (formData: any) => {
     dispatch(setLoading(true));
-    try {
-      const {email, password, phone_number, name, confirmPassword} = formData;
-
-      if (!email || !password || !phone_number || !name || !confirmPassword) {
-        setErrorMsg('All fields are required.');
-        return;
-      }
-      if (password !== confirmPassword) {
-        setErrorMsg('Passwords do not match.');
-        return;
-      }
-      const data = await signup(name, email, phone_number, password);
-      dispatch(setToken(data.accessToken));
-      dispatch(setUser(data.user));
-      props.navigation.navigate('Welcome');
-      setErrorMsg('');
-    } catch (error: any) {
-      console.error('create account Failed:', error);
-      dispatch(setError(error?.response?.data?.message));
-      setErrorMsg(
-        error?.response?.data?.message ||
-          'Sign up failed. Please try again later.',
-      );
-    } finally {
+    const { email, password, phone_number, name, confirmPassword } = formData;
+    if (password !== confirmPassword) {
+      setPasswordError("Passwords do not match.");
       dispatch(setLoading(false));
+      return;
     }
+    signup(name, email, phone_number, password)
+      .then((data) => {
+        dispatch(setToken(data.accessToken));
+        dispatch(setUser(data.user));
+        props.navigation.navigate('Welcome');
+      })
+      .catch((error: any) => {
+        console.error('create account Failed:', error);
+        setErrorMsg(error?.response?.data?.message);
+      })
+      .finally(() => {
+        dispatch(setLoading(false));
+      });
   };
 
   const handleShowPassword = () => {
@@ -82,6 +80,8 @@ const SignupForm = (props: any) => {
                 autoCapitalize="none"
                 value={field.value}
                 onChangeText={field.onChange}
+                secureTextEntry={false}
+                error={!!errors?.name || !!errorMsg}
               />
             )}
             name="name"
@@ -102,6 +102,8 @@ const SignupForm = (props: any) => {
                 autoCapitalize="none"
                 value={field.value}
                 onChangeText={field.onChange}
+                secureTextEntry={false}
+                error={!!errors?.email || !!errorMsg}
               />
             )}
             name="email"
@@ -122,6 +124,8 @@ const SignupForm = (props: any) => {
                 autoCapitalize="none"
                 value={field.value}
                 onChangeText={field.onChange}
+                secureTextEntry={false}
+                error={!!errors?.phone_number || !!errorMsg}
               />
             )}
             name="phone_number"
@@ -142,6 +146,8 @@ const SignupForm = (props: any) => {
                   secureTextEntry={!showPassword}
                   value={field.value}
                   onChangeText={field.onChange}
+                  error={!!errors?.password || !!errorMsg || !!passwordError}
+
                 />
               )}
               name="password"
@@ -160,13 +166,14 @@ const SignupForm = (props: any) => {
 
           <Controller
             control={control}
-            render={({field}) => (
+            render={({ field }) => (
               <InputBox
                 style={styles.input}
                 placeholder="Confirm Password"
-                secureTextEntry
+                secureTextEntry={true}
                 value={field.value}
                 onChangeText={field.onChange}
+                error={!!errors?.confirmPassword || !!errorMsg || !!passwordError}
               />
             )}
             name="confirmPassword"
@@ -179,15 +186,29 @@ const SignupForm = (props: any) => {
             </Text>
           )}
         </View>
-        <TouchableOpacity
+        {errorMsg && <Text style={styles.errorMsg}>{errorMsg}</Text>}
+      <View style={styles.createButtonContainer}></View>
+        {/* <TouchableOpacity
           style={styles.createButton}
           onPress={handleSubmit(handleSignUp)}
           activeOpacity={1}>
           <Text style={styles.buttonText}>Create Account</Text>
-        </TouchableOpacity>
-        {errorMsg && <Text style={styles.errorMsg}>{errorMsg}</Text>}
+        </TouchableOpacity> */}
+        <TouchableOpacity
+    style={[styles.createButton, loading && styles.loadingButton]}
+    onPress={handleSubmit(handleSignUp)}
+    activeOpacity={1}
+    disabled={loading}
+  >
+    {loading && (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#3A2D7D" />
       </View>
-    </View>
+    )}
+    <Text style={styles.buttonText}>Create Account</Text>
+  </TouchableOpacity>
+        </View>
+      </View>
   );
 };
 
@@ -207,17 +228,14 @@ const styles = StyleSheet.create({
     marginRight: 16,
   },
   headers: {
-    width: 'auto',
-    height: 'auto',
     justifyContent: 'flex-start',
     paddingVertical: 8,
-    marginBottom: 42,
+    paddingHorizontal:0,
   },
   createAccountText: {
     fontFamily: 'Montserrat',
     fontWeight: '600',
     fontSize: 14,
-    lineHeight: 21,
     color: '#03050A',
     marginBottom: 16,
   },
@@ -225,11 +243,10 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
     fontWeight: '400',
     fontSize: 12,
-    lineHeight: 15.6,
     color: '#717171',
   },
   inputcontainer: {
-    marginTop: 16,
+    marginTop: 8,
     marginBottom: 12,
   },
   input: {
@@ -247,20 +264,18 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
     fontWeight: '100',
   },
+  createButtonContainer: {
+    marginBottom: 0, 
+  },
   createButton: {
     backgroundColor: '#3A2D7D',
     width: 'auto',
     height: 'auto',
     borderWidth: 1,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: 14,
     borderRadius: 8,
     color: '#000000',
     borderColor: '#D4D4D4',
-    marginBottom: 12,
-    fontSize: 12,
-    fontFamily: 'Roboto',
-    fontWeight: '100',
   },
   buttonText: {
     fontFamily: 'Roboto',
@@ -287,6 +302,23 @@ const styles = StyleSheet.create({
     width: 25,
     height: 25,
   },
+  loadingButton: {
+    opacity: 0.7,
+  },
+  loadingContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    color: '#ffffff',
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
+  // loadingImage: {
+  //   width: 'auto', // Adjust the width and height of the image as needed
+  //   height: 'auto',
+  // },
 });
 
 export default SignupForm;

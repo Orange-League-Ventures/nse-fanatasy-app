@@ -124,9 +124,9 @@ function App(): React.JSX.Element {
           component={Home}
         />
         <Stack.Screen
+          options={{headerShown: false}}
           name="Login"
           component={LoginForm}
-          options={{title: 'Login'}}
         />
         <Stack.Screen
           name="Signup"
@@ -199,7 +199,7 @@ function App(): React.JSX.Element {
           <Stack.Screen
             name="Login"
             component={LoginForm}
-            options={{title: 'Login'}}
+           options={{ headerShown: false }}
           />
           <Stack.Screen
             name="Signup"

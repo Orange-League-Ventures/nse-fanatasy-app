@@ -209,7 +209,6 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     fontSize: 10,
     color: '#E66F25',
-    flexDirection:'flex-end',
   },
   loginButton: {
     backgroundColor: '#3A2D7D',

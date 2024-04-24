@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {Text, View, StyleSheet, Button, TouchableOpacity} from 'react-native';
+import {Text, View, StyleSheet, Button, TouchableOpacity, ActivityIndicator} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import axios from 'axios';
 import {RadioButton} from 'react-native-paper';
@@ -129,10 +129,15 @@ const Quiz = (props: any) => {
   } else {
     dynamicHeight = '75%'; // For Android or other platforms
   }
+
   return (
     <View>
-      {loading && <Text>Loding...</Text>}
-      {!lastQuestion && !loading ? (
+      {loading && (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#3A2D7D" />
+        </View>
+      )}
+      {!loading ? (
         <View style={{padding: 20}}>
           <View
             style={{

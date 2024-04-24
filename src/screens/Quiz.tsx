@@ -166,11 +166,11 @@ const Quiz = (props: any) => {
             <View style={[styles.progressBar, {width: `${progressWidth}%`}]} />
           </View>
           <View style={{maxHeight: '90%', height: dynamicHeight}}>
-            <Text style={{paddingBottom:10}}>
-              <Text style={{fontSize: 14, fontWeight: '600'}}>Situation: </Text>
+            <Text style={styles.heading}>
+              <Text style={styles.headingText}>Situation: </Text>
               {questionData?.questions?.[currentIndex]?.['sitituation']}
             </Text>
-            <Text style={{color: '#03050A', fontSize: 14, fontWeight: '600',fontFamily:'Montserrat'}}>
+            <Text style={styles.questionText}>
               Q{questionNumber + 1}.{' '}
               {questionData?.questions?.[currentIndex]?.['question_text']}
             </Text>
@@ -378,5 +378,28 @@ const styles = StyleSheet.create({
     color: '#03050A',
     height: 25,
   },
+  loadingContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    color: '#ffffff',
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
+  heading:{
+    paddingBottom:10
+  },
+  headingText:{
+    fontSize: 14,
+    fontWeight: '600'
+  },
+  questionText:{
+    color: '#03050A', 
+    fontSize: 14, 
+    fontWeight: '600',
+    fontFamily:'Montserrat'
+  }
 });
 export default Quiz;

@@ -131,7 +131,8 @@ const Quiz = (props: any) => {
   }
   return (
     <View>
-      {!lastQuestion ? (
+      {loading && <Text>Loding...</Text>}
+      {!lastQuestion && !loading ? (
         <View style={{padding: 20}}>
           <View
             style={{

@@ -20,7 +20,6 @@ import {login} from '../services/authService';
 import {useDispatch, useSelector} from 'react-redux';
 import InputBox from '../common/InputBox';
 import {AuthState} from '../interfaces/autInterfaces';
-import {CheckBox} from 'react-native-elements';
 
 type FormData = {
   email: string;

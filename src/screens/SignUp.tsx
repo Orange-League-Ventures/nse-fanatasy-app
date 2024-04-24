@@ -24,22 +24,17 @@ type FormValues = {
 const SignupForm = (props: any) => {
   const { control, handleSubmit, formState: { errors } } = useForm<FormValues>();
   const dispatch = useDispatch();
-   const errorMsg=useSelector((state: AuthState) => state?.auth?.error);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [passwordError,setPasswordError]=useState<string | null>(null);
   const loading=useSelector((state: AuthState) => state?.auth?.loading);
   const handleSignUp = (formData: any) => {
     dispatch(setLoading(true));
     const { email, password, phone_number, name, confirmPassword } = formData;
-    if (!email || !password || !phone_number || !name || !confirmPassword) {
-      dispatch(setError("All fields are required."));
-      dispatch(setLoading(false));
-      return;
-    }
     if (password !== confirmPassword) {
-      dispatch(setError("Passwords do not match."));
+      setPasswordError("Passwords do not match.");
       dispatch(setLoading(false));
       return;
     }
-  
     signup(name, email, phone_number, password)
       .then((data) => {
         dispatch(setToken(data.accessToken));
@@ -50,6 +45,7 @@ const SignupForm = (props: any) => {
       .catch((error: any) => {
         console.error('create account Failed:', error);
         dispatch(setError(error?.response?.data?.message));
+        setErrorMsg(error?.response?.data?.message);
       })
       .finally(() => {
         dispatch(setLoading(false));
@@ -77,6 +73,7 @@ const SignupForm = (props: any) => {
                 value={field.value}
                 onChangeText={field.onChange}
                 secureTextEntry={false}
+                error={!!errors?.name || !!errorMsg}
               />
             )}
             name="name"
@@ -96,6 +93,7 @@ const SignupForm = (props: any) => {
                 value={field.value}
                 onChangeText={field.onChange}
                 secureTextEntry={false}
+                error={!!errors?.email || !!errorMsg}
               />
             )}
             name="email"
@@ -115,6 +113,7 @@ const SignupForm = (props: any) => {
                 value={field.value}
                 onChangeText={field.onChange}
                 secureTextEntry={false}
+                error={!!errors?.phone_number || !!errorMsg}
               />
             )}
             name="phone_number"
@@ -132,6 +131,7 @@ const SignupForm = (props: any) => {
                 value={field.value}
                 onChangeText={field.onChange}
                 secureTextEntry={true}
+                error={!!errors?.password || !!errorMsg || !!passwordError}
               />
             )}
             name="password"
@@ -149,6 +149,7 @@ const SignupForm = (props: any) => {
                 secureTextEntry={true}
                 value={field.value}
                 onChangeText={field.onChange}
+                error={!!errors?.confirmPassword || !!errorMsg || !!passwordError}
               />
             )}
             name="confirmPassword"
@@ -157,12 +158,6 @@ const SignupForm = (props: any) => {
           />
           {errors?.confirmPassword && <Text style={styles.errorMsg}>{errors.confirmPassword.message}</Text>}
         </View>
-        <TouchableOpacity
-          style={styles.createButton}
-          onPress={handleSubmit(handleSignUp)}
-          activeOpacity={1}>
-          <Text style={styles.buttonText}>Create Account</Text>
-        </TouchableOpacity>
         {errorMsg && <Text style={styles.errorMsg}>{errorMsg}</Text>}
         {loading && (
         <View style={styles.loadingContainer}>
@@ -173,8 +168,15 @@ const SignupForm = (props: any) => {
           <ActivityIndicator size="large" color="#3A2D7D"/>
         </View>
       )}
+      <View style={styles.createButtonContainer}></View>
+        <TouchableOpacity
+          style={styles.createButton}
+          onPress={handleSubmit(handleSignUp)}
+          activeOpacity={1}>
+          <Text style={styles.buttonText}>Create Account</Text>
+        </TouchableOpacity>
+        </View>
       </View>
-    </View>
   );
 };
 
@@ -195,17 +197,14 @@ const styles = StyleSheet.create({
     marginRight: 16,
   },
   headers: {
-    width: 'auto',
-    height: 'auto',
     justifyContent: 'flex-start',
     paddingVertical: 8,
-    marginBottom: 42,
+    paddingHorizontal:0,
   },
   createAccountText: {
     fontFamily: 'Montserrat',
     fontWeight: '600',
     fontSize: 14,
-    lineHeight: 21,
     color: '#03050A',
     marginBottom: 16,
   },
@@ -213,11 +212,10 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
     fontWeight: '400',
     fontSize: 12,
-    lineHeight: 15.6,
     color: '#717171',
   },
   inputcontainer: {
-    marginTop: 16,
+    marginTop: 8,
     marginBottom: 12,
   },
   input: {
@@ -235,20 +233,18 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
     fontWeight: '100',
   },
+  createButtonContainer: {
+    marginBottom: 0, 
+  },
   createButton: {
     backgroundColor: '#3A2D7D',
     width: 'auto',
     height: 'auto',
     borderWidth: 1,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: 14,
     borderRadius: 8,
     color: '#000000',
     borderColor: '#D4D4D4',
-    marginBottom: 12,
-    fontSize: 12,
-    fontFamily: 'Roboto',
-    fontWeight: '100',
   },
   buttonText: {
     fontFamily: 'Roboto',

@@ -34,7 +34,7 @@ const LoginForm = (props: any) => {
   } = useForm<FormData>();
   const dispatch = useDispatch();
   const loading = useSelector((state: AuthState) => state?.auth?.loading);
-  const loginError=useSelector((state: AuthState) => state?.auth?.error);
+  const [loginError, setLoginError] = useState<string | null>(null);
   const handleLogin = async (formData: {email: string; password: string}) => {
     dispatch(setLoading(true));
     const {email, password} = formData;
@@ -43,14 +43,17 @@ const LoginForm = (props: any) => {
       dispatch(setToken(data.accessToken));
       dispatch(setUser(data.user));
       props.navigation.navigate('Home');
+      dispatch(setError(null));
     })
     .catch((error: any) => {
       console.error('Login failed:', error);
       dispatch(
         setError(
           error?.response?.data?.message ||
-            'Login failed. Please check your credentials.',),
+            'Login failed. Please check your credentials.'),
       );
+      setLoginError(error?.response?.data?.message ||
+        'Login failed. Please check your credentials.');
     })
     .finally(() => {
       dispatch(setLoading(false));

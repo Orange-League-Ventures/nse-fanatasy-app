@@ -120,12 +120,30 @@ const LoginForm = (props: any) => {
             <Text style={styles.forgotPassword}>Forgot Password</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.loginButton}
           onPress={handleSubmit(handleLogin)}
           activeOpacity={1}>
+             {loading && (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="#3A2D7D" />
+          </View>
+        )}
           <Text style={styles.buttonText}>Log In</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
+        <TouchableOpacity
+    style={[styles.loginButton, loading && styles.loadingButton]}
+    onPress={handleSubmit(handleLogin)}
+    activeOpacity={1}
+    disabled={loading}
+  >
+    {loading && (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#3A2D7D" />
+      </View>
+    )}
+    <Text style={styles.buttonText}>Log In</Text>
+  </TouchableOpacity>
         {loginError && !loading && (
           <Text style={styles.errorMsg}>{loginError}</Text>
         )}
@@ -143,15 +161,6 @@ const LoginForm = (props: any) => {
           />
           <Text style={styles.SignupbuttonText}>Signup with Email</Text>
         </TouchableOpacity>
-        {loading && (
-          <View style={styles.loadingContainer}>
-            {/* <Image
-            source={require('../../assets/images/LoaderIcon.gif')}
-            style={styles.loadingImage}
-          /> */}
-            <ActivityIndicator size="large" color="#3A2D7D" />
-          </View>
-        )}
       </View>
     </View>
   );
@@ -293,10 +302,18 @@ const styles = StyleSheet.create({
     backgroundColor: '#717171',
     marginLeft: 10,
   },
+  loadingButton: {
+    opacity: 0.7,
+  },
   loadingContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    color: '#3A2D7D',
+    color: '#ffffff',
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
   },
   loadingImage: {
     width: 100, // Adjust the width and height of the image as needed

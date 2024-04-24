@@ -159,22 +159,26 @@ const SignupForm = (props: any) => {
           {errors?.confirmPassword && <Text style={styles.errorMsg}>{errors.confirmPassword.message}</Text>}
         </View>
         {errorMsg && <Text style={styles.errorMsg}>{errorMsg}</Text>}
-        {loading && (
-        <View style={styles.loadingContainer}>
-                {/* <Image
-            source={require('../../assets/images/LoaderIcon.gif')}
-            style={styles.loadingImage}
-          /> */}
-          <ActivityIndicator size="large" color="#3A2D7D"/>
-        </View>
-      )}
       <View style={styles.createButtonContainer}></View>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.createButton}
           onPress={handleSubmit(handleSignUp)}
           activeOpacity={1}>
           <Text style={styles.buttonText}>Create Account</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
+        <TouchableOpacity
+    style={[styles.createButton, loading && styles.loadingButton]}
+    onPress={handleSubmit(handleSignUp)}
+    activeOpacity={1}
+    disabled={loading}
+  >
+    {loading && (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#3A2D7D" />
+      </View>
+    )}
+    <Text style={styles.buttonText}>Create Account</Text>
+  </TouchableOpacity>
         </View>
       </View>
   );
@@ -259,9 +263,18 @@ const styles = StyleSheet.create({
     marginTop:0,
     marginBottom: 10,
   },
+  loadingButton: {
+    opacity: 0.7,
+  },
   loadingContainer: {
     justifyContent: 'center',
     alignItems: 'center',
+    color: '#ffffff',
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
   },
   // loadingImage: {
   //   width: 'auto', // Adjust the width and height of the image as needed

@@ -218,14 +218,14 @@ const styles = StyleSheet.create({
     marginBottom: 4,
     fontSize : 12,
     fontWeight : '400',
-    fontFamily : 'Roboto',
+    fontFamily : 'Roboto-Regular',
 
   },
   text2: {
     color: '#03050A',
     fontSize : 14,
     fontWeight : '600',
-    fontFamily : 'Montserrat',
+    fontFamily : 'Montserrat-Bold',
     fontStyle : 'normal',
 
   },
@@ -274,7 +274,7 @@ const styles = StyleSheet.create({
     color: '#717171',
   },
   code: {
-    fontFamily: 'Montserrat',
+    fontFamily: 'Montserrat-Bold',
     fontSize: 14,
     fontWeight: '600',
     lineHeight: 21,
@@ -282,7 +282,7 @@ const styles = StyleSheet.create({
     color: '#C35516',
   },
   detailsName: {
-    fontFamily: 'Roboto',
+    fontFamily: 'Roboto-Medium',
     fontSize: 12,
     fontWeight: '500',
     lineHeight: 15.6,

@@ -84,8 +84,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
   textinfo: {
-    fontFamily: 'Roboto',
-    fontWeight: 'bold',
+    fontFamily: 'Montserrat-Bold',
     fontSize: 14,
     lineHeight: 21,
     color: '#007A00',
@@ -100,22 +99,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   welcomeText: {
-    fontFamily: 'Montserrat',
-    fontWeight: '600',
+    fontFamily: 'Montserrat-Bold',
     fontSize: 14,
     lineHeight: 21,
     color: '#03050A',
   },
   userNameText: {
-    fontFamily: 'Montserrat',
-    fontWeight: '600',
+    fontFamily: 'Montserrat-Bold',
     fontSize: 14,
     lineHeight: 21,
     color: '#E66F25',
   },
   descriptionText: {
-    fontFamily: 'Roboto',
-    fontWeight: '400',
+    fontFamily: 'Roboto-Regular',
     fontSize: 12,
     lineHeight: 15.6,
     color: '#717171',
@@ -128,13 +124,12 @@ const styles = StyleSheet.create({
   },
 
   textStyle : {
-    fontFamily :'Roboto',
-    fontWeight : '500',
+    fontFamily :'Roboto-Medium',
     fontSize : 14,
   },
 
   buttonContainer: {
-    width: windowWidth - 32,
+    width: (windowWidth - 32),
     position: 'absolute',
     bottom: 0,
     display: 'flex',

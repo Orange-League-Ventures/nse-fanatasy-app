@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start', // Center the logo vertically within the header
   },
   titlename: {
-    fontFamily: 'Montserrat',
+    fontFamily: 'Montserrat-Bold',
     fontWeight: '600',
     fontSize: 14,
     lineHeight: 21,
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
   },
   pageNumber: {
     marginLeft: 100,
-    fontFamily: 'Montserrat',
+    fontFamily: 'Montserrat-Bold',
     fontWeight: '600',
     fontSize: 14,
     lineHeight: 21,

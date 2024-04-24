@@ -38,11 +38,12 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize : 14, 
     fontWeight: '500',
+    fontFamily : 'Roboto-Medium',
   },
   text2: {
     color: 'black',
     fontSize : 14,
-    fontWeight: '400',
+    fontFamily : 'Roboto-Regular',
   },
 });
 

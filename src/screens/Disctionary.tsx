@@ -26,8 +26,8 @@ const styles = StyleSheet.create({
     headingText: {
         marginTop: 20,
         fontSize: 14,
-        fontWeight: '500',
-        color:'#03050A'
+        color:'#03050A',
+        fontFamily : 'Roboto-Medium',
     },
     imageContainer: {
         marginVertical: 12,  

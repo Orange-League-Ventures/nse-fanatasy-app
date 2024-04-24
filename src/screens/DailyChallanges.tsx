@@ -19,7 +19,7 @@ const DailyChallanges = () => {
         onPress={() => {}}
         title={`START THE QUIZ`}
         style={styles.view7}
-        textStyle={''}
+        textStyle={styles.btnText}
       />
     </View>
   );
@@ -35,17 +35,15 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   text2: {
-    // marginLeft: 20,
     color: '#03050A',
     width: '100%',
     fontSize: 14,
-    fontWeight: '500',
+    fontFamily : 'Roboto-Medium',
   },
   view3: {
     alignItems: 'stretch',
     borderRadius: 8,
     display: 'flex',
-    // marginTop: 8,
     width: '100%',
     flexDirection: 'column',
   },
@@ -68,7 +66,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     paddingVertical: 12,
   },
-  view6: {fontFamily: 'Roboto, sans-serif'},
+  view6: {fontFamily: 'Roboto-Bold'},
   image1: {
     width: windowWidth - 32,
     resizeMode: 'cover',
@@ -79,7 +77,9 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: '#25D366',
     color: '#FFF',
-    fontFamily: 'Montserrat',
+  },
+  btnText : {
+    fontFamily: 'Roboto-Medium',
   },
   text8: {
     color: '#C35516',

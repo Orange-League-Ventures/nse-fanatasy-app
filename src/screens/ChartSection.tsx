@@ -76,8 +76,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
   chartPatternContainer: {
-    width: windowWidth - 32,
-    // backgroundColor :'green',
+    width: (windowWidth - 32),
     height: 180,
     marginTop: 12,
   },
@@ -94,6 +93,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '500',
     color: '#000000',
+    fontFamily : 'Roboto-Medium',
   },
 });
 

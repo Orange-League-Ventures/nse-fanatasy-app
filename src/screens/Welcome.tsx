@@ -42,7 +42,7 @@ const Welcome = (props: any) => {
           </View>
         </View>
         <View style={styles.buttonContainer}>
-          <Button style={styles.buttonStyle} textStyle={styles.textStyle} title={'Get Started'} />
+          <Button style={styles.buttonStyle} textStyle={styles.textStyle} title={'Get Started'} onPress={() => props.navigation.navigate('Home')} />
         </View>
       </View>
     </SafeAreaView>

@@ -140,11 +140,7 @@ const Quiz = (props: any) => {
       {!loading ? (
         <View style={styles.top}>
           <View
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-            }}>
+            style={styles.mainBack}>
             <Text style={styles.backSymbol} onPress={handlePress}>
               {'<'}
             </Text>
@@ -152,12 +148,7 @@ const Quiz = (props: any) => {
             <Text></Text>
           </View>
           <View
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              marginBottom: 20,
-            }}>
+            style={styles.mainQuestion}>
             <Text>
               Q.{questionNumber + 1}/{questionData?.questions?.length}
             </Text>
@@ -403,6 +394,17 @@ const styles = StyleSheet.create({
   },
   top:{
     padding: 20
+  },
+  mainBack:{
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  mainQuestion:{
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 20,
   }
 });
 export default Quiz;

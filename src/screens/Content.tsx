@@ -11,9 +11,8 @@ import {
 import {contentByTopic} from '../services/contentService';
 import {useRoute} from '@react-navigation/native';
 import RenderHtml from 'react-native-render-html';
-import { windowHeight , windowWidth } from '../common/Dimensions';
+import {windowHeight} from '../common/Dimensions';
 
-import Header from './Header';
 import CustomText from '../common/CustomText';
 
 const Content = (props: any) => {
@@ -43,7 +42,7 @@ const Content = (props: any) => {
         setTotalPages(contentResult?.count);
       })
       .catch(error => {
-        console.log('ERR');
+        console.log('ERR', error);
       });
   };
 
@@ -53,26 +52,41 @@ const Content = (props: any) => {
 
   return (
     <>
-    <ScrollView>
-      {/* <Header title={topic_name.charAt(0).toUpperCase() + topic_name.slice(1)} currentPage={currentPage} totalPages={totalPages} /> */}
-      <View style={styles.container}>
-        {contentItem && (
-          <>
-            <CustomText/>
-            {contentItem.content_image ? (
-              <Image
-                source={{uri: contentItem.content_image}}
-                style={styles.image}
+      <ScrollView>
+        {/* <Header title={topic_name.charAt(0).toUpperCase() + topic_name.slice(1)} currentPage={currentPage} totalPages={totalPages} /> */}
+        <View style={styles.container}>
+          {contentItem && (
+            <>
+              <CustomText />
+              {contentItem.content_image ? (
+                <Image
+                  source={{uri: contentItem.content_image}}
+                  style={styles.image}
+                />
+              ) : null}
+              <RenderHtml
+                contentWidth={width}
+                source={{html: contentItem?.content_value}}
+                baseStyle={{color: 'black', fontSize: 14, fontWeight: '400'}}
               />
-            ) : null}
-            <RenderHtml
-              contentWidth={width}
-              source={{html: contentItem?.content_value}}
-              baseStyle={{color: 'black', fontSize : 14 , fontWeight : '400'}}
-            />
-          </>
-        )}
-       { (contentItem && contentItem?.content_value.length > (windowHeight-50)) && <View style={{...styles.footer}}>
+            </>
+          )}
+          {contentItem &&
+            contentItem?.content_value.length > windowHeight - 50 && (
+              <View style={{...styles.footer}}>
+                <TouchableOpacity
+                  style={styles.nextButton}
+                  onPress={onNextPage}
+                  disabled={currentPage === totalPages} // Disable the button if currentPage equals totalPages
+                >
+                  <Text style={styles.buttonText}>Next</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+        </View>
+      </ScrollView>
+      {contentItem && contentItem?.content_value.length < windowHeight - 50 && (
+        <View style={{...styles.footer, marginHorizontal: 16}}>
           <TouchableOpacity
             style={styles.nextButton}
             onPress={onNextPage}
@@ -80,45 +94,32 @@ const Content = (props: any) => {
           >
             <Text style={styles.buttonText}>Next</Text>
           </TouchableOpacity>
-        </View>}
-      </View>
-    </ScrollView>
-    { (contentItem && contentItem?.content_value.length < (windowHeight-50)) && <View style={{...styles.footer,marginHorizontal : 16}}>
-          <TouchableOpacity
-            style={styles.nextButton}
-            onPress={onNextPage}
-            disabled={currentPage === totalPages} // Disable the button if currentPage equals totalPages
-          >
-            <Text style={styles.buttonText}>Next</Text>
-          </TouchableOpacity>
-        </View>}
-
+        </View>
+      )}
     </>
-
-
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     marginHorizontal: 16,
-    marginTop : 16,
+    marginTop: 16,
     flex: 1,
     // backgroundColor : 'red',
   },
   image: {
     width: '100%',
     height: 200,
-    backgroundColor : 'green',
-    resizeMode : 'cover',
+    backgroundColor: 'green',
+    resizeMode: 'cover',
     // marginBottom: 10,
   },
   footer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical : 16,
-    height : 80,
+    paddingVertical: 16,
+    height: 80,
     // backgroundColor : 'red',
   },
   // pageNumber: {

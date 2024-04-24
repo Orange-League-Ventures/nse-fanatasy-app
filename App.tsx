@@ -1,50 +1,30 @@
-import React, {useState} from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  Image,
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import React from 'react';
+import {Image, StyleSheet, useColorScheme} from 'react-native';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
-import {REACT_APP_BASE_LOCAL_URL} from '@env';
 import Home from './src/screens/Home';
 import LoginForm from './src/screens/Login';
 import SignupForm from './src/screens/SignUp';
 import Welcome from './src/screens/Welcome';
-import Header from './src/screens/Header';
 import Profile from './src/screens/Profile';
 import LearnSection from './src/screens/Learn.Section';
 import ChartList from './src/screens/ChartList';
 import Play from './src/screens/Play';
 import Quiz from './src/screens/Quiz';
-import {Provider, useSelector} from 'react-redux';
+import {Provider} from 'react-redux';
 import store from './src/Redux/store';
 import Content from './src/screens/Content';
 import Words from './src/screens/Words';
-import {AuthState} from './src/interfaces/autInterfaces';
 import ReportPage from './src/screens/ReportPage';
 import imageUrls from './src/constants/imageurls';
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
 function App(): React.JSX.Element {
-  const [openQuiz, setOpenQuiz] = useState(false);
   const isDarkMode = useColorScheme() === 'dark';
 
-  const [quizData, setQuizData] = useState();
-  const [quizType, setQuizType] = useState();
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
@@ -117,7 +97,7 @@ function App(): React.JSX.Element {
 
   const HomeStack = (props: any) => {
     return (
-      <Stack.Navigator initialRouteName="HomeScreen">
+      <Stack.Navigator initialRouteName="HomeScreen" >
         <Stack.Screen
           options={{headerShown: false}}
           name="HomeScreen"
@@ -138,8 +118,6 @@ function App(): React.JSX.Element {
           component={Welcome}
           options={{title: 'Welcome'}}
         />
-        {/* <Stack.Screen name="Signup" component={SignupForm} /> */}
-        {/* <Stack.Screen name="NewScreen" component={Quiz} /> */}
         <Stack.Screen
           name="ChartList"
           options={({route}: any) => ({
@@ -188,7 +166,6 @@ function App(): React.JSX.Element {
 
   return (
     <Provider store={store}>
-      {/* <AppWrapper /> */}
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Login">
           <Stack.Screen
@@ -199,12 +176,13 @@ function App(): React.JSX.Element {
           <Stack.Screen
             name="Login"
             component={LoginForm}
-           options={{ headerShown: false }}
+            options={{headerShown: false}}
           />
           <Stack.Screen
             name="Signup"
             component={SignupForm}
-            options={{title: 'Signup'}}
+            options={{title: ''}}
+            
           />
           <Stack.Screen
             name="Welcome"

@@ -1,18 +1,8 @@
 import React, {useEffect, useState} from 'react';
 
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import InputBox from '../common/InputBox';
-import {
-  fetchDefinition,
-  fetchWordOfTheDay,
-  fetchWords,
-} from '../services/dictionaryService';
+import {fetchWords} from '../services/dictionaryService';
 import CustomText from '../common/CustomText';
 import {useDebounce} from '../hooks/useDebounce';
 
@@ -104,7 +94,8 @@ const Words = () => {
               <View style={styles.view5} key={wordIndex}>
                 {wordIndex === 0 ||
                 item.first_letter !== wordsState[wordIndex - 1].first_letter ? (
-                  <CustomText style={styles.header}
+                  <CustomText
+                    style={styles.header}
                     text={item.first_letter.toUpperCase()}
                   />
                 ) : null}
@@ -118,14 +109,19 @@ const Words = () => {
                       selectedWord === item?.id
                         ? styles.selectedWord
                         : styles.item
-                    } 
-                    text={item?.word?.charAt(0).toUpperCase() + item?.word?.slice(1)}
+                    }
+                    text={
+                      item?.word?.charAt(0).toUpperCase() + item?.word?.slice(1)
+                    }
                   />
                   <View style={styles.view7}>
                     {selectedWord === item?.id && (
-                      <CustomText style={styles.selectedWord} 
-                        text={item.definition.charAt(0).toUpperCase() +
-                          item.definition?.slice(1)}
+                      <CustomText
+                        style={styles.selectedWord}
+                        text={
+                          item.definition.charAt(0).toUpperCase() +
+                          item.definition?.slice(1)
+                        }
                       />
                     )}
                   </View>
@@ -169,8 +165,8 @@ const styles = StyleSheet.create({
     color: '#E66F25',
     textAlign: 'center',
   },
-  item:{
-    color:"#4A4A4A"
+  item: {
+    color: '#4A4A4A',
   },
   view5: {
     alignItems: 'stretch',

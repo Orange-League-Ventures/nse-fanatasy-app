@@ -5,22 +5,18 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
-  ActivityIndicator,
   ImageStyle,
+  ScrollView,
 } from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
-import {
-  setUser,
-  setLoading,
-  setError,
-  logout,
-  setToken,
-} from '../Redux/Slices/AuthSlice';
+import {setUser, setLoading, setToken} from '../Redux/Slices/AuthSlice';
 import {login} from '../services/authService';
 import {useDispatch, useSelector} from 'react-redux';
 import InputBox from '../common/InputBox';
 import imageUrls from '../constants/imageurls';
 import {AuthState} from '../interfaces/autInterfaces';
+import CustomButton from '../common/CustomButton';
+import CustomInput from '../common/CustomInput';
 
 type FormData = {
   email: string;
@@ -33,6 +29,7 @@ const LoginForm = (props: any) => {
     handleSubmit,
     formState: {errors, isSubmitting},
   } = useForm<FormData>();
+
   const dispatch = useDispatch();
   const loading = useSelector((state: AuthState) => state?.auth?.loading);
   const [loginError, setLoginError] = useState<string | null>(null);
@@ -45,22 +42,22 @@ const LoginForm = (props: any) => {
     dispatch(setLoading(true));
     const {email, password} = formData;
     login(email, password)
-    .then((data) => {
-      dispatch(setToken(data.accessToken));
-      dispatch(setUser(data.user));
-      props.navigation.navigate('Home');
-    })
-    .catch((error: any) => {
-      console.error('Login failed:', error);
-      setLoginError(error?.response?.data?.message ||
-        'Login failed. Please check your credentials.');
-    })
-    .finally(() => {
-      dispatch(setLoading(false));
-    });
+      .then(data => {
+        dispatch(setToken(data.accessToken));
+        dispatch(setUser(data.user));
+        props.navigation.navigate('Home');
+      })
+      .catch((error: any) => {
+        console.error('Login failed:', error);
+        setLoginError(
+          error?.response?.data?.message ||
+            'Login failed. Please check your credentials.',
+        );
+      })
+      .finally(() => {
+        dispatch(setLoading(false));
+      });
   };
-
-  
 
   return (
     <View style={styles.container}>
@@ -72,7 +69,7 @@ const LoginForm = (props: any) => {
           />
         </View>
         <View style={styles.inputcontainer}>
-          <Controller
+          {/* <Controller
             control={control}
             render={({field: {onChange, onBlur, value}}) => (
               <InputBox
@@ -87,11 +84,26 @@ const LoginForm = (props: any) => {
               />
             )}
             name="email"
-            rules={{required: 'email is required'}}
+            rules={{required: 'Email is required!'}}
           />
           {errors?.email && (
             <Text style={styles.errorMsg}>{errors?.email?.message}</Text>
-          )}
+          )} */}
+          <CustomInput
+            control={control}
+            name="email"
+            placeholder="Email Address"
+            keyboardType="email-address"
+            error={!!errors.email || !!loginError}
+            errorText={errors?.email?.message ?? ''}
+            rules={{
+              required: 'Email is required',
+              pattern: {
+                value: /^\S+@\S+$/i,
+                message: 'Invalid email address',
+              },
+            }}
+          />
           <View style={styles.passwordContainer}>
             <Controller
               control={control}
@@ -107,13 +119,18 @@ const LoginForm = (props: any) => {
                 />
               )}
               name="password"
-              rules={{required: 'Password is required'}}
+              rules={{required: 'Password is required!'}}
               defaultValue=""
             />
             <TouchableOpacity
               style={styles.passwordIcon}
               onPress={handleShowPassword}>
-              <Image source={ showPassword ? imageUrls.lockeyeIcon : imageUrls.openEyeIcon} style={{ ...styles.eyeIcon, tintColor: '#D4D4D4'}} />
+              <Image
+                source={
+                  showPassword ? imageUrls.lockeyeIcon : imageUrls.openEyeIcon
+                }
+                style={{...styles.eyeIcon, tintColor: '#D4D4D4'}}
+              />
             </TouchableOpacity>
           </View>
           {errors?.password && (
@@ -123,7 +140,7 @@ const LoginForm = (props: any) => {
         <View style={styles.FingerprintAndForgotPassword}>
           <TouchableOpacity
             onPress={() => props.navigation.navigate('ForgotPassword')}>
-            <Text style={styles.forgotPassword}>Forgot Password</Text>
+            <Text style={styles.forgotPassword}>Forgot Password ?</Text>
           </TouchableOpacity>
         </View>
         {/* <TouchableOpacity
@@ -132,8 +149,8 @@ const LoginForm = (props: any) => {
           activeOpacity={1}>
           <Text style={styles.buttonText}>Log In</Text>
         </TouchableOpacity> */}
-        <TouchableOpacity
-    style={[styles.loginButton, loading && styles.loadingButton]}
+        {/* <TouchableOpacity
+     style={[styles.loginButton, loading && styles.loadingButton]}
     onPress={handleSubmit(handleLogin)}
     activeOpacity={1}
     disabled={loading}
@@ -144,7 +161,13 @@ const LoginForm = (props: any) => {
       </View>
     )}
     <Text style={styles.buttonText}>Log In</Text>
-  </TouchableOpacity>
+  </TouchableOpacity> */}
+        <CustomButton
+          onPress={handleSubmit(handleLogin)}
+          title={'Log In'}
+          loading={loading}
+          style={{backgroundColor: '#3A2D7D', color: '#ffffff'}}
+        />
         {loginError && !loading && (
           <Text style={styles.errorMsg}>{loginError}</Text>
         )}
@@ -153,6 +176,24 @@ const LoginForm = (props: any) => {
           <Text style={styles.moreOptions}>Don't have an account?</Text>
           <View style={styles.horizontalLineRight} />
         </View>
+        <TouchableOpacity
+          style={styles.SignupButton}
+          onPress={() => props.navigation.navigate('Signup')}>
+          <Image
+            source={require('../../assets/images/EmailIcon.png')}
+            style={styles.emailIcon as ImageStyle}
+          />
+          <Text style={styles.SignupbuttonText}>Continue with Google</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.SignupButton}
+          onPress={() => props.navigation.navigate('Signup')}>
+          <Image
+            source={require('../../assets/images/EmailIcon.png')}
+            style={styles.emailIcon as ImageStyle}
+          />
+          <Text style={styles.SignupbuttonText}>Continue with Phone Number</Text>
+        </TouchableOpacity>
         <TouchableOpacity
           style={styles.SignupButton}
           onPress={() => props.navigation.navigate('Signup')}>
@@ -182,12 +223,12 @@ const styles = StyleSheet.create({
     marginRight: 16,
   },
   imageContainer: {
-    marginHorizontal: 61,
-    marginBottom: 42,
+    marginHorizontal: 60,
+    marginBottom: 20,
     justifyContent: 'center',
   },
   image: {
-    width: 205,
+    width: 204,
     height: 54,
   },
   inputcontainer: {
@@ -204,7 +245,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     color: '#000000',
     borderColor: '#D4D4D4',
-    marginBottom: 12,
+    // marginBottom: 12,
     fontSize: 12,
     fontFamily: 'Roboto',
     fontWeight: '400',
@@ -212,13 +253,14 @@ const styles = StyleSheet.create({
   FingerprintAndForgotPassword: {
     flexDirection: 'row', // Distribute space between children
     alignItems: 'center', // Align children along the cross axis (vertically)
-    justifyContent: 'flex-end', 
-    marginBottom: 32,
+    justifyContent: 'flex-end',
+    marginBottom: 20,
+    marginRight: 10,
   },
   forgotPassword: {
     fontFamily: 'Roboto',
     fontWeight: '400',
-    fontSize: 10,
+    fontSize: 12,
     color: '#E66F25',
   },
   loginButton: {
@@ -263,8 +305,8 @@ const styles = StyleSheet.create({
   },
   SignupbuttonText: {
     fontFamily: 'Roboto',
-    fontWeight: '500',
-    fontSize: 14,
+    fontWeight: '700',
+    fontSize: 12,
     textAlign: 'center',
     color: '#03050A',
   },
@@ -296,12 +338,12 @@ const styles = StyleSheet.create({
   emailIcon: {
     width: 24,
     height: 24,
-    marginRight: 5,
+    marginRight: 10,
   },
   horizontalLineContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 8, // Adjust as needed
+    marginVertical: 0, // Adjust as needed
   },
   horizontalLineLeft: {
     flex: 1,

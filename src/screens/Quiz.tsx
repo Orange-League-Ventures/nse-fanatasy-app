@@ -21,9 +21,8 @@ interface IProps {
   quizType: any;
 }
 
-const Quiz = (props: any) => { 
+const Quiz = (props: any) => {
   const route: any = useRoute();
-  
   const [quizData, setQuizData] = useState([]);
   const [currentQuizId, setCurrentQuizId] = useState('');
   const [questionData, setQuestionData] = useState([]);
@@ -31,12 +30,12 @@ const Quiz = (props: any) => {
   const [lastQuestion, setLastQuestion] = useState(false);
   const [score, setScore] = useState(0);
 
-
-  const progressWidth = ((questionNumber + 1) / questionData?.questions?.length) * 100;
+  const progressWidth =
+    ((questionNumber + 1) / questionData?.questions?.length) * 100;
   const navigation = useNavigation();
 
   const handlePress = () => {
-    props.navigation.navigate("Play")
+    props.navigation.navigate('Play');
   };
 
   const [loading, setLoading] = useState(false);
@@ -80,7 +79,12 @@ const Quiz = (props: any) => {
       setCurrentQuizId(quizData[0]?.['id']);
       setQuestionNumber(questionNumber + 1); // Reset question index for the new quiz
     } else {
-      props.navigation.navigate('ReportPage',{score:score,quizId:quizData[0]?.['id'],quizType:route?.params?.state?.quizTypes,totalQuestions:questionData?.questions?.length})
+      props.navigation.navigate('ReportPage', {
+        score: score,
+        quizId: quizData[0]?.['id'],
+        quizType: route?.params?.state?.quizTypes,
+        totalQuestions: questionData?.questions?.length,
+      });
     }
     setSubmitted(false);
   };
@@ -196,7 +200,9 @@ const Quiz = (props: any) => {
                             : {}
                         }
                       />
-                      <Text>{option.option_text}</Text>
+                      <Text style={{color: '#03050A'}}>
+                        {option.option_text}
+                      </Text>
                     </View>
                   </View>
                 ),

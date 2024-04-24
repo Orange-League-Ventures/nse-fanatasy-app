@@ -296,7 +296,7 @@ const styles = StyleSheet.create({
   loadingContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    Color: '#3A2D7D',
+    color: '#3A2D7D',
   },
   loadingImage: {
     width: 100, // Adjust the width and height of the image as needed

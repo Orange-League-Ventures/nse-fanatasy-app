@@ -160,7 +160,11 @@ const Quiz = (props: any) => {
             <View style={[styles.progressBar, {width: `${progressWidth}%`}]} />
           </View>
           <View style={{maxHeight: '90%', height: dynamicHeight}}>
-            <Text style={{color: '#03050A', fontSize: 14, fontWeight: '600'}}>
+            <Text style={{paddingBottom:10}}>
+              <Text style={{fontSize: 14, fontWeight: '600'}}>Situation: </Text>
+              {questionData?.questions?.[currentIndex]?.['sitituation']}
+            </Text>
+            <Text style={{color: '#03050A', fontSize: 14, fontWeight: '600',fontFamily:'Montserrat'}}>
               Q{questionNumber + 1}.{' '}
               {questionData?.questions?.[currentIndex]?.['question_text']}
             </Text>

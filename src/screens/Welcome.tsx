@@ -1,95 +1,100 @@
 import React from 'react';
-import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
-import { useSelector } from 'react-redux';
-import { AuthState } from '../interfaces/autInterfaces';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  SafeAreaView,
+} from 'react-native';
+import {useSelector} from 'react-redux';
+import {AuthState} from '../interfaces/autInterfaces';
+import imageUrls from '../constants/imageurls';
+import Button from '../common/Button';
+import {windowWidth} from '../common/Dimensions';
 
-const Welcome = (props:any) => {
-  const details = useSelector((state: AuthState)  => state?.auth);
- const data=details?.user;
- console.log("data in welcome--",details);
-    return (
-    <View style={styles.welcome}>
-      <View style={styles.started}>
-      <View style={styles.container1}>
-        <View style={styles.left}>
-          <Text style={styles.textinfo}>
-            Your Account Has Been Created Successfully
-          </Text>
+const Welcome = (props: any) => {
+  const details = useSelector((state: AuthState) => state?.auth);
+  const data = details?.user;
+  console.log('data in welcome--', details);
+  return (
+    <SafeAreaView style={styles.mainContainer}>
+      <View style={styles.welcome}>
+        <View style={styles.started}>
+          <View style={styles.container1}>
+            <View style={styles.left}>
+              <Text style={styles.textinfo}>
+                Your Account Has Been Created Successfully
+              </Text>
+            </View>
+            <View style={styles.right}>
+              <Image style={styles.image} source={imageUrls.iconParkSuccess} />
+            </View>
+          </View>
+          <View style={styles.container2}>
+            <Text style={styles.textContainer}>
+              <Text style={styles.welcomeText}>Welcome aboard! </Text>
+              <Text style={styles.userNameText}>{data?.name}</Text>
+            </Text>
+            <Text style={styles.descriptionText}>
+              Your account is ready. Get ready to conquer the stock market with
+              fun and games!
+            </Text>
+          </View>
         </View>
-        <View style={styles.right}>
-          <Image
-            style={styles.image}
-            source={require('../../assets/images/Welcome.png')}
-          />
+        <View style={styles.buttonContainer}>
+          <Button style={styles.buttonStyle} textStyle={styles.textStyle} title={'Get Started'} />
         </View>
       </View>
-      <View style={styles.container2}>
-      <Text style={styles.textContainer}>
-      <Text style={styles.welcomeText}>Welcome aboard! </Text>
-      <Text style={styles.userNameText}>{data?.name}</Text>
-    </Text>
-        <Text style={styles.descriptionText}>
-          Your account is ready. Get ready to conquer the stock market with fun
-          and games!
-        </Text>
-      </View>
-      <TouchableOpacity
-          style={styles.createButton}
-          onPress={() => props.navigation.navigate('Home')}
-          activeOpacity={1}>
-          <Text style={styles.buttonText}>Get Started</Text>
-        </TouchableOpacity>
-        </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+    // backgroundColor: 'red',
+  },
   welcome: {
-    display:'flex',
-    width: 'auto',
-    height: 'auto',
+    display: 'flex',
     flex: 1,
     alignItems: 'center',
-    backgroundColor: '#F8F8F8',
+    // backgroundColor: '#F8F8F8',
   },
   started: {
-    marginLeft: 16,
-    marginRight: 16,
+    marginBottom: 16,
+    marginHorizontal: 16,
+    marginTop: 32,
   },
   container1: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 8,
-    paddingHorizontal:0,
-    marginHorizontal:14,
-    marginBottom:12,
+    paddingHorizontal: 0,
   },
   left: {
-    flex: 1,
+    width: '60%',
   },
   right: {
     flex: 1,
     alignItems: 'flex-end',
   },
   container2: {
-    width: 'auto',
-    height: 'auto',
+    display: 'flex',
+    rowGap: 4,
     paddingVertical: 8,
-    paddingHorizontal:0,
-    marginHorizontal:14
   },
   textinfo: {
-    fontFamily: 'Montserrat',
-    fontWeight: '600',
+    fontFamily: 'Roboto',
+    fontWeight: 'bold',
     fontSize: 14,
     lineHeight: 21,
-    color: '#007A00', // adjust this as needed
+    color: '#007A00',
   },
   image: {
-    backgroundColor: '#007A00',
-    width: 'auto',
-    height: 'auto',
+    width: 50,
+    height : 50,
+    borderRadius: 8,
   },
   textContainer: {
     flexDirection: 'row',
@@ -109,7 +114,6 @@ const styles = StyleSheet.create({
     lineHeight: 21,
     color: '#E66F25',
   },
-
   descriptionText: {
     fontFamily: 'Roboto',
     fontWeight: '400',
@@ -117,27 +121,27 @@ const styles = StyleSheet.create({
     lineHeight: 15.6,
     color: '#717171',
   },
-  createButton: {
-    backgroundColor: '#3A2D7D',
-    width: 328,
-    height: 'auto',
-    borderWidth: 1,
+
+  buttonStyle: {
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: 16,
     borderRadius: 8,
-    color: '#000000',
-    borderColor: '#D4D4D4',
-    marginBottom: 12,
-    fontSize: 12,
-    fontFamily: 'Roboto',
-    fontWeight: '100',
   },
-  buttonText: {
-    fontFamily: 'Roboto',
-    fontWeight: '500',
-    fontSize: 14,
-    textAlign: 'center',
-    color: '#ffffff',
+
+  textStyle : {
+    fontFamily :'Roboto',
+    fontWeight : '500',
+    fontSize : 14,
+  },
+
+  buttonContainer: {
+    width: windowWidth - 32,
+    position: 'absolute',
+    bottom: 0,
+    display: 'flex',
+    justifyContent: 'center',
+    paddingTop: 16,
+    paddingBottom: 32,
   },
 });
 

@@ -207,9 +207,9 @@ function App(): React.JSX.Element {
             options={{title: 'Signup'}}
           />
           <Stack.Screen
-            name="Welcome"
+            name="Welcome" 
             component={Welcome}
-            options={{title: 'Welcome'}}
+            options={{headerShown: false}}
           />
           <Stack.Screen
             name="Quiz"

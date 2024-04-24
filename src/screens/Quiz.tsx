@@ -138,7 +138,7 @@ const Quiz = (props: any) => {
         </View>
       )}
       {!loading ? (
-        <View style={{padding: 20}}>
+        <View style={styles.top}>
           <View
             style={{
               display: 'flex',
@@ -400,6 +400,9 @@ const styles = StyleSheet.create({
     fontSize: 14, 
     fontWeight: '600',
     fontFamily:'Montserrat'
+  },
+  top:{
+    padding: 20
   }
 });
 export default Quiz;

@@ -44,15 +44,9 @@ const LoginForm = (props: any) => {
       dispatch(setToken(data.accessToken));
       dispatch(setUser(data.user));
       props.navigation.navigate('Home');
-      dispatch(setError(null));
     })
     .catch((error: any) => {
       console.error('Login failed:', error);
-      dispatch(
-        setError(
-          error?.response?.data?.message ||
-            'Login failed. Please check your credentials.'),
-      );
       setLoginError(error?.response?.data?.message ||
         'Login failed. Please check your credentials.');
     })

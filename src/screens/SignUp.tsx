@@ -40,11 +40,9 @@ const SignupForm = (props: any) => {
         dispatch(setToken(data.accessToken));
         dispatch(setUser(data.user));
         props.navigation.navigate('Welcome');
-        dispatch(setError(null));
       })
       .catch((error: any) => {
         console.error('create account Failed:', error);
-        dispatch(setError(error?.response?.data?.message));
         setErrorMsg(error?.response?.data?.message);
       })
       .finally(() => {

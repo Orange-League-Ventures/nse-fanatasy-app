@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Image,
   ActivityIndicator,
+  ImageStyle,
 } from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
 import {
@@ -68,7 +69,7 @@ const LoginForm = (props: any) => {
         <View style={styles.imageContainer}>
           <Image
             source={require('../../assets/images/nseLogo.png')}
-            style={styles.image}
+            style={styles.image as ImageStyle}
           />
         </View>
         <View style={styles.inputcontainer}>
@@ -138,7 +139,7 @@ const LoginForm = (props: any) => {
           onPress={() => props.navigation.navigate('Signup')}>
           <Image
             source={require('../../assets/images/EmailIcon.png')}
-            style={styles.emailIcon}
+            style={styles.emailIcon as ImageStyle}
           />
           <Text style={styles.SignupbuttonText}>Signup with Email</Text>
         </TouchableOpacity>
@@ -245,14 +246,14 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontFamily: 'Roboto',
-    fontWeight: 'medium',
+    fontWeight: '500',
     fontSize: 16,
     textAlign: 'center',
     color: '#ffffff',
   },
   SignupbuttonText: {
     fontFamily: 'Roboto',
-    fontWeight: 'medium',
+    fontWeight: '500',
     fontSize: 14,
     textAlign: 'center',
     color: '#03050A',

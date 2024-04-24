@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
+import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
+import {useDispatch} from 'react-redux';
+import {useForm, Controller} from 'react-hook-form';
+import {signup} from '../services/authService';
 import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-} from 'react-native';
-import { useDispatch } from 'react-redux';
-import { useForm, Controller } from 'react-hook-form';
-import { signup } from '../services/authService';
-import { setError, setLoading, setToken, setUser } from '../Redux/Slices/AuthSlice';
+  setError,
+  setLoading,
+  setToken,
+  setUser,
+} from '../Redux/Slices/AuthSlice';
 import InputBox from '../common/InputBox';
+import imageUrls from '../constants/imageurls';
 
 type FormValues = {
   name: string;
@@ -20,21 +20,25 @@ type FormValues = {
   confirmPassword: string;
 };
 const SignupForm = (props: any) => {
-  const { control, handleSubmit, formState: { errors } } = useForm<FormValues>();
+  const {
+    control,
+    handleSubmit,
+    formState: {errors},
+  } = useForm<FormValues>();
   const dispatch = useDispatch();
   const [errorMsg, setErrorMsg] = useState('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const handleSignUp = async (formData: any) => {
     dispatch(setLoading(true));
     try {
-      const { email, password, phone_number, name, confirmPassword } = formData;
+      const {email, password, phone_number, name, confirmPassword} = formData;
 
       if (!email || !password || !phone_number || !name || !confirmPassword) {
-        setErrorMsg("All fields are required.");
+        setErrorMsg('All fields are required.');
         return;
       }
       if (password !== confirmPassword) {
-        setErrorMsg("Passwords do not match.");
+        setErrorMsg('Passwords do not match.');
         return;
       }
       const data = await signup(name, email, phone_number, password);
@@ -42,17 +46,20 @@ const SignupForm = (props: any) => {
       dispatch(setUser(data.user));
       props.navigation.navigate('Welcome');
       setErrorMsg('');
-    } catch (error:any) {
+    } catch (error: any) {
       console.error('create account Failed:', error);
       dispatch(setError(error?.response?.data?.message));
-      setErrorMsg(error?.response?.data?.message || 'Sign up failed. Please try again later.');
+      setErrorMsg(
+        error?.response?.data?.message ||
+          'Sign up failed. Please try again later.',
+      );
     } finally {
       dispatch(setLoading(false));
     }
   };
 
   const handleShowPassword = () => {
-    setShowPassword(!showPassword); 
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -68,7 +75,7 @@ const SignupForm = (props: any) => {
         <View style={styles.inputcontainer}>
           <Controller
             control={control}
-            render={({ field }) => (
+            render={({field}) => (
               <InputBox
                 style={styles.input}
                 placeholder="Name"
@@ -78,14 +85,16 @@ const SignupForm = (props: any) => {
               />
             )}
             name="name"
-            rules={{ required: 'Name is required' }} // Define validation rules
+            rules={{required: 'Name is required'}} // Define validation rules
             defaultValue=""
           />
-          {errors?.name && <Text style={styles.errorMsg}>{errors.name.message}</Text>}
+          {errors?.name && (
+            <Text style={styles.errorMsg}>{errors.name.message}</Text>
+          )}
 
           <Controller
             control={control}
-            render={({ field }) => (
+            render={({field}) => (
               <InputBox
                 style={styles.input}
                 placeholder="Email Address"
@@ -96,14 +105,16 @@ const SignupForm = (props: any) => {
               />
             )}
             name="email"
-            rules={{ required: 'Email is required' }}
+            rules={{required: 'Email is required'}}
             defaultValue=""
           />
-          {errors?.email && <Text style={styles.errorMsg}>{errors.email.message}</Text>}
+          {errors?.email && (
+            <Text style={styles.errorMsg}>{errors.email.message}</Text>
+          )}
 
           <Controller
             control={control}
-            render={({ field }) => (
+            render={({field}) => (
               <InputBox
                 style={styles.input}
                 placeholder="Mobile Number"
@@ -114,39 +125,42 @@ const SignupForm = (props: any) => {
               />
             )}
             name="phone_number"
-            rules={{ required: 'Mobile number is required' }}
+            rules={{required: 'Mobile number is required'}}
             defaultValue=""
           />
-          {errors?.phone_number && <Text style={styles.errorMsg}>{errors.phone_number.message}</Text>}
+          {errors?.phone_number && (
+            <Text style={styles.errorMsg}>{errors.phone_number.message}</Text>
+          )}
 
           <View style={styles.passwordContainer}>
-          <Controller
-            control={control}
-            render={({ field }) => (
-              <InputBox
-                style={styles.input}
-                placeholder="Password"
-                secureTextEntry={!showPassword}
-                value={field.value}
-                onChangeText={field.onChange} 
-              />
-            )}
-            name="password"
-            rules={{ required: 'Password is required' }}
-            defaultValue=""
-          />
-          <TouchableOpacity style={styles.passwordIcon} onPress={handleShowPassword}>
-          <Image
-              source={require('../../assets/images/eye.png')}
-              style={styles.eyeIcon}
+            <Controller
+              control={control}
+              render={({field}) => (
+                <InputBox
+                  style={styles.input}
+                  placeholder="Password"
+                  secureTextEntry={!showPassword}
+                  value={field.value}
+                  onChangeText={field.onChange}
+                />
+              )}
+              name="password"
+              rules={{required: 'Password is required'}}
+              defaultValue=""
             />
-          </TouchableOpacity>
-        </View>
-          {errors?.password && <Text style={styles.errorMsg}>{errors.password.message}</Text>}
+            <TouchableOpacity
+              style={styles.passwordIcon}
+              onPress={handleShowPassword}>
+              <Image source={showPassword ? imageUrls.lockeyeIcon : imageUrls.openEyeIcon} style={{ ...styles.eyeIcon, tintColor: '#D4D4D4'}} />
+            </TouchableOpacity>
+          </View>
+          {errors?.password && (
+            <Text style={styles.errorMsg}>{errors.password.message}</Text>
+          )}
 
           <Controller
             control={control}
-            render={({ field }) => (
+            render={({field}) => (
               <InputBox
                 style={styles.input}
                 placeholder="Confirm Password"
@@ -156,10 +170,14 @@ const SignupForm = (props: any) => {
               />
             )}
             name="confirmPassword"
-            rules={{ required: 'Confirm password is required' }}
+            rules={{required: 'Confirm password is required'}}
             defaultValue=""
           />
-          {errors?.confirmPassword && <Text style={styles.errorMsg}>{errors.confirmPassword.message}</Text>}
+          {errors?.confirmPassword && (
+            <Text style={styles.errorMsg}>
+              {errors.confirmPassword.message}
+            </Text>
+          )}
         </View>
         <TouchableOpacity
           style={styles.createButton}
@@ -172,7 +190,6 @@ const SignupForm = (props: any) => {
     </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {
@@ -255,22 +272,21 @@ const styles = StyleSheet.create({
   errorMsg: {
     color: '#CB0505',
     fontSize: 10,
-    marginTop:0,
+    marginTop: 0,
     marginBottom: 10,
   },
-  passwordContainer : {
-    position : 'relative', 
+  passwordContainer: {
+    position: 'relative',
   },
-  passwordIcon : {
-    position : 'absolute',
-    right : 10,
-    top: '20%'
+  passwordIcon: {
+    position: 'absolute',
+    right: 10,
+    top: '20%',
   },
-  eyeIcon : {
-    width : 25,
-    height : 25,
-    color : '#D4D4D4',
-  }
+  eyeIcon: {
+    width: 25,
+    height: 25,
+  },
 });
 
 export default SignupForm;

@@ -18,7 +18,7 @@ const ChartSection = (props: any) => {
   return (
     <View>
       <View style={styles.textContainer}>
-        <CustomText text={'Understanding Charts'} style={styles.headingText}/>
+        <Text style={styles.headingText}>Understanding Charts</Text>
       </View>
       <View style={styles.container}>
         <TouchableOpacity

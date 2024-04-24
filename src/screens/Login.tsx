@@ -7,11 +7,18 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import { useForm, Controller } from 'react-hook-form';
-import { setUser, setLoading, setError, logout,setToken }  from '../Redux/Slices/AuthSlice';
+import {useForm, Controller} from 'react-hook-form';
+import {
+  setUser,
+  setLoading,
+  setError,
+  logout,
+  setToken,
+} from '../Redux/Slices/AuthSlice';
 import {login} from '../services/authService';
 import {useDispatch} from 'react-redux';
 import InputBox from '../common/InputBox';
+import imageUrls from '../constants/imageurls';
 
 type FormData = {
   email: string;
@@ -19,28 +26,37 @@ type FormData = {
 };
 
 const LoginForm = (props: any) => {
-  const { control, handleSubmit, formState: { errors } } = useForm<FormData>();
+  const {
+    control,
+    handleSubmit,
+    formState: {errors},
+  } = useForm<FormData>();
   const dispatch = useDispatch();
   const [loginError, setLoginError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const handleLogin = async (formData: { email: string, password: string }) => {
-    dispatch(setLoading(true)); 
+  const handleLogin = async (formData: {email: string; password: string}) => {
+    dispatch(setLoading(true));
     try {
       const data = await login(formData.email, formData.password);
-      dispatch(setToken(data.accessToken)); 
-      dispatch(setUser(data.user)); 
-      props.navigation.navigate('Home'); 
-    } catch (error:any) {
-      console.error('Login failed:', error?.response?.data?.message); 
-      dispatch(setError(error?.response?.data?.message || 'Login failed. Please check your credentials.'));
+      dispatch(setToken(data.accessToken));
+      dispatch(setUser(data.user));
+      props.navigation.navigate('Home');
+    } catch (error: any) {
+      console.error('Login failed:', error?.response?.data?.message);
+      dispatch(
+        setError(
+          error?.response?.data?.message ||
+            'Login failed. Please check your credentials.',
+        ),
+      );
       setLoginError(error?.response?.data?.message);
     } finally {
-      dispatch(setLoading(false)); 
+      dispatch(setLoading(false));
     }
   };
 
   const handleShowPassword = () => {
-    setShowPassword(!showPassword); 
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -49,13 +65,13 @@ const LoginForm = (props: any) => {
         <View>
           <Image
             source={require('../../assets/images/nseLogo.png')}
-            style={styles.image} 
+            style={styles.image}
           />
         </View>
         <View style={styles.inputcontainer}>
           <Controller
             control={control}
-            render={({ field: { onChange, onBlur, value } }) => (
+            render={({field: {onChange, onBlur, value}}) => (
               <InputBox
                 style={styles.input}
                 placeholder="Email Address"
@@ -67,57 +83,56 @@ const LoginForm = (props: any) => {
               />
             )}
             name="email"
-            rules={{ required: "email is required" }}
+            rules={{required: 'email is required'}}
           />
-          {errors?.email && <Text style={styles.errorMsg}>{errors?.email?.message}</Text>}
+          {errors?.email && (
+            <Text style={styles.errorMsg}>{errors?.email?.message}</Text>
+          )}
           <View style={styles.passwordContainer}>
-          <Controller
-            control={control}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <InputBox
-                style={styles.input}
-                placeholder="Password"
-                secureTextEntry={!showPassword}
-                value={value}
-                onBlur={onBlur}
-                onChangeText={onChange}
-              />
-            )}
-            name="password"
-            rules={{ required: 'Password is required' }}
-            defaultValue=""
-          />
-          <TouchableOpacity style={styles.passwordIcon} onPress={handleShowPassword}>
-          <Image
-              source={require('../../assets/images/eye.png')}
-              style={styles.eyeIcon}
+            <Controller
+              control={control}
+              render={({field: {onChange, onBlur, value}}) => (
+                <InputBox
+                  style={styles.input}
+                  placeholder="Password"
+                  secureTextEntry={!showPassword}
+                  value={value}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                />
+              )}
+              name="password"
+              rules={{required: 'Password is required'}}
+              defaultValue=""
             />
-          </TouchableOpacity>
-        </View>
-          {errors?.password && <Text style={styles.errorMsg}>{errors?.password?.message}</Text>}
+            <TouchableOpacity
+              style={styles.passwordIcon}
+              onPress={handleShowPassword}>
+              <Image source={ showPassword ? imageUrls.lockeyeIcon : imageUrls.openEyeIcon} style={{ ...styles.eyeIcon, tintColor: '#D4D4D4'}} />
+            </TouchableOpacity>
+          </View>
+          {errors?.password && (
+            <Text style={styles.errorMsg}>{errors?.password?.message}</Text>
+          )}
         </View>
 
         <TouchableOpacity
           style={styles.loginButton}
           onPress={handleSubmit(handleLogin)}
-          activeOpacity={1}
-        >
+          activeOpacity={1}>
           <Text style={styles.buttonText}>Log In</Text>
         </TouchableOpacity>
         {loginError && <Text style={styles.errorMsg}>{loginError}</Text>}
         <Text style={styles.moreOptions}>Don't have an account?</Text>
         <TouchableOpacity
           style={styles.SignupButton}
-          onPress={() => props.navigation.navigate('Signup')}
-        >
+          onPress={() => props.navigation.navigate('Signup')}>
           <Text style={styles.SignupbuttonText}>Sign up with Email</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 };
-
-
 
 const styles = StyleSheet.create({
   container: {
@@ -136,7 +151,7 @@ const styles = StyleSheet.create({
   image: {
     width: 'auto',
     height: 60,
-   justifyContent:'center',
+    justifyContent: 'center',
     paddingVertical: 8,
     marginBottom: 42,
   },
@@ -175,7 +190,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
     fontWeight: '100',
   },
-  SignupButton:{
+  SignupButton: {
     backgroundColor: '#ffffff',
     width: 'auto',
     height: 'auto',
@@ -217,20 +232,18 @@ const styles = StyleSheet.create({
     marginVertical: 32,
     textAlign: 'center',
   },
-  passwordContainer : {
-    position : 'relative', 
+  passwordContainer: {
+    position: 'relative',
   },
-  passwordIcon : {
-    position : 'absolute',
-    right : 10,
-    top: '20%'
+  passwordIcon: {
+    position: 'absolute',
+    right: 10,
+    top: '20%',
   },
-  eyeIcon : {
-    width : 25,
-    height : 25,
-    color : "#D4D4D4",
-  }
-  
+  eyeIcon: {
+    width: 25,
+    height: 25,
+  },
 });
 
 export default LoginForm;

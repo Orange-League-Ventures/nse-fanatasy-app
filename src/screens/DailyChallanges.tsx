@@ -1,6 +1,7 @@
 import React from 'react';
 import {Image, StyleSheet, Text, View, Dimensions} from 'react-native';
 import Button from '../common/Button';
+import imageUrls from '../constants/imageurls';
 
 const windowWidth = Dimensions.get('window').width;
 const DailyChallanges = () => {
@@ -11,16 +12,15 @@ const DailyChallanges = () => {
       </View>
 
       <View style={styles.view5}>
-        <Image
-          source={require('../../assets/images/dailyChallenges.png')}
-          style={styles.image1}
-        />
+        <Image source={imageUrls.dailyChallengeImg} style={styles.image1} />
       </View>
 
-      <Button onPress={() => {}} title={`START THE QUIZ`} style={styles.view7} textStyle={''}/>
-      <View>
-        <Text style={styles.text8}>$Terms & Conditions Apply</Text>
-      </View>
+      <Button
+        onPress={() => {}}
+        title={`START THE QUIZ`}
+        style={styles.view7}
+        textStyle={''}
+      />
     </View>
   );
 };
@@ -66,28 +66,27 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: 'rgba(0, 0, 0, 0.50)',
     fontWeight: '400',
-    paddingVertical:12,
+    paddingVertical: 12,
   },
   view6: {fontFamily: 'Roboto, sans-serif'},
   image1: {
-    width: (windowWidth-32),
-    resizeMode :'contain',
-    height: windowWidth > 400? 300 :  270,
+    width: windowWidth - 32,
+    resizeMode: 'cover',
+    height: windowWidth > 400 ? 360 : 270,
     borderRadius: 8,
   },
   view7: {
     borderRadius: 8,
     backgroundColor: '#25D366',
     color: '#FFF',
-    marginBottom: 12,
-    
+    fontFamily: 'Montserrat',
   },
   text8: {
     color: '#C35516',
     textAlign: 'center',
     alignSelf: 'center',
     fontSize: 10,
-    fontWeight : '400',
+    fontWeight: '400',
   },
   customButton: {
     backgroundColor: 'green',

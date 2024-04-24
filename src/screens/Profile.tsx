@@ -218,12 +218,15 @@ const styles = StyleSheet.create({
     marginBottom: 4,
     fontSize : 12,
     fontWeight : '400',
+    fontFamily : 'Roboto',
 
   },
   text2: {
-    color: '#3A2D7D',
+    color: '#03050A',
     fontSize : 14,
     fontWeight : '600',
+    fontFamily : 'Montserrat',
+    fontStyle : 'normal',
 
   },
   subcontainer: {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Image,
   View,
@@ -6,53 +6,68 @@ import {
   Text,
   TouchableOpacity,
   Dimensions,
+  ActivityIndicator,
 } from 'react-native';
-import CustomText from '../common/CustomText';
+import { fetchLessons } from '../services/lessonService';
 
 const windowWidth: number = Dimensions.get('window').width;
 const windowHeight: number = Dimensions.get('window').height;
 const imageContainerWidth: number = (windowWidth - 40) / 2;
 const ChartSection = (props: any) => {
-  // const handleImageClick =
+  const [loading, setLoading] = useState(false);
+  const [lessons, setLessons] = useState<any>([])
+
+  useEffect(() => {
+    setLoading(true)
+    const wordsGroupByLetter = () => {
+      fetchLessons()
+        .then(response => {
+          setLoading(false)
+          setLessons(response?.data?.lessons);
+        })
+        .catch(error => {
+          setLoading(false)
+          console.log({ error });
+        });
+    };
+    wordsGroupByLetter();
+  }, [])
 
   return (
     <View>
       <View style={styles.textContainer}>
         <Text style={styles.headingText}>Understanding Charts</Text>
       </View>
+      {loading && (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#3A2D7D" />
+        </View>
+      )}
       <View style={styles.container}>
-        <TouchableOpacity
-          onPress={() => {
-            props.navigation.navigate('ChartList', {
-              state: {chart_type: 'line'},
-            });
-          }}>
-          <View style={styles.imageContainer}>
-            <Image
-              source={require('../../assets/images/linechart_4x.png')}
-              style={styles.image}
-            />
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            props.navigation.navigate('ChartList', {
-              state: {chart_type: 'candelstick'},
-            });
-          }}>
-          <View style={styles.imageContainer}>
-            <Image
-              source={require('../../assets/images/candlestick_4x.png')}
-              style={styles.image}
-            />
-          </View>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.chartPatternContainer}>
-        <Image
-          source={require('../../assets/images/chartPattern_4x.png')}
-          style={styles.chartImage}
-        />
+        {
+          lessons.length > 0 ? (
+            <>
+              {
+                lessons.map((item: any, index: number) => (
+                  <TouchableOpacity
+                    key={index}
+                    onPress={() => {
+                      props.navigation.navigate('ChartList', {
+                        state: { lesson_id: item?.id, lesson_name: item?.lesson_name },
+                      });
+                    }}>
+                    <View style={styles.imageContainer}>
+                      <Image
+                        source={{ uri: item?.lessong_image }}
+                        style={styles.image}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                ))
+              }
+            </>
+          ) : null
+        }
       </View>
     </View>
   );
@@ -94,6 +109,18 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: '#000000',
     fontFamily : 'Roboto-Medium',
+  },
+  loadingContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    color: '#ffffff',
+    position: 'absolute',
+    marginTop: 100,
+    marginBottom: 20,
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
   },
 });
 

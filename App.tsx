@@ -61,7 +61,7 @@ function App(): React.JSX.Element {
           tabBarIconStyle: styles.tabBarIcon,
         }}>
         <Tab.Screen
-          name="Home "
+          name="Home"
           options={{
             headerShown: false,
             tabBarIcon: ({ color, size }) => (
@@ -117,7 +117,7 @@ function App(): React.JSX.Element {
 
   const HomeStack = (props: any) => {
     return (
-      <Stack.Navigator initialRouteName="Login">
+      <Stack.Navigator initialRouteName="HomeScreen">
         <Stack.Screen
           options={{ headerShown: false }}
           name="HomeScreen"
@@ -205,7 +205,7 @@ function App(): React.JSX.Element {
     <Provider store={store}>
       {/* <AppWrapper /> */}
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home">
+        <Stack.Navigator initialRouteName="Login">
           <Stack.Screen
             name="Home"
             component={MainTabStackNavigator}

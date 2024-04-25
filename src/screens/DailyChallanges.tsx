@@ -2,6 +2,7 @@ import React from 'react';
 import {Image, StyleSheet, Text, View, Dimensions} from 'react-native';
 import Button from '../common/Button';
 import imageUrls from '../constants/imageurls';
+import GlobalFonts from '../common/GlobalFonts';
 
 const windowWidth = Dimensions.get('window').width;
 const DailyChallanges = () => {
@@ -19,7 +20,7 @@ const DailyChallanges = () => {
         onPress={() => {}}
         title={`START THE QUIZ`}
         style={styles.view7}
-        textStyle={''}
+        textStyle={styles.btnText}
       />
     </View>
   );
@@ -28,24 +29,20 @@ const DailyChallanges = () => {
 const styles = StyleSheet.create({
   view1: {
     display: 'flex',
-
     flexDirection: 'column',
-    // backgroundColor: 'red',
     marginHorizontal: 16,
     flex: 1,
   },
   text2: {
-    // marginLeft: 20,
     color: '#03050A',
     width: '100%',
     fontSize: 14,
-    fontWeight: '500',
+    fontFamily : GlobalFonts.RobotoMedium,
   },
   view3: {
     alignItems: 'stretch',
     borderRadius: 8,
     display: 'flex',
-    // marginTop: 8,
     width: '100%',
     flexDirection: 'column',
   },
@@ -55,7 +52,6 @@ const styles = StyleSheet.create({
     color: '#FFF',
     textAlign: 'center',
     justifyContent: 'center',
-    //   padding: "8px 16px",
   },
   view5: {
     justifyContent: 'center',
@@ -68,18 +64,19 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     paddingVertical: 12,
   },
-  view6: {fontFamily: 'Roboto, sans-serif'},
-  image1: {
+  image1: {  
     width: windowWidth - 32,
     resizeMode: 'cover',
-    height: windowWidth > 400 ? 360 : 270,
+    height: windowWidth > 400 ? 360 : 300,
     borderRadius: 8,
   },
   view7: {
     borderRadius: 8,
     backgroundColor: '#25D366',
     color: '#FFF',
-    fontFamily: 'Montserrat',
+  },
+  btnText : {
+    fontFamily: GlobalFonts.RobotoMedium,
   },
   text8: {
     color: '#C35516',

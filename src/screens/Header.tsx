@@ -3,6 +3,7 @@ import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import CustomText from '../common/CustomText';
 import {windowWidth} from '../common/Dimensions';
 import imageurl from '../constants/imageurls';
+import GlobalFonts from '../common/GlobalFonts';
 
 const Header = (props: any) => {
   return (
@@ -29,14 +30,14 @@ const Header = (props: any) => {
           <Text style={styles.titlename}>{props.title}</Text>
         )}
       </View>
-      <View style={styles.container}>
+      {/* <View style={styles.container}>
         {props?.totalPages && props?.currentPage ? (
           <CustomText
             style={styles.pageNumber}
             text={`${props.currentPage} / ${props?.totalPages}`}
           />
         ) : null}
-      </View>
+      </View> */}
     </View>
   );
 };
@@ -68,7 +69,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start', // Center the logo vertically within the header
   },
   titlename: {
-    fontFamily: 'Montserrat',
+    fontFamily: GlobalFonts.MontserratSemiBold,
     fontWeight: '600',
     fontSize: 14,
     lineHeight: 21,
@@ -77,7 +78,7 @@ const styles = StyleSheet.create({
   },
   pageNumber: {
     marginLeft: 100,
-    fontFamily: 'Montserrat',
+    fontFamily: GlobalFonts.MontserratSemiBold,
     fontWeight: '600',
     fontSize: 14,
     lineHeight: 21,

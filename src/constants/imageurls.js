@@ -8,7 +8,8 @@ const imageUrls = {
     home: require('../../assets/images/home_4x.png') ,
     settings : require('../../assets/images/settings_4x.png') ,
     learn : require('../../assets/images/learn_4x.png') ,
-    dailyChallengeImg : require('../../assets/images/stockMarketQuiz_4x.png')
+    dailyChallengeImg : require('../../assets/images/stockMarketQuiz_4x.png'),
+    iconParkSuccess : require('../../assets/images/icon-park_success.png')
   }; 
   export default imageUrls;
   

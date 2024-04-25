@@ -395,12 +395,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600'
   },
-  questionText:{
-    color: '#03050A', 
-    fontSize: 14, 
-    fontWeight: '600',
-    fontFamily:'Montserrat'
-  },
+  // questionText:{
+  //   color: '#03050A', 
+  //   fontSize: 14, 
+  //   fontWeight: '600',
+  //   fontFamily:'Montserrat'
+  // },
   top:{
     padding: 20
   }

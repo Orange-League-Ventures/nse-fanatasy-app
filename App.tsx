@@ -117,7 +117,7 @@ function App(): React.JSX.Element {
 
   const HomeStack = (props: any) => {
     return (
-      <Stack.Navigator initialRouteName="HomeScreen">
+      <Stack.Navigator initialRouteName="Login">
         <Stack.Screen
           options={{ headerShown: false }}
           name="HomeScreen"

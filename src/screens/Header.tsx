@@ -29,14 +29,14 @@ const Header = (props: any) => {
           <Text style={styles.titlename}>{props.title}</Text>
         )}
       </View>
-      <View style={styles.container}>
+      {/* <View style={styles.container}>
         {props?.totalPages && props?.currentPage ? (
           <CustomText
             style={styles.pageNumber}
             text={`${props.currentPage} / ${props?.totalPages}`}
           />
         ) : null}
-      </View>
+      </View> */}
     </View>
   );
 };

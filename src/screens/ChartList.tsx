@@ -1,13 +1,12 @@
 // ChartList.tsx
 
 import React, { useEffect, useState } from 'react';
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View , Dimensions } from 'react-native';
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View, Dimensions, ActivityIndicator } from 'react-native';
 import Header from './Header';
-import { topicByChart } from '../services/topicservice';
+import { topicsByLessonId } from '../services/topicservice';
 import { useRoute } from '@react-navigation/native';
 import CustomText from '../common/CustomText';
-import CheckboxComponent from '../common/CheckBoxComponent';
-import { windowHeight , windowWidth } from '../common/Dimensions';
+import { windowHeight, windowWidth } from '../common/Dimensions';
 
 interface ITopic {
   topic_name: string;
@@ -16,44 +15,46 @@ interface ITopic {
 }
 const ChartList = (props: any) => {
   const route: any = useRoute();
-  const chart_type = route?.params?.state?.chart_type;
-  console.log({ chart_type });
+  const lesson_id = route?.params?.state?.lesson_id;
+  const lesson_name = route?.params?.state?.lesson_name;
 
   const [topicList, setTopicList] = useState<any>();
   const [selectedTopics, setSelectedTopics] = useState<any>();
+  const [loading, setLoading] = useState(false);
+
 
   useEffect(() => {
-    console.log("USE EFFECT");
     getTopics();
   }, []);
 
   const getTopics = async () => {
-    console.log("GET TOPICS");
-
+    setLoading(true)
     setTopicList([])
-    topicByChart({ chart_type })
+    topicsByLessonId({ lesson_id })
       .then((response) => {
-        console.log({ data: response?.data });
         const topics = response?.data?.topics;
-        console.log({ topics });
         setTopicList(topics);
+        setLoading(false)
       })
       .catch((error) => {
-        console.log("ERROR",error);
+        setLoading(false)
+        console.log("ERROR", error);
       });
   };
 
   const readContent = (topic_id: string, topic_name: String) => {
-    console.log({ topic_id });
-
-    props.navigation.navigate('Content', { state: { topic_id, topic_name } })
+    props.navigation.navigate('Content', { state: { topic_id, topic_name, lesson_id, lesson_name } })
   }
 
   return (
     <View style={styles.mainContainer}>
-      {/* <Header title={chart_type.charAt(0).toUpperCase() + chart_type.slice(1) + ' Chart'} /> */}
+      {loading && (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#3A2D7D" />
+        </View>
+      )}
       <ScrollView>
-        <CustomText style={styles.subTopicText} text={'Subtopics'}/>
+        <CustomText style={styles.subTopicText} text={'Subtopics'} />
         {topicList?.length > 0 ? (
           <>
             {topicList.map((topic: ITopic, index: number) => (
@@ -61,18 +62,19 @@ const ChartList = (props: any) => {
                 onPress={() => { readContent(topic?.id, topic?.topic_name) }}
                 key={index}
                 style={styles.topicItem}>
-                {topic.icon ? (
-                  <Image source={{ uri: topic.icon }} style={styles.icon} />
-                ) : (
-                  <View style={[styles.icon, styles.placeholder]} />
-                )}
+                <Image
+                  source={{ uri: 'https://miro.medium.com/v2/resize:fit:750/1*D7gcAmZzNaPvMtX7VjaVUg.png' }}
+                  style={styles.icon}
+                  onError={e => {
+                    console.log("ERROR", e);
+                  }}
+                />
                 <View style={styles.topicInfo}>
                   <Text style={styles.topicName}>
                     {topic.topic_name.charAt(0).toUpperCase() + topic.topic_name.slice(1)}
                   </Text>
                 </View>
-                
-                {/* <CheckboxComponent isChecked={false} onChange={(newValue) => { }} /> */}
+
               </TouchableOpacity>
             ))}
           </>
@@ -83,13 +85,13 @@ const ChartList = (props: any) => {
 };
 
 const styles = StyleSheet.create({
-  mainContainer :{
-    width : windowWidth, 
-    height : windowHeight,
-    backgroundColor : '#fff'
+  mainContainer: {
+    width: windowWidth,
+    height: windowHeight,
+    backgroundColor: '#fff'
   },
   subTopicText: {
-    marginLeft : 16,
+    marginLeft: 16,
     marginTop: 20,
     fontSize: 14,
     fontWeight: '500',
@@ -108,7 +110,7 @@ const styles = StyleSheet.create({
   icon: {
     width: 50,
     height: 50,
-    borderRadius: 25,
+    // borderRadius: 25,
     marginRight: 10,
   },
   topicName: {
@@ -125,6 +127,16 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     borderRadius: 15,
+  },
+  loadingContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    color: '#ffffff',
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
   },
 });
 

@@ -9,6 +9,8 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { fetchLessons } from '../services/lessonService';
+import CustomText from '../common/CustomText';
+import GlobalFonts from '../common/GlobalFonts';
 
 const windowWidth: number = Dimensions.get('window').width;
 const windowHeight: number = Dimensions.get('window').height;
@@ -91,8 +93,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
   chartPatternContainer: {
-    width: windowWidth - 32,
-    // backgroundColor :'green',
+    width: (windowWidth - 32),
     height: 180,
     marginTop: 12,
   },
@@ -109,6 +110,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '500',
     color: '#000000',
+    fontFamily : GlobalFonts.RobotoMedium,
   },
   loadingContainer: {
     justifyContent: 'center',

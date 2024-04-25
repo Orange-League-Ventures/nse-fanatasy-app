@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setUser, setLoading, setError, logout }  from '../Redux/Slices/AuthSlice';
 import { updateUser } from '../services/authService';
 import { AuthState } from '../interfaces/autInterfaces';
+import GlobalFonts from '../common/GlobalFonts';
 
 const Profile = (props: any) => {
   const details = useSelector((state: AuthState) => state?.auth);
@@ -217,16 +218,15 @@ const styles = StyleSheet.create({
     color: '#03050A',
     marginBottom: 4,
     fontSize : 12,
-    fontWeight : '400',
-    fontFamily : 'Roboto',
+    fontFamily : GlobalFonts.RobotoRegular,
 
   },
   text2: {
-    color: '#03050A',
+    color: '#03050A', 
     fontSize : 14,
     fontWeight : '600',
-    fontFamily : 'Montserrat',
-    fontStyle : 'normal',
+    // fontStyle : 'normal',
+    fontFamily : GlobalFonts.MontserratSemiBold,
 
   },
   subcontainer: {
@@ -267,14 +267,14 @@ const styles = StyleSheet.create({
     borderWidth: 3,
   },
   refercode: {
-    fontFamily: 'Roboto',
+    fontFamily: GlobalFonts.RobotoRegular,
     fontWeight: '400',
     fontSize: 12,
     lineHeight: 15.6,
     color: '#717171',
   },
   code: {
-    fontFamily: 'Montserrat',
+    fontFamily: GlobalFonts.MontserratSemiBold,
     fontSize: 14,
     fontWeight: '600',
     lineHeight: 21,
@@ -282,7 +282,7 @@ const styles = StyleSheet.create({
     color: '#C35516',
   },
   detailsName: {
-    fontFamily: 'Roboto',
+    fontFamily: GlobalFonts.RobotoMedium,
     fontSize: 12,
     fontWeight: '500',
     lineHeight: 15.6,
@@ -290,7 +290,7 @@ const styles = StyleSheet.create({
     color: '#03050A',
   },
   copy: {
-    fontFamily: 'Montserrat',
+    fontFamily: GlobalFonts.MontserratSemiBold,
     fontSize: 14,
     fontWeight: '600',
     lineHeight: 21,

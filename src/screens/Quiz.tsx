@@ -3,19 +3,15 @@ import {
   Text,
   View,
   StyleSheet,
-  Button,
   TouchableOpacity,
   ActivityIndicator,
   Image,
   ScrollView,
   DimensionValue,
 } from "react-native";
-import { useNavigation, useRoute } from "@react-navigation/native";
-import axios from "axios";
+import { useRoute } from "@react-navigation/native";
 import { RadioButton } from "react-native-paper";
-import ReportPage from "./ReportPage";
 import {
-  UpdateReport,
   getQuestionBasedOnQuestionId,
   getQuestionsBasedOnQuizType,
 } from "../services/quizServices";
@@ -44,7 +40,6 @@ const Quiz = (props: any) => {
 
   const progressWidth =
     ((questionNumber + 1) / questionData?.questions?.length) * 100;
-  const navigation = useNavigation();
 
   const handlePress = () => {
     props.navigation.navigate("Play");
@@ -107,14 +102,14 @@ const Quiz = (props: any) => {
   const [isCorrect, setIsCorrect] = useState(false);
   const [correctOption, setCorrectOption] = useState<any>();
 
-  const handleOptionSelect = (optionText:any) => {
+  const handleOptionSelect = (optionText: any) => {
     setSelectedOption(optionText);
   };
 
   const handleSubmit = () => {
     const currentQuestion = questionData?.questions?.[questionNumber];
     let vv;
-    currentQuestion?.option?.map((item:any) => {
+    currentQuestion?.option?.map((item: any) => {
       // setCorrectOption(item);
       if (item.is_correct === true) {
         vv = item?.option_text;
@@ -157,12 +152,7 @@ const Quiz = (props: any) => {
             <TouchableOpacity onPress={handlePress}>
               <Image
                 source={require("../../assets/images/Vector.png")}
-                style={{
-                  width: 6,
-                  height: 10,
-                  marginLeft: 0,
-                  marginBottom: 12,
-                }} // Adjust width and height as needed
+                style={styles.backArrowImage}
               />
             </TouchableOpacity>
             <Text style={styles.stylingChanges}>Quiz</Text>
@@ -178,7 +168,12 @@ const Quiz = (props: any) => {
               style={[styles.progressBar, { width: `${progressWidth}%` }]}
             />
           </View>
-          <View style={{ maxHeight: "90%", height: dynamicHeight as DimensionValue | undefined }}>
+          <View
+            style={{
+              maxHeight: "90%",
+              height: dynamicHeight as DimensionValue | undefined,
+            }}
+          >
             <ScrollView>
               <View>
                 <Text style={styles.heading}>
@@ -191,7 +186,7 @@ const Quiz = (props: any) => {
                 </Text>
                 <View>
                   {questionData?.questions?.[currentIndex]?.option?.map(
-                    (option:any, index:any) => (
+                    (option: any, index: any) => (
                       <View
                         key={index}
                         style={{
@@ -218,7 +213,7 @@ const Quiz = (props: any) => {
                             onPress={
                               !submitted
                                 ? () => handleOptionSelect(option.option_text)
-                                : null
+                                : undefined
                             }
                             color={submitted ? "#FFFFFF" : "#C35516"}
                             style={
@@ -293,7 +288,7 @@ const Quiz = (props: any) => {
                             </Text>
                             {questionData?.questions?.[
                               currentIndex
-                            ]?.option?.map((item:any) => {
+                            ]?.option?.map((item: any) => {
                               if (item.option_text === selectedOption) {
                                 kk = item?.explaination?.explaination_text;
                               }
@@ -304,9 +299,7 @@ const Quiz = (props: any) => {
                       )}
                     </View>
                     {!isCorrect && (
-                      <View
-                        style={styles.notCorrectRightExplaination}
-                      >
+                      <View style={styles.notCorrectRightExplaination}>
                         <Text style={styles.rightAnswerText}>
                           Right Answer is
                         </Text>
@@ -340,7 +333,7 @@ const Quiz = (props: any) => {
                   styles.button,
                   { backgroundColor: selectedOption ? "#3A2D7D" : "#D4D4D4" },
                 ]}
-                onPress={selectedOption && handleSubmit}
+                onPress={selectedOption ? handleSubmit : undefined}
               >
                 <Text style={styles.buttonText}>Submit</Text>
               </TouchableOpacity>
@@ -491,6 +484,12 @@ const styles = StyleSheet.create({
     marginTop: 10,
     borderRadius: 10,
     padding: 10,
+  },
+  backArrowImage: {
+    width: 6,
+    height: 10,
+    marginLeft: 0,
+    marginBottom: 12,
   },
 });
 export default Quiz;

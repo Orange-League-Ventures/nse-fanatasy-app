@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   Image,
   ScrollView,
+  DimensionValue,
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import axios from "axios";
@@ -34,7 +35,9 @@ const Quiz = (props: any) => {
   const route: any = useRoute();
   const [quizData, setQuizData] = useState([]);
   const [currentQuizId, setCurrentQuizId] = useState("");
-  const [questionData, setQuestionData] = useState([]);
+  // const [questionData, setQuestionData] = useState([]);
+  const [questionData, setQuestionData] = useState<any>([]);
+
   const [questionNumber, setQuestionNumber] = useState(0);
   const [lastQuestion, setLastQuestion] = useState(false);
   const [score, setScore] = useState(0);
@@ -102,16 +105,16 @@ const Quiz = (props: any) => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
-  const [correctOption, setCorrectOption] = useState();
+  const [correctOption, setCorrectOption] = useState<any>();
 
-  const handleOptionSelect = (optionText) => {
+  const handleOptionSelect = (optionText:any) => {
     setSelectedOption(optionText);
   };
 
   const handleSubmit = () => {
     const currentQuestion = questionData?.questions?.[questionNumber];
     let vv;
-    currentQuestion?.option?.map((item) => {
+    currentQuestion?.option?.map((item:any) => {
       // setCorrectOption(item);
       if (item.is_correct === true) {
         vv = item?.option_text;
@@ -175,7 +178,7 @@ const Quiz = (props: any) => {
               style={[styles.progressBar, { width: `${progressWidth}%` }]}
             />
           </View>
-          <View style={{ maxHeight: "90%", height: dynamicHeight }}>
+          <View style={{ maxHeight: "90%", height: dynamicHeight as DimensionValue | undefined }}>
             <ScrollView>
               <View>
                 <Text style={styles.heading}>
@@ -188,7 +191,7 @@ const Quiz = (props: any) => {
                 </Text>
                 <View>
                   {questionData?.questions?.[currentIndex]?.option?.map(
-                    (option, index) => (
+                    (option:any, index:any) => (
                       <View
                         key={index}
                         style={{
@@ -290,7 +293,7 @@ const Quiz = (props: any) => {
                             </Text>
                             {questionData?.questions?.[
                               currentIndex
-                            ]?.option?.map((item) => {
+                            ]?.option?.map((item:any) => {
                               if (item.option_text === selectedOption) {
                                 kk = item?.explaination?.explaination_text;
                               }

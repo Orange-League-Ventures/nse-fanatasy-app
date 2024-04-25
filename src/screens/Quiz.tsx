@@ -490,6 +490,7 @@ const styles = StyleSheet.create({
     height: 10,
     marginLeft: 0,
     marginBottom: 12,
+    
   },
 });
 export default Quiz;

@@ -39,6 +39,7 @@ const ReportPage = (props:any) => {
             fontWeight: 600,
             fontFamily: 'Montserrat',
             marginBottom: 20,
+            color:'#000000'
           }}
           text="Result"
         />
@@ -55,6 +56,7 @@ const ReportPage = (props:any) => {
               marginBottom: 10,
               fontSize: 12,
               fontWeight: 500,
+              color:'#03050A'
             }}
             text="Your Final Score Is"
           />
@@ -73,6 +75,7 @@ const ReportPage = (props:any) => {
               marginBottom: 10,
               fontSize: 12,
               fontWeight: 400,
+              color:'#03050A'
             }}
             text={`${score} correct answers out of total ${totalQuestions} questions.`}
           />

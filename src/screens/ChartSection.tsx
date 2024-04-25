@@ -47,7 +47,7 @@ const ChartSection = (props: any) => {
       )}
       <View style={styles.container}>
         {
-          lessons.length > 0 ? (
+          lessons?.length > 0 ? (
             <>
               {
                 lessons.map((item: any, index: number) => (

@@ -1,24 +1,11 @@
 import React from 'react';
 import {Image, StyleSheet, useColorScheme} from 'react-native';
-import React, { useState } from 'react';
-import type { PropsWithChildren } from 'react';
-import {
-  Image,
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
 
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import { REACT_APP_BASE_LOCAL_URL } from '@env';
 import Home from './src/screens/Home';
 import LoginForm from './src/screens/Login';
 import SignupForm from './src/screens/SignUp';
@@ -32,7 +19,6 @@ import { Provider } from 'react-redux';
 import store from './src/Redux/store';
 import Content from './src/screens/Content';
 import Words from './src/screens/Words';
-import { AuthState } from './src/interfaces/autInterfaces';
 import ReportPage from './src/screens/ReportPage';
 import imageUrls from './src/constants/imageurls';
 

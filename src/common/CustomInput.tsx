@@ -1,39 +1,40 @@
-import React from 'react';
-import {TextInput, View, Text, StyleSheet} from 'react-native';
-import {Controller} from 'react-hook-form';
+import React from "react";
+import { TextInput, View, Text, StyleSheet } from "react-native";
+import { Controller } from "react-hook-form";
 
 interface Props {
   control: any;
   name: string;
   placeholder: string;
-  keyboardType?: 'default' | 'numeric' | 'email-address' | 'phone-pad';
+  keyboardType?: "default" | "numeric" | "email-address" | "phone-pad";
   secureTextEntry?: boolean;
   error: boolean;
   errorText?: string;
+  rules: object;
 }
 
 const CustomInput: React.FC<Props> = ({
   control,
   name,
   placeholder,
-  keyboardType = 'default',
+  keyboardType = "default",
   secureTextEntry = false,
   error,
-  errorText = '',
+  errorText = "",
   rules = {},
 }) => {
   return (
-    <View>
+    <View style={styles.inputs}>
       <Controller
         control={control}
-        render={({field: {onChange, onBlur, value}}) => (
+        render={({ field: { onChange, onBlur, value } }) => (
           <TextInput
             style={[styles.input, error && styles.errorInput]}
             value={value}
             onChangeText={onChange}
             onBlur={onBlur}
             placeholder={placeholder}
-            placeholderTextColor={'grey'}
+            placeholderTextColor={"grey"}
             keyboardType={keyboardType}
             secureTextEntry={secureTextEntry}
           />
@@ -41,36 +42,46 @@ const CustomInput: React.FC<Props> = ({
         name={name}
         rules={rules}
       />
-      {error && <Text style={styles.errorMsg}>{errorText}</Text>}
+      {error && (
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorMsg}>{errorText}</Text>
+        </View>
+      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   input: {
-    width: 'auto',
-    height: 'auto',
+    width: "auto",
+    height: "auto",
     borderWidth: 1,
     paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingVertical: 16,
     borderRadius: 8,
-    backgroundColor: '#ffffff',
-    color: '#000000',
-    borderColor: '#D4D4D4',
+    backgroundColor: "#ffffff",
+    color: "#000000",
+    borderColor: "#D4D4D4",
     marginTop: 8,
-    marginBottom: 8,
+    marginBottom: 3,
     fontSize: 12,
-    fontFamily: 'Roboto',
-    fontWeight: '400',
+    fontFamily: "Roboto",
+    fontWeight: "400",
   },
   errorInput: {
-    borderColor: '#CB0505',
+    borderColor: "#CB0505",
   },
   errorMsg: {
-    color: '#CB0505',
-    fontSize: 12,
+    color: "#CB0505",
+    fontSize: 10,
     marginLeft: 8,
   },
+  errorContainer: {
+    marginTop: 0, // Add margin top for the error message
+  },
+  inputs:{
+    marginBottom: 12,
+  }
 });
 
 export default CustomInput;

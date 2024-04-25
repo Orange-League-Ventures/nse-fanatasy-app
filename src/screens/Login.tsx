@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -7,16 +7,17 @@ import {
   Image,
   ImageStyle,
   ScrollView,
-} from 'react-native';
-import {useForm, Controller} from 'react-hook-form';
-import {setUser, setLoading, setToken} from '../Redux/Slices/AuthSlice';
-import {login} from '../services/authService';
-import {useDispatch, useSelector} from 'react-redux';
-import InputBox from '../common/InputBox';
-import imageUrls from '../constants/imageurls';
-import {AuthState} from '../interfaces/autInterfaces';
-import CustomButton from '../common/CustomButton';
-import CustomInput from '../common/CustomInput';
+} from "react-native";
+import { useForm, Controller } from "react-hook-form";
+import { setUser, setLoading, setToken } from "../Redux/Slices/AuthSlice";
+import { login } from "../services/authService";
+import { useDispatch, useSelector } from "react-redux";
+import InputBox from "../common/InputBox";
+import imageUrls from "../constants/imageurls";
+import { AuthState } from "../interfaces/autInterfaces";
+import CustomButton from "../common/CustomButton";
+import CustomInput from "../common/CustomInput";
+import GlobalFonts from "../common/GlobalFonts";
 
 type FormData = {
   email: string;
@@ -27,7 +28,7 @@ const LoginForm = (props: any) => {
   const {
     control,
     handleSubmit,
-    formState: {errors, isSubmitting},
+    formState: { errors, isSubmitting },
   } = useForm<FormData>();
 
   const dispatch = useDispatch();
@@ -38,20 +39,20 @@ const LoginForm = (props: any) => {
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
   };
-  const handleLogin = async (formData: {email: string; password: string}) => {
+  const handleLogin = async (formData: { email: string; password: string }) => {
     dispatch(setLoading(true));
-    const {email, password} = formData;
+    const { email, password } = formData;
     login(email, password)
-      .then(data => {
+      .then((data) => {
         dispatch(setToken(data.accessToken));
         dispatch(setUser(data.user));
-        props.navigation.navigate('Home');
+        props.navigation.navigate("Home");
       })
       .catch((error: any) => {
-        console.error('Login failed:', error);
+        console.error("Login failed:", error);
         setLoginError(
           error?.response?.data?.message ||
-            'Login failed. Please check your credentials.',
+            "Login failed. Please check your credentials."
         );
       })
       .finally(() => {
@@ -64,7 +65,7 @@ const LoginForm = (props: any) => {
       <View style={styles.loginform}>
         <View style={styles.imageContainer}>
           <Image
-            source={require('../../assets/images/nseLogo.png')}
+            source={require("../../assets/images/nseLogo.png")}
             style={styles.image as ImageStyle}
           />
         </View>
@@ -95,19 +96,19 @@ const LoginForm = (props: any) => {
             placeholder="Email Address"
             keyboardType="email-address"
             error={!!errors.email || !!loginError}
-            errorText={errors?.email?.message ?? ''}
+            errorText={errors?.email?.message ?? ""}
             rules={{
-              required: 'Email is required',
+              required: "Email is required",
               pattern: {
                 value: /^\S+@\S+$/i,
-                message: 'Invalid email address',
+                message: "Invalid email address",
               },
             }}
           />
           <View style={styles.passwordContainer}>
             <Controller
               control={control}
-              render={({field: {onChange, onBlur, value}}) => (
+              render={({ field: { onChange, onBlur, value } }) => (
                 <InputBox
                   style={styles.input}
                   placeholder="Password"
@@ -119,19 +120,23 @@ const LoginForm = (props: any) => {
                 />
               )}
               name="password"
-              rules={{required: 'Password is required!'}}
+              rules={{ required: "* Password is required!" }}
               defaultValue=""
             />
             <TouchableOpacity
               style={styles.passwordIcon}
-              onPress={handleShowPassword}>
+              onPress={handleShowPassword}
+            >
               <Image
                 source={
                   showPassword ? imageUrls.lockeyeIcon : imageUrls.openEyeIcon
                 }
-                style={{...styles.eyeIcon, tintColor: '#D4D4D4'}}
+                style={{ ...styles.eyeIcon, tintColor: "#D4D4D4" }}
               />
             </TouchableOpacity>
+            {loginError && !loading && (
+              <Text style={styles.errorMsg}>{loginError}</Text>
+            )}
           </View>
           {errors?.password && (
             <Text style={styles.errorMsg}>{errors?.password?.message}</Text>
@@ -139,7 +144,8 @@ const LoginForm = (props: any) => {
         </View>
         <View style={styles.FingerprintAndForgotPassword}>
           <TouchableOpacity
-            onPress={() => props.navigation.navigate('ForgotPassword')}>
+            onPress={() => props.navigation.navigate("ForgotPassword")}
+          >
             <Text style={styles.forgotPassword}>Forgot Password ?</Text>
           </TouchableOpacity>
         </View>
@@ -164,13 +170,10 @@ const LoginForm = (props: any) => {
   </TouchableOpacity> */}
         <CustomButton
           onPress={handleSubmit(handleLogin)}
-          title={'Log In'}
+          title={"Log In"}
           loading={loading}
-          style={{backgroundColor: '#3A2D7D', color: '#ffffff'}}
+          style={styles.newButtonStyle}
         />
-        {loginError && !loading && (
-          <Text style={styles.errorMsg}>{loginError}</Text>
-        )}
         <View style={styles.horizontalLineContainer}>
           <View style={styles.horizontalLineLeft} />
           <Text style={styles.moreOptions}>Don't have an account?</Text>
@@ -178,27 +181,32 @@ const LoginForm = (props: any) => {
         </View>
         <TouchableOpacity
           style={styles.SignupButton}
-          onPress={() => props.navigation.navigate('Signup')}>
+          onPress={() => props.navigation.navigate("Signup")}
+        >
           <Image
-            source={require('../../assets/images/EmailIcon.png')}
+            source={require("../../assets/images/google.png")}
             style={styles.emailIcon as ImageStyle}
           />
           <Text style={styles.SignupbuttonText}>Continue with Google</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.SignupButton}
-          onPress={() => props.navigation.navigate('Signup')}>
+          onPress={() => props.navigation.navigate("Signup")}
+        >
           <Image
-            source={require('../../assets/images/EmailIcon.png')}
+            source={require("../../assets/images/phone.png")}
             style={styles.emailIcon as ImageStyle}
           />
-          <Text style={styles.SignupbuttonText}>Continue with Phone Number</Text>
+          <Text style={styles.SignupbuttonText}>
+            Continue with Phone Number
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.SignupButton}
-          onPress={() => props.navigation.navigate('Signup')}>
+          onPress={() => props.navigation.navigate("Signup")}
+        >
           <Image
-            source={require('../../assets/images/EmailIcon.png')}
+            source={require("../../assets/images/email.png")}
             style={styles.emailIcon as ImageStyle}
           />
           <Text style={styles.SignupbuttonText}>Signup with Email</Text>
@@ -210,12 +218,12 @@ const LoginForm = (props: any) => {
 
 const styles = StyleSheet.create({
   container: {
-    display: 'flex',
+    display: "flex",
     flex: 1,
-    width: 'auto',
-    height: 'auto',
-    backgroundColor: '#ffffff',
-    justifyContent: 'center',
+    width: "auto",
+    height: "auto",
+    backgroundColor: "#ffffff",
+    justifyContent: "center",
     padding: 0,
   },
   loginform: {
@@ -225,7 +233,7 @@ const styles = StyleSheet.create({
   imageContainer: {
     marginHorizontal: 60,
     marginBottom: 20,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   image: {
     width: 204,
@@ -233,103 +241,102 @@ const styles = StyleSheet.create({
   },
   inputcontainer: {
     marginTop: 16,
-    marginBottom: 12,
+    marginBottom: 8,
   },
   input: {
-    width: 'auto',
-    height: 'auto',
+    width: "auto",
+    height: "auto",
     borderWidth: 1,
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: 16,
     borderRadius: 8,
-    backgroundColor: '#ffffff',
-    color: '#000000',
-    borderColor: '#D4D4D4',
-    // marginBottom: 12,
+    backgroundColor: "#ffffff",
+    color: "#000000",
+    borderColor: "#D4D4D4",
+    // marginBottom: 8,
     fontSize: 12,
-    fontFamily: 'Roboto',
-    fontWeight: '400',
+    fontFamily: "Roboto",
+    fontWeight: "400",
   },
   FingerprintAndForgotPassword: {
-    flexDirection: 'row', // Distribute space between children
-    alignItems: 'center', // Align children along the cross axis (vertically)
-    justifyContent: 'flex-end',
+    flexDirection: "row", // Distribute space between children
+    alignItems: "center", // Align children along the cross axis (vertically)
     marginBottom: 20,
     marginRight: 10,
   },
   forgotPassword: {
-    fontFamily: 'Roboto',
-    fontWeight: '400',
+    fontFamily: "Roboto",
+    fontWeight: "400",
     fontSize: 12,
-    color: '#E66F25',
+    color: "#E66F25",
   },
   loginButton: {
-    backgroundColor: '#3A2D7D',
-    width: 'auto',
-    height: 'auto',
+    backgroundColor: "#3A2D7D",
+    width: "auto",
+    height: "auto",
     borderWidth: 1,
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderRadius: 8,
-    color: '#000000',
-    borderColor: '#D4D4D4',
+    color: "#000000",
+    borderColor: "#D4D4D4",
     marginBottom: 12,
     fontSize: 12,
-    fontFamily: 'Roboto',
-    fontWeight: '100',
+    fontFamily: "Roboto",
+    fontWeight: "100",
   },
   SignupButton: {
-    backgroundColor: '#ffffff',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 'auto',
-    height: 'auto',
+    backgroundColor: "#ffffff",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "auto",
+    height: "auto",
     borderWidth: 1,
-    color: '#03050A',
+    color: "#03050A",
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: 10,
     borderRadius: 8,
-    borderColor: '#717171',
+    borderColor: "#717171",
     marginBottom: 12,
     fontSize: 12,
-    fontFamily: 'Roboto',
-    fontWeight: '500',
+    fontFamily: "Roboto",
+    fontWeight: "500",
   },
   buttonText: {
-    fontFamily: 'Roboto',
-    fontWeight: '500',
+    fontFamily: "Roboto",
+    fontWeight: "500",
     fontSize: 16,
-    textAlign: 'center',
-    color: '#ffffff',
+    textAlign: "center",
+    color: "#ffffff",
   },
   SignupbuttonText: {
-    fontFamily: 'Roboto',
-    fontWeight: '700',
+    fontFamily: "Roboto",
+    fontWeight: "500",
     fontSize: 12,
-    textAlign: 'center',
-    color: '#03050A',
+    textAlign: "center",
+    color: "#03050A",
   },
   errorMsg: {
-    color: '#CB0505',
+    color: "#CB0505",
     fontSize: 10,
     marginVertical: 5,
   },
   moreOptions: {
-    color: '#717171',
-    fontFamily: 'Roboto',
-    fontWeight: '400',
+    color: "#717171",
+    fontFamily: "Roboto",
+    fontWeight: "400",
     fontSize: 12,
     marginVertical: 32,
-    textAlign: 'center',
+    textAlign: "center",
   },
   passwordContainer: {
-    position: 'relative',
+    position: "relative",
   },
   passwordIcon: {
-    position: 'absolute',
+    position: "absolute",
     right: 10,
-    top: '20%',
+    top: "20%",
   },
   eyeIcon: {
     width: 25,
@@ -341,30 +348,30 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   horizontalLineContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginVertical: 0, // Adjust as needed
   },
   horizontalLineLeft: {
     flex: 1,
     height: 1,
-    backgroundColor: '#717171',
+    backgroundColor: "#717171",
     marginRight: 10,
   },
   horizontalLineRight: {
     flex: 1,
     height: 1,
-    backgroundColor: '#717171',
+    backgroundColor: "#717171",
     marginLeft: 10,
   },
   loadingButton: {
     opacity: 0.7,
   },
   loadingContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    color: '#ffffff',
-    position: 'absolute',
+    justifyContent: "center",
+    alignItems: "center",
+    color: "#ffffff",
+    position: "absolute",
     top: 0,
     bottom: 0,
     left: 0,
@@ -373,6 +380,11 @@ const styles = StyleSheet.create({
   loadingImage: {
     width: 100, // Adjust the width and height of the image as needed
     height: 100,
+  },
+  newButtonStyle: {
+    backgroundColor: "#3A2D7D",
+    color: "#ffffff",
+    fontFamily: GlobalFonts.RobotoMedium,
   },
 });
 

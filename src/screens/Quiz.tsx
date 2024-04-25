@@ -1,19 +1,25 @@
-import {useEffect, useState} from 'react';
-import {Text, View, StyleSheet, Button, TouchableOpacity, ActivityIndicator} from 'react-native';
-import {useNavigation, useRoute} from '@react-navigation/native';
-import axios from 'axios';
-import {RadioButton} from 'react-native-paper';
-import ReportPage from './ReportPage';
+import { useEffect, useState } from "react";
 import {
-  UpdateReport,
+  Text,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  ActivityIndicator,
+  Image,
+  ScrollView,
+  DimensionValue,
+} from "react-native";
+import { useRoute } from "@react-navigation/native";
+import { RadioButton } from "react-native-paper";
+import {
   getQuestionBasedOnQuestionId,
   getQuestionsBasedOnQuizType,
-} from '../services/quizServices';
-import {Dimensions, Platform} from 'react-native';
+} from "../services/quizServices";
+import { Dimensions, Platform } from "react-native";
 
-const windowWidth = Dimensions.get('window').width;
+const windowWidth = Dimensions.get("window").width;
 
-const {height} = Dimensions.get('window');
+const { height } = Dimensions.get("window");
 
 interface IProps {
   openQuiz: any;
@@ -24,18 +30,19 @@ interface IProps {
 const Quiz = (props: any) => {
   const route: any = useRoute();
   const [quizData, setQuizData] = useState([]);
-  const [currentQuizId, setCurrentQuizId] = useState('');
-  const [questionData, setQuestionData] = useState([]);
+  const [currentQuizId, setCurrentQuizId] = useState("");
+  // const [questionData, setQuestionData] = useState([]);
+  const [questionData, setQuestionData] = useState<any>([]);
+
   const [questionNumber, setQuestionNumber] = useState(0);
   const [lastQuestion, setLastQuestion] = useState(false);
   const [score, setScore] = useState(0);
 
   const progressWidth =
     ((questionNumber + 1) / questionData?.questions?.length) * 100;
-  const navigation = useNavigation();
 
   const handlePress = () => {
-    props.navigation.navigate('Play');
+    props.navigation.navigate("Play");
   };
 
   const [loading, setLoading] = useState(false);
@@ -44,14 +51,14 @@ const Quiz = (props: any) => {
     const fetchQuestionsBasedOnQuizType = () => {
       setLoading(true);
       getQuestionsBasedOnQuizType(route?.params?.state?.quizTypes)
-        .then(response => {
+        .then((response) => {
           setQuizData(response?.data.quiz);
           setCurrentQuizId(response?.data.quiz[0]?.id);
           setLoading(false);
         })
-        .catch(error => {
+        .catch((error) => {
           setLoading(false);
-          console.error('Error fetching:', error.message);
+          console.error("Error fetching:", error.message);
         });
     };
     fetchQuestionsBasedOnQuizType();
@@ -61,27 +68,28 @@ const Quiz = (props: any) => {
     const fetchQuestionBasedOnQuestonId = () => {
       setQuestionLoading(true);
       getQuestionBasedOnQuestionId(currentQuizId)
-        .then(response => {
+        .then((response) => {
           setQuestionData(response?.data);
-          setLoading(false);
-        })
-        .catch(error => {
           setQuestionLoading(false);
-          console.error('Error fetching:', error.message);
+        })
+        .catch((error) => {
+          setQuestionLoading(false);
+          console.error("Error fetching:", error.message);
         });
     };
     fetchQuestionBasedOnQuestonId();
   }, [currentQuizId]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const handleNextQuestion = () => {
+    setSelectedOption(null);
     if (currentIndex < questionData?.questions?.length - 1) {
       setCurrentIndex(currentIndex + 1);
-      setCurrentQuizId(quizData[0]?.['id']);
+      setCurrentQuizId(quizData[0]?.["id"]);
       setQuestionNumber(questionNumber + 1); // Reset question index for the new quiz
     } else {
-      props.navigation.navigate('ReportPage', {
+      props.navigation.navigate("ReportPage", {
         score: score,
-        quizId: quizData[0]?.['id'],
+        quizId: quizData[0]?.["id"],
         quizType: route?.params?.state?.quizTypes,
         totalQuestions: questionData?.questions?.length,
       });
@@ -92,19 +100,20 @@ const Quiz = (props: any) => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
-  const [correctOption, setCorrectOption] = useState();
+  const [correctOption, setCorrectOption] = useState<any>();
 
-  const handleOptionSelect = optionText => {
+  const handleOptionSelect = (optionText: any) => {
     setSelectedOption(optionText);
   };
 
   const handleSubmit = () => {
     const currentQuestion = questionData?.questions?.[questionNumber];
     let vv;
-    currentQuestion?.option?.map(item => {
-      setCorrectOption(item);
+    currentQuestion?.option?.map((item: any) => {
+      // setCorrectOption(item);
       if (item.is_correct === true) {
         vv = item?.option_text;
+        setCorrectOption(item);
       }
     });
     if (selectedOption === vv) {
@@ -118,16 +127,16 @@ const Quiz = (props: any) => {
 
   let dynamicHeight;
 
-  if (Platform.OS === 'ios') {
+  if (Platform.OS === "ios") {
     if (height < 700) {
       // Assuming iPhone SE (3rd generation)
-      dynamicHeight = '75%';
+      dynamicHeight = "75%";
     } else {
       // Assuming iPhone 15 or similar
-      dynamicHeight = '80%';
+      dynamicHeight = "80%";
     }
   } else {
-    dynamicHeight = '75%'; // For Android or other platforms
+    dynamicHeight = "75%"; // For Android or other platforms
   }
 
   return (
@@ -139,183 +148,193 @@ const Quiz = (props: any) => {
       )}
       {!loading ? (
         <View style={styles.top}>
-          <View
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-            }}>
-            <Text style={styles.backSymbol} onPress={handlePress}>
-              {'<'}
-            </Text>
+          <View style={styles.mainBack}>
+            <TouchableOpacity onPress={handlePress}>
+              <Image
+                source={require("../../assets/images/Vector.png")}
+                style={styles.backArrowImage}
+              />
+            </TouchableOpacity>
             <Text style={styles.stylingChanges}>Quiz</Text>
             <Text></Text>
           </View>
-          <View
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              marginBottom: 20,
-            }}>
+          <View style={styles.mainQuestion}>
             <Text>
               Q.{questionNumber + 1}/{questionData?.questions?.length}
             </Text>
           </View>
           <View style={styles.container}>
-            <View style={[styles.progressBar, {width: `${progressWidth}%`}]} />
+            <View
+              style={[styles.progressBar, { width: `${progressWidth}%` }]}
+            />
           </View>
-          <View style={{maxHeight: '90%', height: dynamicHeight}}>
-            <Text style={styles.heading}>
-              <Text style={styles.headingText}>Situation: </Text>
-              {questionData?.questions?.[currentIndex]?.['sitituation']}
-            </Text>
-            <Text style={styles.questionText}>
-              Q{questionNumber + 1}.{' '}
-              {questionData?.questions?.[currentIndex]?.['question_text']}
-            </Text>
-            <View>
-              {questionData?.questions?.[currentIndex]?.option?.map(
-                (option, index) => (
-                  <View
-                    key={index}
-                    style={{
-                      ...(selectedOption === option.option_text && submitted
-                        ? {
-                            backgroundColor: isCorrect ? '#007A00' : '#CB0505',
-                            borderRadius: 10,
-                          }
-                        : selectedOption === option.option_text
-                        ? {backgroundColor: '#E7E7F7', borderRadius: 10}
-                        : {}),
-                    }}>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        padding: 10,
-                      }}>
-                      <RadioButton.Android
-                        value={option.option_text}
-                        status={
-                          selectedOption === option.option_text
-                            ? 'checked'
-                            : 'unchecked'
-                        }
-                        onPress={() => handleOptionSelect(option.option_text)}
-                        color={submitted ? 'white' : '#C35516'}
-                        style={
-                          selectedOption === option.option_text
-                            ? {backgroundColor: isCorrect ? 'green' : 'green'}
-                            : {}
-                        }
-                      />
-                      <Text style={{color: '#03050A'}}>
-                        {option.option_text}
-                      </Text>
-                    </View>
-                  </View>
-                ),
-              )}
-            </View>
-            {submitted && (
+          <View
+            style={{
+              maxHeight: "90%",
+              height: dynamicHeight as DimensionValue | undefined,
+            }}
+          >
+            <ScrollView>
               <View>
-                <View
-                  style={{
-                    backgroundColor: isCorrect
-                      ? 'rgba(0, 122, 0, 0.1)'
-                      : '#FFE6E6',
-                    marginTop: 10,
-                    borderRadius: 10,
-                    padding: 10,
-                  }}>
-                  <Text
-                    style={{
-                      textAlign: 'center',
-                      color: isCorrect ? '#007A00' : '#CB0505',
-                      fontWeight: '600',
-                      fontSize: 14,
-                    }}>
-                    {isCorrect ? 'Correct!' : 'Well Tried !!'}
-                  </Text>
-                  {isCorrect && (
-                    <View>
-                      <Text
+                <Text style={styles.heading}>
+                  <Text style={styles.headingText}>Situation: </Text>
+                  {questionData?.questions?.[currentIndex]?.["sitituation"]}
+                </Text>
+                <Text style={styles.questionText}>
+                  Q{questionNumber + 1}.{" "}
+                  {questionData?.questions?.[currentIndex]?.["question_text"]}
+                </Text>
+                <View>
+                  {questionData?.questions?.[currentIndex]?.option?.map(
+                    (option: any, index: any) => (
+                      <View
+                        key={index}
                         style={{
-                          color: '#03050A',
-                          fontWeight: '500',
-                          fontSize: 12,
-                        }}>
-                        Explanation
-                      </Text>
-                      <Text>
-                        {correctOption?.explaination?.explaination_text}
-                      </Text>
-                    </View>
-                  )}
-                  {!isCorrect && (
-                    <View>
-                      <View>
-                        <Text
-                          style={{
-                            color: '#03050A',
-                            fontWeight: '500',
-                            fontSize: 12,
-                          }}>
-                          Explanation
-                        </Text>
-                        {questionData?.questions?.[0]?.option?.map(item => {
-                          if (item.option_text === selectedOption) {
-                            kk = item?.explaination?.explaination_text;
-                          }
-                        })}
-                        <Text>{kk}</Text>
+                          ...(selectedOption === option.option_text && submitted
+                            ? {
+                                backgroundColor: isCorrect
+                                  ? "#007A00"
+                                  : "#CB0505",
+                                borderRadius: 10,
+                              }
+                            : selectedOption === option.option_text
+                            ? { backgroundColor: "#E7E7F7", borderRadius: 10 }
+                            : {}),
+                        }}
+                      >
+                        <View style={styles.option}>
+                          <RadioButton.Android
+                            value={option.option_text}
+                            status={
+                              selectedOption === option.option_text
+                                ? "checked"
+                                : "unchecked"
+                            }
+                            onPress={
+                              !submitted
+                                ? () => handleOptionSelect(option.option_text)
+                                : undefined
+                            }
+                            color={submitted ? "#FFFFFF" : "#C35516"}
+                            style={
+                              selectedOption === option.option_text
+                                ? {
+                                    backgroundColor: isCorrect
+                                      ? "green"
+                                      : "green",
+                                  }
+                                : {}
+                            }
+                          />
+                          <Text
+                            style={{
+                              color:
+                                submitted &&
+                                selectedOption === option.option_text
+                                  ? "#FFFFFF"
+                                  : "#03050A",
+                            }}
+                          >
+                            {option.option_text}
+                          </Text>
+                        </View>
                       </View>
-                    </View>
+                    )
                   )}
                 </View>
-                {!isCorrect && (
-                  <View
-                    style={{
-                      backgroundColor: 'rgba(0, 122, 0, 0.1)',
-                      marginTop: 10,
-                      borderRadius: 10,
-                      padding: 10,
-                    }}>
-                    <Text
+                {submitted && (
+                  <View>
+                    <View
                       style={{
-                        textAlign: 'center',
-                        color: '#007A00',
-                        fontWeight: '600',
-                        fontSize: 14,
-                      }}>
-                      Right Answer is
-                    </Text>
-                    <Text
-                      style={{
-                        color: '#03050A',
-                        fontWeight: '500',
-                        fontSize: 12,
-                      }}>
-                      Explaination
-                    </Text>
-                    <Text>
-                      {correctOption?.explaination?.explaination_text}
-                    </Text>
+                        backgroundColor: isCorrect
+                          ? "rgba(0, 122, 0, 0.1)"
+                          : "#FFE6E6",
+                        marginTop: 10,
+                        borderRadius: 10,
+                        padding: 10,
+                      }}
+                    >
+                      <Text
+                        style={{
+                          textAlign: "center",
+                          color: isCorrect ? "#007A00" : "#CB0505",
+                          fontWeight: "600",
+                          fontSize: 14,
+                        }}
+                      >
+                        {isCorrect ? "Correct!" : "Well Tried !!"}
+                      </Text>
+                      {isCorrect && (
+                        <View>
+                          <Text style={styles.correctExplaination}>
+                            Explanation
+                          </Text>
+                          <Text style={styles.correctOptionText}>
+                            {correctOption?.option_text}
+                          </Text>
+                          <Text style={styles.explaination}>
+                            {correctOption?.explaination?.explaination_text}
+                          </Text>
+                        </View>
+                      )}
+                      {!isCorrect && (
+                        <View>
+                          <View>
+                            <Text style={styles.wrongAnswerExplaination}>
+                              Explanation
+                            </Text>
+                            <Text style={styles.wrongAnwerSelectedOption}>
+                              {selectedOption}
+                            </Text>
+                            {questionData?.questions?.[
+                              currentIndex
+                            ]?.option?.map((item: any) => {
+                              if (item.option_text === selectedOption) {
+                                kk = item?.explaination?.explaination_text;
+                              }
+                            })}
+                            <Text style={styles.explaination}>{kk}</Text>
+                          </View>
+                        </View>
+                      )}
+                    </View>
+                    {!isCorrect && (
+                      <View style={styles.notCorrectRightExplaination}>
+                        <Text style={styles.rightAnswerText}>
+                          Right Answer is
+                        </Text>
+                        <Text style={styles.wrongRightExplaination}>
+                          Explaination
+                        </Text>
+                        <Text style={styles.wrongRightOption}>
+                          {correctOption?.option_text}
+                        </Text>
+                        <Text style={styles.explaination}>
+                          {correctOption?.explaination?.explaination_text}
+                        </Text>
+                      </View>
+                    )}
                   </View>
                 )}
               </View>
-            )}
+            </ScrollView>
           </View>
           <View>
             {submitted ? (
               <TouchableOpacity
                 style={styles.button}
-                onPress={handleNextQuestion}>
+                onPress={handleNextQuestion}
+              >
                 <Text style={styles.buttonText}>Next</Text>
               </TouchableOpacity>
             ) : (
-              <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+              <TouchableOpacity
+                style={[
+                  styles.button,
+                  { backgroundColor: selectedOption ? "#3A2D7D" : "#D4D4D4" },
+                ]}
+                onPress={selectedOption ? handleSubmit : undefined}
+              >
                 <Text style={styles.buttonText}>Submit</Text>
               </TouchableOpacity>
             )}
@@ -339,70 +358,139 @@ const Quiz = (props: any) => {
 
 const styles = StyleSheet.create({
   buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
   },
   button: {
-    backgroundColor: '#3A2D7D',
+    backgroundColor: "#3A2D7D",
     width: windowWidth * 0.9, // Adjust percentage as needed
     padding: 15,
     borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   buttonText: {
-    color: 'white',
+    color: "#FFFFFF",
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   container: {
     height: 10,
-    backgroundColor: '#F5F5F7',
+    backgroundColor: "#F5F5F7",
     borderRadius: 5,
-    overflow: 'hidden',
+    overflow: "hidden",
     marginBottom: 20,
   },
   progressBar: {
-    height: '100%',
-    backgroundColor: '#C35516',
+    height: "100%",
+    backgroundColor: "#C35516",
   },
   stylingChanges: {
     marginBottom: 20,
-    display: 'flex',
-    color: '#000000',
+    display: "flex",
+    color: "#000000",
     fontSize: 14,
-    fontWeight: '600',
-  },
-  backSymbol: {
-    fontSize: 20,
-    color: '#03050A',
-    height: 25,
+    fontWeight: "600",
   },
   loadingContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    color: '#ffffff',
-    position: 'absolute',
+    justifyContent: "center",
+    alignItems: "center",
+    color: "#ffffff",
+    position: "absolute",
     top: 0,
     bottom: 0,
     left: 0,
     right: 0,
   },
-  heading:{
-    paddingBottom:10
+  heading: {
+    paddingBottom: 10,
   },
-  headingText:{
+  headingText: {
     fontSize: 14,
-    fontWeight: '600'
+    fontWeight: "600",
   },
-  questionText:{
-    color: '#03050A', 
-    fontSize: 14, 
-    fontWeight: '600',
-    fontFamily:'Montserrat'
+  questionText: {
+    color: "#03050A",
+    fontSize: 14,
+    fontWeight: "600",
+    fontFamily: "Montserrat",
+    marginBottom: 10,
   },
-  top:{
-    padding: 20
-  }
+  top: {
+    padding: 20,
+  },
+  mainBack: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  mainQuestion: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 20,
+  },
+  option: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 10,
+    marginBottom: 10,
+  },
+  correctExplaination: {
+    color: "#03050A",
+    fontWeight: "500",
+    fontSize: 12,
+    marginBottom: 10,
+  },
+  explaination: {
+    color: "#03050A",
+    fontWeight: "400",
+    fontSize: 10,
+    fontFamily: "Roboto",
+  },
+  correctOptionText: {
+    marginBottom: 10,
+    color: "#007A00",
+  },
+  wrongAnswerExplaination: {
+    color: "#03050A",
+    fontWeight: "500",
+    fontSize: 12,
+    marginBottom: 10,
+  },
+  wrongAnwerSelectedOption: {
+    marginBottom: 10,
+    color: "#CB0505",
+  },
+  wrongRightExplaination: {
+    color: "#03050A",
+    fontWeight: "500",
+    fontSize: 12,
+    marginBottom: 10,
+  },
+  wrongRightOption: {
+    marginBottom: 10,
+    color: "#007A00",
+  },
+  rightAnswerText: {
+    textAlign: "center",
+    color: "#007A00",
+    fontWeight: "600",
+    fontSize: 14,
+  },
+  notCorrectRightExplaination: {
+    backgroundColor: "rgba(0, 122, 0, 0.1)",
+    marginTop: 10,
+    borderRadius: 10,
+    padding: 10,
+  },
+  backArrowImage: {
+    width: 6,
+    height: 10,
+    marginLeft: 0,
+    marginBottom: 12,
+    
+  },
 });
 export default Quiz;

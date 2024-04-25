@@ -136,7 +136,7 @@ function App(): React.JSX.Element {
         <Stack.Screen
           name="Welcome"
           component={Welcome}
-          options={{ title: 'Welcome' }}
+          options={{ headerShown : false}}
         />
         {/* <Stack.Screen name="Signup" component={SignupForm} /> */}
         {/* <Stack.Screen name="NewScreen" component={Quiz} /> */}

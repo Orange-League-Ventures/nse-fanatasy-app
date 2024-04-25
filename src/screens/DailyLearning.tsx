@@ -1,5 +1,6 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
+import GlobalFonts from '../common/GlobalFonts';
 
 const DailyLearning = () => {
   return (
@@ -37,13 +38,12 @@ const styles = StyleSheet.create({
   text1: {
     color: 'black',
     fontSize : 14, 
-    fontWeight: '500',
-    fontFamily : 'Roboto-Medium',
+    fontFamily : GlobalFonts.RobotoMedium,
   },
   text2: {
     color: 'black',
     fontSize : 14,
-    fontFamily : 'Roboto-Regular',
+    fontFamily : GlobalFonts.RobotoRegular,
   },
 });
 

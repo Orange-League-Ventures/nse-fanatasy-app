@@ -1,6 +1,7 @@
 import React from 'react'
 import { Image, StyleSheet,  View, Dimensions , Text, TouchableOpacity} from 'react-native'
 import CustomText from '../common/CustomText'
+import GlobalFonts from '../common/GlobalFonts';
 
 const windowWidth : number = Dimensions.get('window').width;
 const Dictionary = (props: any) => {
@@ -26,8 +27,8 @@ const styles = StyleSheet.create({
     headingText: {
         marginTop: 20,
         fontSize: 14,
-        color:'#03050A',
-        fontFamily : 'Roboto-Medium',
+        color:'#03050A', 
+        fontFamily : GlobalFonts.RobotoMedium,
     },
     imageContainer: {
         marginVertical: 12,  

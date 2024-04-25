@@ -12,6 +12,7 @@ import {AuthState} from '../interfaces/autInterfaces';
 import imageUrls from '../constants/imageurls';
 import Button from '../common/Button';
 import {windowWidth} from '../common/Dimensions';
+import GlobalFonts from '../common/GlobalFonts';
 
 const Welcome = (props: any) => {
   const details = useSelector((state: AuthState) => state?.auth);
@@ -52,7 +53,7 @@ const Welcome = (props: any) => {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    // backgroundColor: 'red',
+    backgroundColor: '#ffffff',
   },
   welcome: {
     display: 'flex',
@@ -84,7 +85,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
   textinfo: {
-    fontFamily: 'Montserrat-Bold',
+    fontFamily: GlobalFonts.MontserratSemiBold,
     fontSize: 14,
     lineHeight: 21,
     color: '#007A00',
@@ -99,19 +100,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   welcomeText: {
-    fontFamily: 'Montserrat-Bold',
+    fontFamily: GlobalFonts.MontserratSemiBold,
     fontSize: 14,
     lineHeight: 21,
     color: '#03050A',
   },
   userNameText: {
-    fontFamily: 'Montserrat-Bold',
+    fontFamily: GlobalFonts.MontserratSemiBold,
     fontSize: 14,
     lineHeight: 21,
     color: '#E66F25',
   },
   descriptionText: {
-    fontFamily: 'Roboto-Regular',
+    fontFamily: GlobalFonts.RobotoRegular,
     fontSize: 12,
     lineHeight: 15.6,
     color: '#717171',
@@ -124,7 +125,7 @@ const styles = StyleSheet.create({
   },
 
   textStyle : {
-    fontFamily :'Roboto-Medium',
+    fontFamily :GlobalFonts.RobotoMedium,
     fontSize : 14,
   },
 

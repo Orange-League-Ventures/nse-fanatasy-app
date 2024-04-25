@@ -6,12 +6,9 @@ import {
   Text,
   TouchableOpacity,
   Dimensions,
-  ScrollView,
   ActivityIndicator,
 } from 'react-native';
-import CustomText from '../common/CustomText';
 import { fetchLessons } from '../services/lessonService';
-import Button from '../common/Button';
 
 const windowWidth: number = Dimensions.get('window').width;
 const windowHeight: number = Dimensions.get('window').height;

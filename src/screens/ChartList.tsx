@@ -6,7 +6,6 @@ import Header from './Header';
 import { topicsByLessonId } from '../services/topicservice';
 import { useRoute } from '@react-navigation/native';
 import CustomText from '../common/CustomText';
-import CheckboxComponent from '../common/CheckBoxComponent';
 import { windowHeight, windowWidth } from '../common/Dimensions';
 
 interface ITopic {

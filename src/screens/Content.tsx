@@ -9,13 +9,8 @@ import {
   ScrollView,
   ActivityIndicator,
 } from 'react-native';
-import { contentByTopic } from '../services/contentService';
 import { useRoute } from '@react-navigation/native';
 import RenderHtml from 'react-native-render-html';
-import { windowHeight, windowWidth } from '../common/Dimensions';
-
-import Header from './Header';
-import CustomText from '../common/CustomText';
 import { contentByTopicId } from '../services/topicservice';
 
 const Content = (props: any) => {
@@ -23,8 +18,8 @@ const Content = (props: any) => {
   const { width } = useWindowDimensions();
 
   const topic_id = route?.params?.state?.topic_id;
-  const lesson_id = route?.params?.state?.lesson_id;
-  const lesson_name = route?.params?.state?.lesson_name;
+  // const lesson_id = route?.params?.state?.lesson_id;
+  const topic_name = route?.params?.state?.topic_name;
 
 
   const [contentItem, setContentItem] = useState<any>();
@@ -64,12 +59,13 @@ const Content = (props: any) => {
         <View style={styles.container}>
           {contentItem && (
             <>
-              {contentItem.content_image ? (
-                <Image
-                  source={{ uri: contentItem.content_image }}
-                  style={styles.image}
-                />
-              ) : null}
+              {/* {contentItem.content_image ? ( */}
+              <Image
+                source={{ uri: 'https://image.binance.vision/editor-uploads/6da65f0b97a2435f9d12504d3a65df27.png' }}
+                style={styles.image}
+              />
+              {/* ) : null} */}
+              <Text style={styles.topicName}>{topic_name}</Text>
               <RenderHtml
                 contentWidth={width}
                 source={{ html: contentItem?.content_value }}
@@ -77,7 +73,7 @@ const Content = (props: any) => {
               />
             </>
           )}
-          {(contentItem && contentItem?.content_value.length > (windowHeight - 50)) && <View style={{ ...styles.footer }}>
+          {/* {(contentItem && contentItem?.content_value.length > (windowHeight - 50)) && <View style={{ ...styles.footer }}>
             <TouchableOpacity
               style={styles.nextButton}
               onPress={() => {
@@ -86,7 +82,7 @@ const Content = (props: any) => {
             >
               <Text style={styles.buttonText}>Completed</Text>
             </TouchableOpacity>
-          </View>}
+          </View>} */}
         </View>
       </ScrollView>
       {/* {(contentItem && contentItem?.content_value.length < (windowHeight - 50)) && <View style={{ ...styles.footer, marginHorizontal: 16 }}>
@@ -133,6 +129,12 @@ const styles = StyleSheet.create({
     bottom: 20,
     left: 0,
     right: 0,
+  },
+  topicName: {
+    marginTop: 20,
+    color: '#03050A',
+    fontWeight: '600',
+    fontSize: 14
   },
   nextButton: {
     width: '100%',

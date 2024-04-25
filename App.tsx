@@ -147,6 +147,13 @@ function App(): React.JSX.Element {
               route.params?.state.lesson_name.charAt(0).toUpperCase() +
               route.params?.state.lesson_name.slice(1)
             ,
+            // headerTitleStyle: {
+            //   fontFamily: 'Montserrat',
+            //   color: '#03050A',
+            //   fontSize: 14,
+            //   fontWeight: '600'
+            // },
+            headerTitleAlign: 'center'
           })}
           component={ChartList}
         />
@@ -162,6 +169,14 @@ function App(): React.JSX.Element {
             title:
               route.params?.state.topic_name.charAt(0).toUpperCase() +
               route.params?.state.topic_name.slice(1),
+            // headerTitleStyle: {
+            //   fontFamily: 'Montserrat',
+            //   color: '#03050A',
+            //   fontSize: 14,
+            //   fontWeight: '600'
+            // },
+            headerTitleAlign: 'center'
+
           })}
           component={Content}
         />

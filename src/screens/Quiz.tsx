@@ -70,7 +70,7 @@ const Quiz = (props: any) => {
       getQuestionBasedOnQuestionId(currentQuizId)
         .then((response) => {
           setQuestionData(response?.data);
-          setLoading(false);
+          setQuestionLoading(false);
         })
         .catch((error) => {
           setQuestionLoading(false);

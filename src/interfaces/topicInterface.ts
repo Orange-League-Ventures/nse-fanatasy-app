@@ -1,3 +1,3 @@
 export interface ITopicReq{
-    chart_type:string;
+    lesson_id:string;
 }

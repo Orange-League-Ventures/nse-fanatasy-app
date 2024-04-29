@@ -147,7 +147,7 @@ const Profile = (props: any) => {
                             value={userData?.name}
                             onChangeText={(text) => handleChange("name", text)}
                             placeholder="Update your name"
-                            style={styles.textBorderStyles}
+                            style={[styles.textBorderStyles,styles.detailsName]}
                           />
                           <Text style={styles.refercode}>Name</Text>
                         </View>
@@ -193,6 +193,7 @@ const Profile = (props: any) => {
                           handleChange("phone_number", text)
                         }
                         placeholder="Update your MobileNumber"
+                        style={styles.detailsName}
                       />
                     ) : (
                       <Text style={styles.detailsName}>
@@ -219,6 +220,7 @@ const Profile = (props: any) => {
                         value={userData.email}
                         onChangeText={(text) => handleChange("email", text)}
                         placeholder="Update your email"
+                        style={styles.detailsName}
                       />
                     ) : (
                       <Text style={styles.detailsName}>{userData?.email}</Text>
@@ -246,6 +248,7 @@ const Profile = (props: any) => {
                         value={userData?.password}
                         onChangeText={(text) => handleChange("password", text)}
                         placeholder="Update your password"
+                        style={styles.detailsName}
                       />
                     ) : (
                       <Text style={styles.detailsName}>********</Text>

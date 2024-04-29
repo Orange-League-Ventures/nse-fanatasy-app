@@ -160,7 +160,7 @@ const Quiz = (props: any) => {
             <Text></Text>
           </View>
           <View style={styles.mainQuestion}>
-            <Text>
+            <Text style={{color:"#000000",fontFamily:GlobalFonts.RobotoRegular,fontSize:12}}>
               Q.{questionNumber + 1}/{questionData?.questions?.length}
             </Text>
           </View>

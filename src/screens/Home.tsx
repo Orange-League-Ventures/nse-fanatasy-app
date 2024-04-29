@@ -12,7 +12,7 @@ const Home = (props: any) => {
     <ScrollView style={styles.container}>
       <Header isHome={true} isTab={true} />
       <Profile isHome={true} />
-      <DailyChallanges />
+      <DailyChallanges navigation={props.navigation}/>
       <DailyLearning />
     </ScrollView>
   )

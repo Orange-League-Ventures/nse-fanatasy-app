@@ -1,29 +1,29 @@
-import React from 'react';
-import {Image, StyleSheet, useColorScheme} from 'react-native';
+import React from "react";
+import { Image, StyleSheet, useColorScheme } from "react-native";
 
-import { Colors } from 'react-native/Libraries/NewAppScreen';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Colors } from "react-native/Libraries/NewAppScreen";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-import Home from './src/screens/Home';
-import LoginForm from './src/screens/Login';
-import SignupForm from './src/screens/SignUp';
-import Welcome from './src/screens/Welcome';
-import Profile from './src/screens/Profile';
-import LearnSection from './src/screens/Learn.Section';
-import ChartList from './src/screens/ChartList';
-import Play from './src/screens/Play';
-import Quiz from './src/screens/Quiz';
-import { Provider } from 'react-redux';
-import store from './src/Redux/store';
-import Content from './src/screens/Content';
-import Words from './src/screens/Words';
-import ReportPage from './src/screens/ReportPage';
-import imageUrls from './src/constants/imageurls';
+import Home from "./src/screens/Home";
+import LoginForm from "./src/screens/Login";
+import SignupForm from "./src/screens/SignUp";
+import Welcome from "./src/screens/Welcome";
+import Profile from "./src/screens/Profile";
+import LearnSection from "./src/screens/Learn.Section";
+import ChartList from "./src/screens/ChartList";
+import Play from "./src/screens/Play";
+import Quiz from "./src/screens/Quiz";
+import { Provider } from "react-redux";
+import store from "./src/Redux/store";
+import Content from "./src/screens/Content";
+import Words from "./src/screens/Words";
+import ReportPage from "./src/screens/ReportPage";
+import imageUrls from "./src/constants/imageurls";
 
 function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+  const isDarkMode = useColorScheme() === "dark";
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
@@ -36,10 +36,11 @@ function App(): React.JSX.Element {
     return (
       <Tab.Navigator
         screenOptions={{
-          tabBarActiveTintColor: '#3A2D7D',
+          tabBarActiveTintColor: "#3A2D7D",
           tabBarLabelStyle: styles.tabBarLabel,
           tabBarIconStyle: styles.tabBarIcon,
-        }}>
+        }}
+      >
         <Tab.Screen
           name="Home"
           options={{
@@ -97,7 +98,7 @@ function App(): React.JSX.Element {
 
   const HomeStack = (props: any) => {
     return (
-      <Stack.Navigator initialRouteName="HomeScreen" >
+      <Stack.Navigator initialRouteName="HomeScreen">
         <Stack.Screen
           options={{ headerShown: false }}
           name="HomeScreen"
@@ -111,36 +112,30 @@ function App(): React.JSX.Element {
         <Stack.Screen
           name="Signup"
           component={SignupForm}
-          options={{ title: 'Signup' }}
+          options={{ title: "Signup" }}
         />
         <Stack.Screen
           name="Welcome"
           component={Welcome}
-          options={{ headerShown : false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="ChartList"
           options={({ route }: any) => ({
             title:
               route.params?.state.lesson_name.charAt(0).toUpperCase() +
-              route.params?.state.lesson_name.slice(1)
-            ,
+              route.params?.state.lesson_name.slice(1),
             // headerTitleStyle: {
             //   fontFamily: 'Montserrat',
             //   color: '#03050A',
             //   fontSize: 14,
             //   fontWeight: '600'
             // },
-            headerTitleAlign: 'center'
+            headerTitleAlign: "center",
           })}
           component={ChartList}
         />
         <Stack.Screen name="Play" component={Play} />
-        <Stack.Screen
-          name="ReportPage"
-          options={{ headerShown: false }}
-          component={ReportPage}
-        />
         <Stack.Screen
           name="Content"
           options={({ route }: any) => ({
@@ -153,15 +148,14 @@ function App(): React.JSX.Element {
             //   fontSize: 14,
             //   fontWeight: '600'
             // },
-            headerTitleAlign: 'center'
-
+            headerTitleAlign: "center",
           })}
           component={Content}
         />
 
         <Stack.Screen
           name="Words"
-          options={{ title: 'Dictionary' }}
+          options={{ title: "Dictionary" }}
           component={Words}
         />
       </Stack.Navigator>
@@ -191,22 +185,27 @@ function App(): React.JSX.Element {
           <Stack.Screen
             name="Login"
             component={LoginForm}
-            options={{headerShown: false}}
+            options={{ headerShown: false }}
           />
           <Stack.Screen
             name="Signup"
             component={SignupForm}
-            options={{ title: 'Signup' }}
+            options={{ title: "Signup" }}
           />
           <Stack.Screen
-            name="Welcome" 
+            name="Welcome"
             component={Welcome}
-            options={{headerShown: false}}
+            options={{ headerShown: false }}
           />
           <Stack.Screen
             name="Quiz"
             component={Quiz}
             options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ReportPage"
+            options={{ headerShown: false }}
+            component={ReportPage}
           />
         </Stack.Navigator>
       </NavigationContainer>
@@ -221,7 +220,7 @@ const styles = StyleSheet.create({
   },
   tabBarLabel: {
     paddingBottom: 5,
-    fontWeight: '500',
+    fontWeight: "500",
     fontSize: 12,
   },
   tabBarIcon: {

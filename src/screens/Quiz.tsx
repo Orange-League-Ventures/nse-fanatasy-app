@@ -16,6 +16,7 @@ import {
   getQuestionsBasedOnQuizType,
 } from "../services/quizServices";
 import { Dimensions, Platform } from "react-native";
+import GlobalFonts from "../common/GlobalFonts";
 
 const windowWidth = Dimensions.get("window").width;
 
@@ -404,10 +405,14 @@ const styles = StyleSheet.create({
   },
   heading: {
     paddingBottom: 10,
+    fontFamily:GlobalFonts.RobotoRegular,
+    color:"#03050A"
   },
   headingText: {
     fontSize: 14,
     fontWeight: "600",
+    fontFamily:GlobalFonts.MontserratSemiBold,
+    color:'#03050A'
   },
   questionText: {
     color: "#03050A",

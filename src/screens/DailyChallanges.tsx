@@ -3,9 +3,11 @@ import {Image, StyleSheet, Text, View, Dimensions} from 'react-native';
 import Button from '../common/Button';
 import imageUrls from '../constants/imageurls';
 import GlobalFonts from '../common/GlobalFonts';
+import CustomButton from '../common/CustomButton';
 
 const windowWidth = Dimensions.get('window').width;
-const DailyChallanges = () => {
+const DailyChallanges = (props:any) => {
+  
   return (
     <View style={styles.view1}>
       <View>
@@ -16,8 +18,8 @@ const DailyChallanges = () => {
         <Image source={imageUrls.dailyChallengeImg} style={styles.image1} />
       </View>
 
-      <Button
-        onPress={() => {}}
+      <CustomButton
+        onPress={() => props.navigation.navigate("Play")}
         title={`START THE QUIZ`}
         style={styles.view7}
         textStyle={styles.btnText}
@@ -32,6 +34,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     marginHorizontal: 16,
     flex: 1,
+    marginTop:20
   },
   text2: {
     color: '#03050A',
@@ -76,7 +79,7 @@ const styles = StyleSheet.create({
     color: '#FFF',
   },
   btnText : {
-    fontFamily: GlobalFonts.RobotoMedium,
+    fontFamily: GlobalFonts.MontserratSemiBold,
   },
   text8: {
     color: '#C35516',

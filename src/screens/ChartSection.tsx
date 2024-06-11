@@ -4,12 +4,11 @@ import {
   View,
   StyleSheet,
   Text,
-  TouchableOpacity,
   Dimensions,
   ActivityIndicator,
+  Pressable,
 } from 'react-native';
 import { fetchLessons } from '../services/lessonService';
-import CustomText from '../common/CustomText';
 import GlobalFonts from '../common/GlobalFonts';
 
 const windowWidth: number = Dimensions.get('window').width;
@@ -34,7 +33,12 @@ const ChartSection = (props: any) => {
     };
     wordsGroupByLetter();
   }, [])
-
+  
+  const obj={
+    "Basic Of Stock Market":require('../../assets/images/basic_of_stock_market.png'),
+    "Candlestic Chart":require('../../assets/images/candlestic_chart.png')
+  };
+  
   return (
     <View>
       <View style={styles.textContainer}>
@@ -51,7 +55,8 @@ const ChartSection = (props: any) => {
             <>
               {
                 lessons.map((item: any, index: number) => (
-                  <TouchableOpacity
+                  
+                  <Pressable
                     key={index}
                     onPress={() => {
                       props.navigation.navigate('ChartList', {
@@ -60,11 +65,14 @@ const ChartSection = (props: any) => {
                     }}>
                     <View style={styles.imageContainer}>
                       <Image
-                        source={{ uri: item?.lessong_image }}
+                        // source={{ uri: item?.lesson_image }}
+                        // source={obj[item?.lesson_name]}
+                        // source={require('../../assets/images/basic_of_stock_market.png')}
+                        source= {obj[item?.lesson_name]}
                         style={styles.image}
                       />
                     </View>
-                  </TouchableOpacity>
+                  </Pressable>
                 ))
               }
             </>
@@ -84,7 +92,7 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     overflow: 'hidden',
-    marginTop: 12,
+    marginTop: 8,
   },
   image: {
     height: 180,
@@ -107,7 +115,7 @@ const styles = StyleSheet.create({
     width: windowWidth - 32,
   },
   headingText: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: '500',
     color: '#000000',
     fontFamily : GlobalFonts.RobotoMedium,

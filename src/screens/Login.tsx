@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -6,11 +6,11 @@ import {
   TouchableOpacity,
   Image,
   ImageStyle,
-  ScrollView,
+  Alert,
 } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { setUser, setLoading, setToken } from "../Redux/Slices/AuthSlice";
-import { login } from "../services/authService";
+import { login, signupWithGoogle } from "../services/authService";
 import { useDispatch, useSelector } from "react-redux";
 import InputBox from "../common/InputBox";
 import imageUrls from "../constants/imageurls";
@@ -18,6 +18,18 @@ import { AuthState } from "../interfaces/autInterfaces";
 import CustomButton from "../common/CustomButton";
 import CustomInput from "../common/CustomInput";
 import GlobalFonts from "../common/GlobalFonts";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useIsFocused } from "@react-navigation/native";
+import CustomCheckBox from "../common/CustomCheckBox";
+import {auth}  from "./firebase";
+import {
+  GoogleAuthProvider,
+  getAuth,
+  signInWithCredential,
+  signInWithPopup,
+} from "firebase/auth";
+import { GoogleSignin ,GoogleSigninButton,statusCodes} from '@react-native-google-signin/google-signin';
+
 
 type FormData = {
   email: string;
@@ -29,6 +41,7 @@ const LoginForm = (props: any) => {
     control,
     handleSubmit,
     formState: { errors, isSubmitting },
+    reset,
   } = useForm<FormData>();
 
   const dispatch = useDispatch();
@@ -39,27 +52,107 @@ const LoginForm = (props: any) => {
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
   };
+  const isFocused = useIsFocused();
+
   const handleLogin = async (formData: { email: string; password: string }) => {
     dispatch(setLoading(true));
     const { email, password } = formData;
-    login(email, password)
-      .then((data) => {
-        dispatch(setToken(data.accessToken));
-        dispatch(setUser(data.user));
+    try {
+      const data = await login(email, password);
+      await AsyncStorage.setItem("accessToken", data.accessToken);
+      await AsyncStorage.setItem("userData", JSON.stringify(data.user));
+      dispatch(setToken(data.accessToken));
+      dispatch(setUser(data.user));
+      props.navigation.navigate("Home");
+    } catch (error) {
+      console.error("Login failed:", error);
+      setLoginError(
+        error?.response?.data?.message ||
+          "Login failed. Please check your credentials."
+      );
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+  
+  const checkAuthStatus = async () => {
+    try {
+      const accessToken = await AsyncStorage.getItem("accessToken");
+      const userData = await AsyncStorage.getItem("userData");
+
+      if (accessToken && userData) {
+        // User is already logged in, navigate to Home screen or any authenticated route
+        dispatch(setToken(accessToken));
+        dispatch(setUser(JSON.parse(userData)));
         props.navigation.navigate("Home");
-      })
-      .catch((error: any) => {
-        console.error("Login failed:", error);
-        setLoginError(
-          error?.response?.data?.message ||
-            "Login failed. Please check your credentials."
-        );
-      })
-      .finally(() => {
-        dispatch(setLoading(false));
-      });
+      } else {
+        // User is not logged in, navigate to Login screen
+        props.navigation.navigate("Login");
+      }
+    } catch (error) {
+      console.error("Error checking auth status:", error);
+      // Handle the error as needed
+    }
   };
 
+  // Call checkAuthStatus when the app starts up
+  useEffect(() => {
+    reset({
+      email: "",
+      password: "",
+    });
+    checkAuthStatus();
+  }, []);
+
+  const [loggedIn, setloggedIn] = useState(false);
+  const [userInfo, setuserInfo] = useState([]);
+
+  const signIn = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const { idToken } = await GoogleSignin.signIn();
+      const userInfo = await GoogleSignin.getCurrentUser();
+
+      const googleCredential = GoogleAuthProvider.credential(idToken);
+      // const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+
+      // const datas=await auth().signInWithCredential(googleCredential);
+
+      const datas=await signInWithCredential(auth,googleCredential);
+
+      const data = await signupWithGoogle(userInfo?.user?.name,userInfo?.user?.email,userInfo?.user?.id,userInfo?.user?.photo);
+      
+      await AsyncStorage.setItem("accessToken", data.accessToken);
+      await AsyncStorage.setItem("userData", JSON.stringify(data.user));
+      dispatch(setToken(data.accessToken));
+      dispatch(setUser(data.user));
+
+      props.navigation.navigate("Home");
+      setloggedIn(true);
+    } catch (error) {
+      Alert.alert("error")
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        // user cancelled the login flow
+        Alert.alert("Cancel");
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        Alert.alert("Signin in progress");
+        // operation (f.e. sign in) is in progress already
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        Alert.alert("PLAY_SERVICES_NOT_AVAILABLE");
+        // play services not available or outdated
+      } else {
+        // some other error happened
+      }
+    }
+  };
+  useEffect(() => {
+    GoogleSignin.configure({
+      // webClientId:'54446732572-mv6hm5uamvt29h3qqvv74mbgneb1d08e.apps.googleusercontent.com',
+      webClientId:'682218343549-ppht5daqv1iva2du8ti9p70lo2p73ivq.apps.googleusercontent.com',
+      // androidClientId:'682218343549-3mv6lmicb76sopp3m86lmu4dt4p98shc.apps.googleusercontent.com',
+      iosClientId:'682218343549-uhs3sb4vu4b6j1thvg6t33thlt4mjs76.apps.googleusercontent.com',
+    });
+  }, [])
   return (
     <View style={styles.container}>
       <View style={styles.loginform}>
@@ -105,6 +198,21 @@ const LoginForm = (props: any) => {
               },
             }}
           />
+          {/* <CustomInput
+            control={control}
+            name="password"
+            placeholder="Password"
+            error={!!errors.password || !!loginError}
+            secureTextEntry={!showPassword}
+            errorText={errors?.password?.message ?? ""}
+            rules={{
+              required: "Password is required",
+              pattern: {
+                value: /^\S+@\S+$/i,
+                message: "Invalid Password",
+              },
+            }}
+          /> */}
           <View style={styles.passwordContainer}>
             <Controller
               control={control}
@@ -123,17 +231,6 @@ const LoginForm = (props: any) => {
               rules={{ required: "* Password is required!" }}
               defaultValue=""
             />
-            <TouchableOpacity
-              style={styles.passwordIcon}
-              onPress={handleShowPassword}
-            >
-              <Image
-                source={
-                  showPassword ? imageUrls.lockeyeIcon : imageUrls.openEyeIcon
-                }
-                style={{ ...styles.eyeIcon, tintColor: "#D4D4D4" }}
-              />
-            </TouchableOpacity>
             {loginError && !loading && (
               <Text style={styles.errorMsg}>{loginError}</Text>
             )}
@@ -143,6 +240,18 @@ const LoginForm = (props: any) => {
           )}
         </View>
         <View style={styles.FingerprintAndForgotPassword}>
+          {/* <CheckBox
+            title="Show Password"
+            checked={showPassword}
+            onPress={handleShowPassword}
+            containerStyle={styles.checkboxContainer}
+            textStyle={styles.checkboxText}
+          /> */}
+          <CustomCheckBox
+            checked={showPassword}
+            onPress={handleShowPassword}
+            label="Show Password"
+          />
           <TouchableOpacity
             onPress={() => props.navigation.navigate("ForgotPassword")}
           >
@@ -173,6 +282,7 @@ const LoginForm = (props: any) => {
           title={"Log In"}
           loading={loading}
           style={styles.newButtonStyle}
+          textStyle={styles.textStyle}
         />
         <View style={styles.horizontalLineContainer}>
           <View style={styles.horizontalLineLeft} />
@@ -181,7 +291,8 @@ const LoginForm = (props: any) => {
         </View>
         <TouchableOpacity
           style={styles.SignupButton}
-          onPress={() => props.navigation.navigate("Signup")}
+          onPress={signIn}
+          // onPress={() => props.navigation.navigate("Signup")}
         >
           <Image
             source={require("../../assets/images/google.png")}
@@ -189,6 +300,7 @@ const LoginForm = (props: any) => {
           />
           <Text style={styles.SignupbuttonText}>Continue with Google</Text>
         </TouchableOpacity>
+        {/* <GoogleSigninButton/> */}
         <TouchableOpacity
           style={styles.SignupButton}
           onPress={() => props.navigation.navigate("Signup")}
@@ -241,33 +353,35 @@ const styles = StyleSheet.create({
   },
   inputcontainer: {
     marginTop: 16,
-    marginBottom: 8,
+    marginBottom: 16,
   },
   input: {
     width: "auto",
-    height: "auto",
+    // height: "auto",
     borderWidth: 1,
     paddingHorizontal: 16,
-    paddingVertical: 16,
+    paddingVertical: 14,
     borderRadius: 8,
     backgroundColor: "#ffffff",
     color: "#000000",
     borderColor: "#D4D4D4",
     // marginBottom: 8,
-    fontSize: 12,
+    fontSize: 14,
     fontFamily: "Roboto",
     fontWeight: "400",
+    height: 48,
   },
   FingerprintAndForgotPassword: {
     flexDirection: "row", // Distribute space between children
     alignItems: "center", // Align children along the cross axis (vertically)
     marginBottom: 20,
     marginRight: 10,
+    justifyContent: "space-between",
   },
   forgotPassword: {
     fontFamily: "Roboto",
     fontWeight: "400",
-    fontSize: 12,
+    fontSize: 14,
     color: "#E66F25",
   },
   loginButton: {
@@ -311,9 +425,9 @@ const styles = StyleSheet.create({
     color: "#ffffff",
   },
   SignupbuttonText: {
-    fontFamily: "Roboto",
+    fontFamily: GlobalFonts.RobotoMedium,
     fontWeight: "500",
-    fontSize: 12,
+    fontSize: 16,
     textAlign: "center",
     color: "#03050A",
   },
@@ -326,7 +440,7 @@ const styles = StyleSheet.create({
     color: "#717171",
     fontFamily: "Roboto",
     fontWeight: "400",
-    fontSize: 12,
+    fontSize: 14,
     marginVertical: 32,
     textAlign: "center",
   },
@@ -385,6 +499,27 @@ const styles = StyleSheet.create({
     backgroundColor: "#3A2D7D",
     color: "#ffffff",
     fontFamily: GlobalFonts.RobotoMedium,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    alignItems: "center",
+    justifyContent: "center",
+    height: 50,
+  },
+  textStyle: {
+    fontSize: 16,
+    fontWeight: "500",
+    fontFamily: GlobalFonts.RobotoMedium,
+  },
+  checkboxContainer: {
+    backgroundColor: "transparent",
+    borderWidth: 0,
+    paddingLeft: 0,
+  },
+  checkboxText: {
+    fontFamily: "Roboto",
+    fontWeight: "400",
+    fontSize: 14,
+    color: "#03050A",
   },
 });
 

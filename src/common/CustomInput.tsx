@@ -54,19 +54,20 @@ const CustomInput: React.FC<Props> = ({
 const styles = StyleSheet.create({
   input: {
     width: "auto",
-    height: "auto",
+    // height: "auto",
     borderWidth: 1,
     paddingHorizontal: 16,
-    paddingVertical: 16,
+    paddingVertical: 14,
     borderRadius: 8,
     backgroundColor: "#ffffff",
     color: "#000000",
     borderColor: "#D4D4D4",
     marginTop: 8,
     marginBottom: 3,
-    fontSize: 12,
+    fontSize: 14,
     fontFamily: "Roboto",
     fontWeight: "400",
+    height:48,
   },
   errorInput: {
     borderColor: "#CB0505",

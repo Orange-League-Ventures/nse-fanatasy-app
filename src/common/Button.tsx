@@ -1,12 +1,13 @@
 import React from 'react';
-import {TouchableOpacity, Text, StyleSheet} from 'react-native';
+import {TouchableOpacity, Text, StyleSheet, Pressable} from 'react-native';
+import GlobalFonts from './GlobalFonts';
 
 const Button = (props: any) => (
-  <TouchableOpacity
+  <Pressable
     onPress={props.onPress}
     style={[styles.button, props.style]}>
     <Text style={[styles.buttonText, props.textStyle]}>{props.title}</Text>
-  </TouchableOpacity>
+  </Pressable>
 );
 
 const styles = StyleSheet.create({
@@ -20,7 +21,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: 'auto',
-    height: 'auto',
+    // height: 'auto',
     borderWidth: 1,
     color: '#03050A',
     paddingHorizontal: 16,
@@ -29,11 +30,12 @@ const styles = StyleSheet.create({
     borderColor: '#717171',
     marginBottom: 12,
     fontSize: 12,
-    fontFamily: 'Roboto',
+    fontFamily: GlobalFonts.RobotoMedium,
     fontWeight: '500',
+    height:48
   },
   buttonText: {
-    fontFamily: 'Roboto',
+    fontFamily: GlobalFonts.RobotoMedium,
     fontWeight: '500',
     fontSize: 14,
     textAlign: 'center',

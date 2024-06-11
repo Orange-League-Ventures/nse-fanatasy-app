@@ -1,5 +1,5 @@
 import React from 'react'
-import { Image, StyleSheet,  View, Dimensions , Text, TouchableOpacity} from 'react-native'
+import { Image, StyleSheet,  View, Dimensions , Text, TouchableOpacity, Pressable} from 'react-native'
 import CustomText from '../common/CustomText'
 import GlobalFonts from '../common/GlobalFonts';
 
@@ -11,12 +11,12 @@ const Dictionary = (props: any) => {
                 <Text style={styles.headingText}>Trading Dictionary</Text>
             </View>
             <View style={styles.imageContainer}>
-                <TouchableOpacity onPress={() => { props.navigation.navigate("Words") }}>
+                <Pressable onPress={() => { props.navigation.navigate("Words") }}>
                     <Image
                         source={require('../../assets/images/dictionary_4x.png')}
                         style={styles.image}
                     />
-                </TouchableOpacity>
+                </Pressable>
 
             </View>
         </View>
@@ -25,13 +25,14 @@ const Dictionary = (props: any) => {
 
 const styles = StyleSheet.create({
     headingText: {
-        marginTop: 20,
-        fontSize: 14,
+        marginTop: 32,
+        fontSize: 16,
         color:'#03050A', 
         fontFamily : GlobalFonts.RobotoMedium,
     },
     imageContainer: {
-        marginVertical: 12,  
+        // marginVertical: 4,
+        marginTop:8
     },
     image : {
         borderRadius: 8,

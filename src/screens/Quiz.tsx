@@ -8,6 +8,7 @@ import {
   Image,
   ScrollView,
   DimensionValue,
+  Pressable,
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import { RadioButton } from "react-native-paper";
@@ -17,6 +18,7 @@ import {
 } from "../services/quizServices";
 import { Dimensions, Platform } from "react-native";
 import GlobalFonts from "../common/GlobalFonts";
+import { useWindowDimensions } from "react-native";
 
 const windowWidth = Dimensions.get("window").width;
 
@@ -29,6 +31,7 @@ interface IProps {
 }
 
 const Quiz = (props: any) => {
+  const windowDimensions = useWindowDimensions();
   const route: any = useRoute();
   const [quizData, setQuizData] = useState([]);
   const [currentQuizId, setCurrentQuizId] = useState("");
@@ -97,6 +100,10 @@ const Quiz = (props: any) => {
     }
     setSubmitted(false);
   };
+  console.log(
+    route?.params?.state?.quizTypes,
+    "route?.params?.state?.quizTypes"
+  );
 
   const [selectedOption, setSelectedOption] = useState(null);
   const [submitted, setSubmitted] = useState(false);
@@ -129,67 +136,85 @@ const Quiz = (props: any) => {
   let dynamicHeight;
 
   if (Platform.OS === "ios") {
-    if (height < 700) {
-      // Assuming iPhone SE (3rd generation)
+    if (windowDimensions.height < 700) {
       dynamicHeight = "75%";
     } else {
       // Assuming iPhone 15 or similar
       dynamicHeight = "80%";
     }
   } else {
-    dynamicHeight = "75%"; // For Android or other platforms
+    dynamicHeight = "80%";
   }
 
   return (
-    <View>
-      {loading && (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#3A2D7D" />
-        </View>
-      )}
-      {!loading ? (
-        <View style={styles.top}>
-          <View style={styles.mainBack}>
-            <TouchableOpacity onPress={handlePress}>
-              <Image
-                source={require("../../assets/images/Vector.png")}
-                style={styles.backArrowImage}
+    <View style={{ flex: 1 }}>
+      <View>
+        {loading && (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="#3A2D7D" />
+          </View>
+        )}
+      </View>
+      <View style={{ flex: 1 }}>
+        {!loading && (
+          <View style={styles.top}>
+            <View style={styles.mainBack}>
+              <TouchableOpacity onPress={handlePress}>
+                <Image
+                  source={require("../../assets/images/Vector.png")}
+                  style={styles.backArrowImage}
+                />
+              </TouchableOpacity>
+              <Text style={styles.stylingChanges}>Quiz</Text>
+              <Text></Text>
+            </View>
+            <View style={styles.mainQuestion}>
+              <Text
+                style={{
+                  color: "#000000",
+                  fontFamily: GlobalFonts.RobotoRegular,
+                  fontSize: 14,
+                }}
+              >
+                Q.{questionNumber + 1}/{questionData?.questions?.length}
+              </Text>
+            </View>
+            <View style={styles.container}>
+              <View
+                style={[styles.progressBar, { width: `${progressWidth}%` }]}
               />
-            </TouchableOpacity>
-            <Text style={styles.stylingChanges}>Quiz</Text>
-            <Text></Text>
-          </View>
-          <View style={styles.mainQuestion}>
-            <Text style={{color:"#000000",fontFamily:GlobalFonts.RobotoRegular,fontSize:12}}>
-              Q.{questionNumber + 1}/{questionData?.questions?.length}
-            </Text>
-          </View>
-          <View style={styles.container}>
-            <View
-              style={[styles.progressBar, { width: `${progressWidth}%` }]}
-            />
-          </View>
-          <View
-            style={{
-              maxHeight: "90%",
-              height: dynamicHeight as DimensionValue | undefined,
-            }}
-          >
+            </View>
             <ScrollView>
               <View>
-                <Text style={styles.heading}>
-                  <Text style={styles.headingText}>Situation: </Text>
-                  {questionData?.questions?.[currentIndex]?.["sitituation"]}
-                </Text>
+                {route?.params?.state?.quizTypes !== "Quiz 2" && (
+                  <Text style={styles.heading}>
+                    <Text style={styles.headingText}>Situation: </Text>
+                    <Text style={styles.headingTexts}>
+                      {questionData?.questions?.[currentIndex]?.["sitituation"]}
+                    </Text>
+                  </Text>
+                )}
                 <Text style={styles.questionText}>
                   Q{questionNumber + 1}.{" "}
                   {questionData?.questions?.[currentIndex]?.["question_text"]}
                 </Text>
+                {route?.params?.state?.quizTypes === "Quiz 2" && (
+                  <Image
+                    source={require("../../assets/images/pattern_identifier.png")}
+                    style={styles.patternIdentifier}
+                  />
+                )}
                 <View>
                   {questionData?.questions?.[currentIndex]?.option?.map(
                     (option: any, index: any) => (
-                      <View
+                      <TouchableOpacity
                         key={index}
+                        onPress={() => {
+                          if (!submitted) {
+                            handleOptionSelect(option.option_text);
+                          }
+                        }}
+                        activeOpacity={0.7}
                         style={{
                           ...(selectedOption === option.option_text && submitted
                             ? {
@@ -199,8 +224,12 @@ const Quiz = (props: any) => {
                                 borderRadius: 10,
                               }
                             : selectedOption === option.option_text
-                            ? { backgroundColor: "#E7E7F7", borderRadius: 10 }
+                            ? {
+                                backgroundColor: "#E7E7F7",
+                                borderRadius: 10,
+                              }
                             : {}),
+                            marginBottom:12
                         }}
                       >
                         <View style={styles.option}>
@@ -234,12 +263,20 @@ const Quiz = (props: any) => {
                                 selectedOption === option.option_text
                                   ? "#FFFFFF"
                                   : "#03050A",
+                              fontSize:16,
+                              fontWeight:'500',
+                              fontFamily:GlobalFonts.RobotoMedium,
+                              display:'flex',
+                              flexWrap:'wrap',
+                              marginRight:10,
+                              flex:1,
+                              // marginBottom:8
                             }}
                           >
                             {option.option_text}
                           </Text>
                         </View>
-                      </View>
+                      </TouchableOpacity>
                     )
                   )}
                 </View>
@@ -252,7 +289,7 @@ const Quiz = (props: any) => {
                           : "#FFE6E6",
                         marginTop: 10,
                         borderRadius: 10,
-                        padding: 10,
+                        padding: 16,
                       }}
                     >
                       <Text
@@ -260,7 +297,9 @@ const Quiz = (props: any) => {
                           textAlign: "center",
                           color: isCorrect ? "#007A00" : "#CB0505",
                           fontWeight: "600",
-                          fontSize: 14,
+                          fontSize: 18,
+                          fontFamily:GlobalFonts.MontserratBold,
+                          marginBottom:12
                         }}
                       >
                         {isCorrect ? "Correct!" : "Well Tried !!"}
@@ -319,40 +358,26 @@ const Quiz = (props: any) => {
                 )}
               </View>
             </ScrollView>
+            <View style={styles.bottomButtonContainer}>
+              {submitted ? (
+                <Pressable style={styles.button} onPress={handleNextQuestion}>
+                  <Text style={styles.buttonText}>Next</Text>
+                </Pressable>
+              ) : (
+                <Pressable
+                  style={[
+                    styles.button,
+                    { backgroundColor: selectedOption ? "#3A2D7D" : "#D4D4D4" },
+                  ]}
+                  onPress={selectedOption ? handleSubmit : undefined}
+                >
+                  <Text style={styles.buttonText}>Submit</Text>
+                </Pressable>
+              )}
+            </View>
           </View>
-          <View>
-            {submitted ? (
-              <TouchableOpacity
-                style={styles.button}
-                onPress={handleNextQuestion}
-              >
-                <Text style={styles.buttonText}>Next</Text>
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity
-                style={[
-                  styles.button,
-                  { backgroundColor: selectedOption ? "#3A2D7D" : "#D4D4D4" },
-                ]}
-                onPress={selectedOption ? handleSubmit : undefined}
-              >
-                <Text style={styles.buttonText}>Submit</Text>
-              </TouchableOpacity>
-            )}
-          </View>
-        </View>
-      ) : (
-        <></>
-        // <ReportPage
-        //   score={score}
-        //   totalQuestions={questionData?.questions?.length}
-        //   // setOpenQuiz={setOpenQuiz}
-        //   // openQuiz={openQuiz}
-        //   quizType={route?.params?.state?.quizTypes}
-        //   dynamicHeight={dynamicHeight}
-        //   quizId={quizData[0]?.['id']}
-        // />
-      )}
+        )}
+      </View>
     </View>
   );
 };
@@ -364,7 +389,7 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: "#3A2D7D",
-    width: windowWidth * 0.9, // Adjust percentage as needed
+    width: windowWidth * 0.9,
     padding: 15,
     borderRadius: 10,
     alignItems: "center",
@@ -377,7 +402,8 @@ const styles = StyleSheet.create({
   },
   container: {
     height: 10,
-    backgroundColor: "#F5F5F7",
+    // backgroundColor: "#F5F5F7",
+    backgroundColor: "#D4D4D4",
     borderRadius: 5,
     overflow: "hidden",
     marginBottom: 20,
@@ -390,39 +416,51 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     display: "flex",
     color: "#000000",
-    fontSize: 14,
-    fontWeight: "600",
+    fontSize: 18,
+    fontWeight: "700",
+    fontFamily: GlobalFonts.MontserratBold,
   },
   loadingContainer: {
     justifyContent: "center",
     alignItems: "center",
     color: "#ffffff",
     position: "absolute",
+    marginTop: 300,
+    marginBottom: 100,
     top: 0,
     bottom: 0,
     left: 0,
     right: 0,
   },
   heading: {
-    paddingBottom: 10,
-    fontFamily:GlobalFonts.RobotoRegular,
-    color:"#03050A"
+    paddingBottom: 18,
+    fontFamily: GlobalFonts.RobotoRegular,
+    color: "#03050A",
   },
   headingText: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: "600",
-    fontFamily:GlobalFonts.MontserratSemiBold,
-    color:'#03050A'
+    fontFamily: GlobalFonts.MontserratSemiBold,
+    color: "#03050A",
+  },
+  headingTexts: {
+    fontSize: 16,
+    fontWeight: "400",
+    fontFamily: GlobalFonts.RobotoRegular,
+    color: "#03050A",
   },
   questionText: {
     color: "#03050A",
-    fontSize: 14,
+    fontSize: 18,
     fontWeight: "600",
-    fontFamily: "Montserrat",
-    marginBottom: 10,
+    fontFamily: GlobalFonts.MontserratSemiBold,
+    marginBottom: 18,
   },
   top: {
     padding: 20,
+    flex: 1,
+    // display: "flex",
+    // justifyContent: "space-between",
   },
   mainBack: {
     display: "flex",
@@ -440,62 +478,90 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     padding: 10,
-    marginBottom: 10,
+    // marginBottom: 20,
+    flex:1,
+    textAlign:'center',
+    // gap:8
   },
   correctExplaination: {
     color: "#03050A",
     fontWeight: "500",
-    fontSize: 12,
+    fontSize: 16,
     marginBottom: 10,
   },
   explaination: {
     color: "#03050A",
     fontWeight: "400",
-    fontSize: 10,
-    fontFamily: "Roboto",
+    fontSize: 14,
+    fontFamily: GlobalFonts.RobotoRegular
   },
   correctOptionText: {
     marginBottom: 10,
     color: "#007A00",
+    fontSize:14,
+    fontWeight:'400',
+    fontFamily:GlobalFonts.RobotoMedium
   },
   wrongAnswerExplaination: {
     color: "#03050A",
     fontWeight: "500",
-    fontSize: 12,
+    fontSize: 16,
     marginBottom: 10,
   },
   wrongAnwerSelectedOption: {
-    marginBottom: 10,
+    marginBottom: 8,
     color: "#CB0505",
+    fontSize:14,
+    fontWeight:'500',
+    fontFamily:GlobalFonts.RobotoMedium
   },
   wrongRightExplaination: {
     color: "#03050A",
     fontWeight: "500",
-    fontSize: 12,
+    fontSize: 16,
     marginBottom: 10,
   },
   wrongRightOption: {
-    marginBottom: 10,
+    marginBottom: 8,
     color: "#007A00",
+    fontSize:14,
+    fontWeight:'500',
+    fontFamily:GlobalFonts.RobotoMedium
   },
   rightAnswerText: {
     textAlign: "center",
     color: "#007A00",
     fontWeight: "600",
-    fontSize: 14,
+    fontSize: 18,
+    fontFamily:GlobalFonts.MontserratBold,
+    marginBottom:12
   },
   notCorrectRightExplaination: {
     backgroundColor: "rgba(0, 122, 0, 0.1)",
     marginTop: 10,
     borderRadius: 10,
     padding: 10,
+    marginBottom: 50,
   },
   backArrowImage: {
-    width: 6,
-    height: 10,
+    width: 24,
+    height: 24,
     marginLeft: 0,
     marginBottom: 12,
-    
+  },
+  patternIdentifier: {
+    width: windowWidth - 40,
+    height: windowWidth > 400 ? 170 : 150,
+    marginBottom: 28,
+    borderRadius: 8,
+  },
+  bottomButtonContainer: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    paddingHorizontal: 20,
+    paddingBottom: 10,
   },
 });
 export default Quiz;

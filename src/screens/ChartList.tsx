@@ -1,12 +1,13 @@
 // ChartList.tsx
 
 import React, { useEffect, useState } from 'react';
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View, Dimensions, ActivityIndicator } from 'react-native';
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View, Dimensions, ActivityIndicator, Pressable } from 'react-native';
 import Header from './Header';
 import { topicsByLessonId } from '../services/topicservice';
 import { useRoute } from '@react-navigation/native';
 import CustomText from '../common/CustomText';
 import { windowHeight, windowWidth } from '../common/Dimensions';
+import GlobalFonts from '../common/GlobalFonts';
 
 interface ITopic {
   topic_name: string;
@@ -45,7 +46,10 @@ const ChartList = (props: any) => {
   const readContent = (topic_id: string, topic_name: String) => {
     props.navigation.navigate('Content', { state: { topic_id, topic_name, lesson_id, lesson_name } })
   }
-
+  const handlePress = () => {
+    props.navigation.navigate("Learn");
+  };
+  
   return (
     <View style={styles.mainContainer}>
       {loading && (
@@ -53,12 +57,23 @@ const ChartList = (props: any) => {
           <ActivityIndicator size="large" color="#3A2D7D" />
         </View>
       )}
+      <View style={styles.mainBack}>
+        <TouchableOpacity onPress={handlePress}>
+          <Image
+            source={require("../../assets/images/Vector.png")}
+            style={styles.backArrowImage}
+          />
+        </TouchableOpacity>
+        <Text style={styles.stylingChanges}>{props.route.params?.state.lesson_name.charAt(0).toUpperCase() +
+              props.route.params?.state.lesson_name.slice(1)}</Text>
+        <Text></Text>
+      </View>
       <ScrollView>
         <CustomText style={styles.subTopicText} text={'Subtopics'} />
         {topicList?.length > 0 ? (
           <>
             {topicList.map((topic: ITopic, index: number) => (
-              <TouchableOpacity
+              <Pressable
                 onPress={() => { readContent(topic?.id, topic?.topic_name) }}
                 key={index}
                 style={styles.topicItem}>
@@ -75,7 +90,7 @@ const ChartList = (props: any) => {
                   </Text>
                 </View>
 
-              </TouchableOpacity>
+              </Pressable>
             ))}
           </>
         ) : null}
@@ -88,36 +103,39 @@ const styles = StyleSheet.create({
   mainContainer: {
     width: windowWidth,
     height: windowHeight,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
+    padding:16
   },
   subTopicText: {
-    marginLeft: 16,
+    // marginLeft: 10,
     marginTop: 20,
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: '500',
     color: '#000000',
-    lineHeight: 16
+    lineHeight: 16,
+    marginBottom: 16,
+    fontFamily:GlobalFonts.RobotoMedium
   },
   topicItem: {
-    borderRadius: 20,
+    borderRadius: 8,
     backgroundColor: '#F8F8F8',
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 25,
-    marginHorizontal: 16,
-    marginTop: 12,
+    padding: 16,
+    marginBottom:12
   },
   icon: {
-    width: 50,
-    height: 50,
+    width: 24,
+    height: 24,
     // borderRadius: 25,
-    marginRight: 10,
+    marginRight: 16,
   },
   topicName: {
-    marginLeft: 20,
-    fontSize: 14,
+    // marginLeft: 20,
+    fontSize: 16,
     fontWeight: '600',
     color: '#03050A',
+    fontFamily:GlobalFonts.MontserratSemiBold,
   },
   topicInfo: {
     flex: 1,
@@ -137,6 +155,29 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
+  },
+  mainBack: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  backArrowImage: {
+    width: 24,
+    height: 24,
+    marginLeft: 0,
+    marginBottom: 20,
+    alignItems:'center',
+    justifyContent:'center'
+  },
+  stylingChanges: {
+    marginBottom: 20,
+    display: "flex",
+    color: "#000000",
+    fontSize: 18,
+    fontWeight: "700",
+    fontFamily:GlobalFonts.MontserratBold,
+    alignItems:'center'
   },
 });
 

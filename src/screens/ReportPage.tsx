@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { UpdateReport } from "../services/quizServices";
 import { useSelector } from "react-redux";
 import { AuthState } from "../interfaces/autInterfaces";
+import { postAmount } from "../services/stockServices";
 
 interface IProps {
   setOpenQuiz: any;
@@ -17,16 +18,17 @@ interface IProps {
   dynamicHeight: any;
   quizId: any;
 }
-const ReportPage = (props: any) => {
+const ReportPage = (props: any) => {  
   const { score, quizId, quizType, totalQuestions } = props.route.params;
 
   const details = useSelector((state: AuthState) => state?.auth);
   const handlePress = () => {
-    props.navigation.navigate("HomeScreen");
+    props.navigation.navigate("Play");
   };
   const userId = details?.user?.id;
   useEffect(() => {
     UpdateReport({ score, quizId, userId });
+    postAmount(userId,200)
   }, [score, quizType, userId]);
   return (
     <View style={{ padding: 20 }}>

@@ -1,10 +1,10 @@
-import React from 'react';
+import React from "react";
 import {
   ActivityIndicator,
   StyleSheet,
   Text,
   TouchableOpacity,
-} from 'react-native';
+} from "react-native";
 
 const CustomButton = (props: any) => {
   return (
@@ -12,11 +12,12 @@ const CustomButton = (props: any) => {
       onPress={props.onPress}
       disabled={props.loading}
       activeOpacity={1}
-      style={[styles.button, props.style]}>
+      style={[styles.button, props.style]}
+    >
       {props.loading ? (
         <ActivityIndicator size="small" color="#fff" />
       ) : (
-        <Text style={[styles.buttonText, props.textStyle]}>{props.title}</Text>
+        <Text style={[styles.buttonText, props.textStyle,{ marginHorizontal: 8 }]}>{props.title}</Text>
       )}
     </TouchableOpacity>
   );
@@ -24,31 +25,31 @@ const CustomButton = (props: any) => {
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: '#ffffff',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 'auto',
-    height: 'auto',
+    backgroundColor: "#ffffff",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "auto",
+    height: "auto",
     borderWidth: 1,
-    color: '#fff',
+    color: "#fff",
     paddingHorizontal: 16,
     paddingVertical: 14,
     borderRadius: 8,
-    borderColor: '#717171',
+    borderColor: "#717171",
   },
   buttonText: {
-    fontFamily: 'Roboto',
-    fontWeight: '700',
+    fontFamily: "Roboto",
+    fontWeight: "700",
     fontSize: 14,
-    color: '#fff',
-    textAlign: 'center',
+    color: "#fff",
+    textAlign: "center",
   },
   loadingContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    color: '#ffffff',
-    position: 'absolute',
+    justifyContent: "center",
+    alignItems: "center",
+    color: "#ffffff",
+    position: "absolute",
     top: 0,
     bottom: 0,
     left: 0,

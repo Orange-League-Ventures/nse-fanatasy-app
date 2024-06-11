@@ -21,6 +21,15 @@ import Content from "./src/screens/Content";
 import Words from "./src/screens/Words";
 import ReportPage from "./src/screens/ReportPage";
 import imageUrls from "./src/constants/imageurls";
+import Portfolio from "./src/screens/Portfolio";
+import Watchlist from "./src/screens/Watchlist";
+import BuyScreen from "./src/screens/BuyScreen";
+import SellScreen from "./src/screens/SellScreen";
+import CompanyDetails from "./src/screens/CompanyDetails";
+import Performers from "./src/screens/Performers";
+import Transactions from "./src/screens/Transactions";
+import "react-native-gesture-handler";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === "dark";
@@ -57,6 +66,7 @@ function App(): React.JSX.Element {
         <Tab.Screen
           name="Play"
           options={{
+            headerShown: false,
             tabBarIcon: ({ color, size }) => (
               <Image
                 source={imageUrls.gamepad}
@@ -79,6 +89,32 @@ function App(): React.JSX.Element {
           }}
           component={LearnSection}
         />
+        {/* <Tab.Screen
+          name="Watchlist"
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ color, size }) => (
+              <Image
+                source={imageUrls.settings}
+                style={{ width: size, height: size, tintColor: color }}
+              />
+            ),
+          }}
+          component={Watchlist}
+        />
+        <Tab.Screen
+          name="Portfolio"
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ color, size }) => (
+              <Image
+                source={imageUrls.settings}
+                style={{ width: size, height: size, tintColor: color }}
+              />
+            ),
+          }}
+          component={Portfolio}
+        /> */}
         <Tab.Screen
           name="Settings"
           options={{
@@ -98,7 +134,7 @@ function App(): React.JSX.Element {
 
   const HomeStack = (props: any) => {
     return (
-      <Stack.Navigator initialRouteName="HomeScreen">
+      <Stack.Navigator>
         <Stack.Screen
           options={{ headerShown: false }}
           name="HomeScreen"
@@ -119,45 +155,29 @@ function App(): React.JSX.Element {
           component={Welcome}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
+        {/* <Stack.Screen
           name="ChartList"
-          options={({ route }: any) => ({
-            title:
-              route.params?.state.lesson_name.charAt(0).toUpperCase() +
-              route.params?.state.lesson_name.slice(1),
-            // headerTitleStyle: {
-            //   fontFamily: 'Montserrat',
-            //   color: '#03050A',
-            //   fontSize: 14,
-            //   fontWeight: '600'
-            // },
-            headerTitleAlign: "center",
-          })}
+          options={{ headerShown: false }}
           component={ChartList}
-        />
-        <Stack.Screen name="Play" component={Play} />
-        <Stack.Screen
+        /> */}
+        {/* <Stack.Screen
           name="Content"
-          options={({ route }: any) => ({
-            title:
-              route.params?.state.topic_name.charAt(0).toUpperCase() +
-              route.params?.state.topic_name.slice(1),
-            // headerTitleStyle: {
-            //   fontFamily: 'Montserrat',
-            //   color: '#03050A',
-            //   fontSize: 14,
-            //   fontWeight: '600'
-            // },
-            headerTitleAlign: "center",
-          })}
+          // options={({ route }: any) => ({
+          //   title:
+          //     route.params?.state.topic_name.charAt(0).toUpperCase() +
+          //     route.params?.state.topic_name.slice(1),
+          //   headerTitleAlign: "center",
+          // })}
+          options={{ headerShown: false }}
           component={Content}
-        />
+        /> */}
 
-        <Stack.Screen
+        {/* <Stack.Screen
           name="Words"
-          options={{ title: "Dictionary" }}
+          // options={{ title: "Dictionary" }}
+          options={{ headerShown: false }}
           component={Words}
-        />
+        /> */}
       </Stack.Navigator>
     );
   };
@@ -173,42 +193,153 @@ function App(): React.JSX.Element {
     );
   };
 
+  const StockStack = () => {
+    return (
+      <Tab.Navigator
+        screenOptions={{
+          tabBarActiveTintColor: "#3A2D7D",
+          tabBarLabelStyle: styles.tabBarLabel,
+          tabBarIconStyle: styles.tabBarIcon,
+        }}
+      >
+        <Tab.Screen
+          name="Home"
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ color, size }) => (
+              <Image
+                source={imageUrls.home}
+                style={{ width: size, height: size, tintColor: color }}
+              />
+            ),
+          }}
+          component={Watchlist}
+        />
+        <Tab.Screen
+          name="Portfolio"
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ color, size }) => (
+              <Image
+                source={imageUrls.portfolio}
+                style={{ width: size, height: size, tintColor: color }}
+              />
+            ),
+          }}
+          component={Portfolio}
+        />
+        <Tab.Screen
+          name="Performers"
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ color, size }) => (
+              <Image
+                source={imageUrls.performers}
+                style={{ width: size, height: size, tintColor: color }}
+              />
+            ),
+          }}
+          component={Performers}
+        />
+        <Tab.Screen
+          name="Trades"
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ color, size }) => (
+              <Image
+                source={imageUrls.trades}
+                style={{ width: size, height: size, tintColor: color }}
+              />
+            ),
+          }}
+          component={Transactions}
+        />
+      </Tab.Navigator>
+    );
+  };
   return (
     <Provider store={store}>
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="Login">
-          <Stack.Screen
-            name="Home"
-            component={MainTabStackNavigator}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Login"
-            component={LoginForm}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Signup"
-            component={SignupForm}
-            options={{ title: "Signup" }}
-          />
-          <Stack.Screen
-            name="Welcome"
-            component={Welcome}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Quiz"
-            component={Quiz}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="ReportPage"
-            options={{ headerShown: false }}
-            component={ReportPage}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <GestureHandlerRootView>
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName="Login">
+            <Stack.Screen
+              name="Home"
+              component={MainTabStackNavigator}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Login"
+              component={LoginForm}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Signup"
+              component={SignupForm}
+              options={{ headerShown: false, title: "Signup" }}
+            />
+            <Stack.Screen
+              name="Welcome"
+              component={Welcome}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Quiz"
+              component={Quiz}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="ReportPage"
+              options={{ headerShown: false }}
+              component={ReportPage}
+            />
+            <Stack.Screen
+              name="Words"
+              // options={{ title: "Dictionary" }}
+              options={{ headerShown: false }}
+              component={Words}
+            />
+            <Stack.Screen
+              name="Watchlist"
+              // options={{ title: "Dictionary" }}
+              options={{ headerShown: false }}
+              component={StockStack}
+            />
+            <Stack.Screen
+              name="ChartList"
+              options={{ headerShown: false }}
+              component={ChartList}
+            />
+            <Stack.Screen
+              name="Content"
+              // options={({ route }: any) => ({
+              //   title:
+              //     route.params?.state.topic_name.charAt(0).toUpperCase() +
+              //     route.params?.state.topic_name.slice(1),
+              //   headerTitleAlign: "center",
+              // })}
+              options={{ headerShown: false }}
+              component={Content}
+            />
+            <Stack.Screen
+              name="BuyScreen"
+              // options={{ title: "Dictionary" }}
+              options={{ headerShown: false }}
+              component={BuyScreen}
+            />
+            <Stack.Screen
+              name="SellScreen"
+              // options={{ title: "Dictionary" }}
+              options={{ headerShown: false }}
+              component={SellScreen}
+            />
+            <Stack.Screen
+              name="CompanyDetails"
+              options={{ headerShown: false }}
+              component={CompanyDetails}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </GestureHandlerRootView>
     </Provider>
   );
 }

@@ -27,7 +27,7 @@ const Header = (props: any) => {
         {props?.isHome ? (
           <Image source={imageurl.nseLogo4x} style={styles.logo} />
         ) : (
-          <Text style={styles.titlename}>{props.title}</Text>
+          <Text style={[styles.titlename,props.style]}>{props.title}</Text>
         )}
       </View>
       {/* <View style={styles.container}>
@@ -60,18 +60,20 @@ const styles = StyleSheet.create({
     // flex: 1, // Make the container take up the full width
     justifyContent: 'center',
     alignItems: 'center', // Optional for vertical centering if needed
+    marginBottom:8,
   },
   logo: {
     width: 150,
     height: 50,
     flex: 1, // Allow logo to grow and center itself within the available space
     resizeMode: 'contain', // Ensure logo scales properly
-    alignSelf: 'flex-start', // Center the logo vertically within the header
+    // alignSelf: 'flex-start',
+    alignSelf:'center'
   },
   titlename: {
-    fontFamily: GlobalFonts.MontserratSemiBold,
-    fontWeight: '600',
-    fontSize: 14,
+    fontFamily: GlobalFonts.MontserratBold,
+    fontWeight: '700',
+    fontSize: 18,
     lineHeight: 21,
     color: '#03050A',
     alignSelf: 'center',

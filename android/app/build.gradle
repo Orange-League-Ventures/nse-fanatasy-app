@@ -1,6 +1,7 @@
 apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
+apply plugin: 'com.google.gms.google-services'
 
 /**
  * This is the configuration block to customize your React Native Android app.
@@ -77,8 +78,10 @@ android {
     namespace "com.auth"
     defaultConfig {
         applicationId "com.auth"
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
+        //minSdkVersion rootProject.ext.minSdkVersion
+        minSdkVersion 23 
+        targetSdkVersion 33
+        //targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
     }
@@ -87,7 +90,11 @@ android {
                 storeFile file(MYAPP_UPLOAD_STORE_FILE)
                 storePassword MYAPP_UPLOAD_STORE_PASSWORD
                 keyAlias MYAPP_UPLOAD_KEY_ALIAS
-                keyPassword MYAPP_UPLOAD_KEY_PASSWORD     
+                keyPassword MYAPP_UPLOAD_KEY_PASSWORD 
+                keyAlias 'new_alias'
+                keyPassword '123456'
+                storeFile file('new_keystore.jks')
+                storePassword '123456'
         }
         debug {
             storeFile file('debug.keystore')
@@ -106,6 +113,12 @@ android {
             signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            signingConfig signingConfigs.release
+        }
+        staging {
+            initWith debug
+            applicationIdSuffix ".staging"
+            versionNameSuffix = "-staging"
         }
     }
 }
@@ -114,6 +127,8 @@ dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
     implementation("com.facebook.react:flipper-integration")
+    // implementation(project(":react-native-community_google-signin")) // <--- add this dependency
+
 
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")

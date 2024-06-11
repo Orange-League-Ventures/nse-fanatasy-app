@@ -12,6 +12,17 @@ export const signup = async (name: string | undefined, email: string | undefined
   }
 };
 
+export const signupWithGoogle = async (name: string | undefined, email: string | undefined, password: string | undefined,profile_picture:string | undefined) => {
+  try {
+    const data = { name, email, password,profile_picture };
+    let response= await axiosInstance.post('/user/signup/google', data);
+    return response.data;
+  } catch (error:any) {
+    console.error('Error in signup:', error);
+    throw error;
+  }
+};
+
 export const login = async (email: string | undefined, password: string | undefined) => {
   try {
     const data = {  email, password }; 

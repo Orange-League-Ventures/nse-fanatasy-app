@@ -28,6 +28,11 @@ end
 target 'auth' do
   config = use_native_modules!
 
+  # Add the GoogleSignIn pod
+  # Pods for auth
+  pod 'GoogleSignIn', '~> 7.1.0' # Ensure this matches RNGoogleSignin dependency
+  pod 'RNGoogleSignin', :path => '../node_modules/@react-native-google-signin/google-signin'
+  
   use_react_native!(
     :path => config[:reactNativePath],
     # Enables Flipper.

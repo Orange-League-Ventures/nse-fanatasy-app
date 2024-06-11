@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   View,
   Text,
@@ -6,13 +6,13 @@ import {
   Image,
   TouchableOpacity,
   SafeAreaView,
-} from 'react-native';
-import {useSelector} from 'react-redux';
-import {AuthState} from '../interfaces/autInterfaces';
-import imageUrls from '../constants/imageurls';
-import Button from '../common/Button';
-import {windowWidth} from '../common/Dimensions';
-import GlobalFonts from '../common/GlobalFonts';
+} from "react-native";
+import { useSelector } from "react-redux";
+import { AuthState } from "../interfaces/autInterfaces";
+import imageUrls from "../constants/imageurls";
+import Button from "../common/Button";
+import { windowWidth } from "../common/Dimensions";
+import GlobalFonts from "../common/GlobalFonts";
 
 const Welcome = (props: any) => {
   const details = useSelector((state: AuthState) => state?.auth);
@@ -43,7 +43,12 @@ const Welcome = (props: any) => {
           </View>
         </View>
         <View style={styles.buttonContainer}>
-          <Button style={styles.buttonStyle} textStyle={styles.textStyle} title={'Get Started'} onPress={() => props.navigation.navigate('Home')} />
+          <Button
+            style={styles.buttonStyle}
+            textStyle={styles.textStyle}
+            title={"Get Started"}
+            onPress={() => props.navigation.navigate("Home")}
+          />
         </View>
       </View>
     </SafeAreaView>
@@ -53,12 +58,12 @@ const Welcome = (props: any) => {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: '#ffffff',
+    backgroundColor: "#ffffff",
   },
   welcome: {
-    display: 'flex',
+    display: "flex",
     flex: 1,
-    alignItems: 'center',
+    alignItems: "center",
     // backgroundColor: '#F8F8F8',
   },
   started: {
@@ -67,76 +72,83 @@ const styles = StyleSheet.create({
     marginTop: 32,
   },
   container1: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     paddingVertical: 8,
     paddingHorizontal: 0,
+    marginBottom:8
   },
   left: {
-    width: '60%',
+    width: "70%",
   },
   right: {
     flex: 1,
-    alignItems: 'flex-end',
+    alignItems: "flex-end",
   },
   container2: {
-    display: 'flex',
+    display: "flex",
     rowGap: 4,
-    paddingVertical: 8,
+    // paddingVertical: 8,
   },
   textinfo: {
-    fontFamily: GlobalFonts.MontserratSemiBold,
-    fontSize: 14,
-    lineHeight: 21,
-    color: '#007A00',
+    fontFamily: GlobalFonts.MontserratBold,
+    fontSize: 18,
+    lineHeight: 27,
+    color: "#007A00",
+    fontWeight:'700'
   },
   image: {
     width: 50,
-    height : 50,
+    height: 50,
     borderRadius: 8,
   },
   textContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    paddingBottom:8,
+    paddingTop:5
   },
   welcomeText: {
-    fontFamily: GlobalFonts.MontserratSemiBold,
-    fontSize: 14,
+    fontFamily: GlobalFonts.MontserratBold,
+    fontSize: 18,
     lineHeight: 21,
-    color: '#03050A',
+    color: "#03050A",
+    fontWeight:'700'
   },
   userNameText: {
-    fontFamily: GlobalFonts.MontserratSemiBold,
-    fontSize: 14,
+    fontFamily: GlobalFonts.MontserratBold,
+    fontSize: 18,
     lineHeight: 21,
-    color: '#E66F25',
+    color: "#E66F25",
   },
   descriptionText: {
     fontFamily: GlobalFonts.RobotoRegular,
-    fontSize: 12,
+    fontSize: 14,
     lineHeight: 15.6,
-    color: '#717171',
+    color: "#717171",
+    fontWeight:'400'
   },
 
   buttonStyle: {
     paddingHorizontal: 16,
-    paddingVertical: 16,
+    paddingVertical: 10,
     borderRadius: 8,
+    height:48
   },
 
-  textStyle : {
-    fontFamily :GlobalFonts.RobotoMedium,
-    fontSize : 14,
+  textStyle: {
+    fontFamily: GlobalFonts.RobotoMedium,
+    fontSize: 16,
+    fontWeight:'500',
+    color:'#FFFFFF'
   },
 
   buttonContainer: {
-    width: (windowWidth - 32),
-    position: 'absolute',
+    width: windowWidth - 32,
+    position: "absolute",
     bottom: 0,
-    display: 'flex',
-    justifyContent: 'center',
-    paddingTop: 16,
-    paddingBottom: 32,
+    display: "flex",
+    justifyContent: "center",
   },
 });
 

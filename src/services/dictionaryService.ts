@@ -1,19 +1,19 @@
+import axios from 'axios';
 import {axiosInstance} from '../utills/axios';
 
+const temp='http://localhost:8000/api/v1'
 export const fetchWords = async query => {
   try {
     const result = await axiosInstance.get(`/dictionary?query=${query}`);
-    console.log('Result--->', result);
+    // const result=axios.get(`http://localhost:8000/api/v1/dictionary?query=${query}`)
     return result;
   } catch (error) {
     console.log('ERROR IN WORDS FETCHING', error);
   }
 };
-
 export const fetchWordOfTheDay = async () => {
   try {
     const result = await axiosInstance.get(`/dictionary/word-of-the-day`);
-    console.log('Result', result);
 
     return result;
   } catch (error) {

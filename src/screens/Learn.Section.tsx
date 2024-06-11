@@ -4,11 +4,12 @@ import ChartSection from './ChartSection'
 import Dictionary from './Disctionary'
 import { ScrollView } from 'react-native'
 import Header from './Header'
+import GlobalFonts from '../common/GlobalFonts'
 
 const LearnSection = (props: any) => {
   return (
     <View>
-      <Header title={"LEARN"} isTab={true} />
+      <Header title={"LEARN"} isTab={true}  style={styles.learn}/>
       <ScrollView style={styles.mainContainer}>
         <ChartSection navigation={props.navigation} />
         <Dictionary navigation={props.navigation} />
@@ -20,6 +21,9 @@ const LearnSection = (props: any) => {
 const styles = StyleSheet.create({
   mainContainer: {
     marginHorizontal: 16
+  },
+  learn:{
+    fontFamily:GlobalFonts.MontserratBold
   }
 })
 

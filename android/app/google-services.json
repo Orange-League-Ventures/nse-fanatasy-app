@@ -1,0 +1,50 @@
+{
+  "project_info": {
+    "project_number": "682218343549",
+    "project_id": "nse-fantasy-new",
+    "storage_bucket": "nse-fantasy-new.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:682218343549:android:c56295ef012c3ee4457514",
+        "android_client_info": {
+          "package_name": "com.auth"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "682218343549-fqeefrp8dn47rnt3rqcpprn1gvcu11ir.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.auth",
+            "certificate_hash": "20b7fa25595123cfda822c0f7022d1254db58c25"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7p_IrQ3C9wb4b3Vu27v0KNTzqxBaohDk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "682218343549-ppht5daqv1iva2du8ti9p70lo2p73ivq.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "682218343549-uhs3sb4vu4b6j1thvg6t33thlt4mjs76.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.auth"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
